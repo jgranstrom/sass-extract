@@ -51,28 +51,27 @@ function makeValue(sassValue) {
   }
 }
 
-function createStructuredValue(sassValue, sourceValue) {
+function createStructuredValue(sassValue) {
   const value = makeValue(sassValue);
 
   if(value) {
     value.type = sassValue.constructor.name;
-    value.source = sourceValue.getValue();
   }
 
   return value;
 }
 
-function inject(filename, fnPrefix, declaration, declarationResultHandler) {
+function inject(context, filename, fnPrefix, declaration, declarationResultHandler) {
   const fileId = new Buffer(filename).toString('base64').replace(/=/g, '');
-  const fnName = `${fileId}_${FN_PREFIX}${fnPrefix}${declaration.declarationClean}`;
+  const fnName = `${fileId}_${context}_${FN_PREFIX}${fnPrefix}${declaration.declarationClean}`;
 
-  const injectedFunction = (sassValue, sourceValue) => {
-    const value = createStructuredValue(sassValue, sourceValue);
-    declarationResultHandler(declaration, value, sassValue);
+  const injectedFunction = (sassValue) => {
+    const value = createStructuredValue(sassValue);
+    declarationResultHandler(context, declaration, value, sassValue);
     return sassValue;
   };
 
-  const injectedCode = `$${fnName}${FN_SUFFIX_VALUE}: ${fnName}(${declaration.declaration}, '${filename}');\n`
+  const injectedCode = `$${fnName}${FN_SUFFIX_VALUE}: ${fnName}(${declaration.declaration});\n`
 
   return { fnName, injectedFunction, injectedCode };
 }
@@ -82,13 +81,13 @@ exports.injectFunctions = (filename, data, declarations, declarationResultHandle
   const injectedFunctions = {};
 
   declarations.implicitGlobals.forEach((declaration) => {
-    const { fnName, injectedFunction, injectedCode } = inject(filename, FN_PREFIX_IMPLICIT_GLOBAL, declaration, declarationResultHandler);
+    const { fnName, injectedFunction, injectedCode } = inject('global', filename, FN_PREFIX_IMPLICIT_GLOBAL, declaration, declarationResultHandler);
     injectedFunctions[fnName] = injectedFunction;
     injectedData += injectedCode;
   });
 
   declarations.explicitGlobals.forEach((declaration) => {
-    const { fnName, injectedFunction, injectedCode } = inject(filename, FN_PREFIX_EXPLICIT_GLOBAL, declaration, declarationResultHandler);
+    const { fnName, injectedFunction, injectedCode } = inject('global', filename, FN_PREFIX_EXPLICIT_GLOBAL, declaration, declarationResultHandler);
     injectedFunctions[fnName] = injectedFunction;
     injectedData += injectedCode;
   });
