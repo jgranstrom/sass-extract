@@ -1,5 +1,5 @@
-const { renderSync } = require('./render');
-const { extractSync } = require('./extract');
+const { renderSync } = require('./lib/render');
+const { extractSync } = require('./lib/extract');
 
 exports.renderSync = renderSync;
 exports.extractSync = extractSync;
@@ -8,8 +8,7 @@ const res = exports.renderSync({
   file: require('path').join(__dirname, 'test.scss'),
 });
 
-/*console.log(require('util').inspect(res, { depth: null }));
-console.log(res.css.toString());*/
+console.log('vars', res.vars);
 
 setInterval(() => {
 
