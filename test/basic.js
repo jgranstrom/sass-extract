@@ -28,7 +28,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
   expect(rendered.vars.global.$number2.sources[0]).to.equal(sourceFile);
-  expect(rendered.vars.global.$number1.expressions).to.have.length(1);
+  expect(rendered.vars.global.$number2.expressions).to.have.length(1);
   expect(rendered.vars.global.$number2.expressions[0]).to.equal('$number1 * 2');
 
   expect(rendered.vars.global.$color.value.r).to.equal(255);
