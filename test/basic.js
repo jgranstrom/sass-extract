@@ -4,6 +4,7 @@ const { render, renderSync } = require('../');
 
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
 const basicExplicitFile = path.join(__dirname, 'sass', 'basic-explicit.scss');
+const basicMixedFile = path.join(__dirname, 'sass', 'basic-mixed.scss');
 
 function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars).to.exist;
@@ -111,6 +112,24 @@ describe('basic-explicit', () => {
       return render({ file: basicExplicitFile })
       .then(rendered => {
         verifyBasic(rendered, basicExplicitFile, false);
+      });
+    });
+  });
+});
+
+describe('basic-mixed', () => {
+  describe('sync', () => {
+    it('should extract all variables', () => {
+      const rendered = renderSync({ file: basicMixedFile })
+      verifyBasic(rendered, basicMixedFile, true);
+    });
+  });
+
+  describe('async', () => {
+    it('should extract all variables', () => {
+      return render({ file: basicMixedFile })
+      .then(rendered => {
+        verifyBasic(rendered, basicMixedFile, true);
       });
     });
   });

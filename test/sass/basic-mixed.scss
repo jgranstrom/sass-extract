@@ -1,0 +1,12 @@
+$list: 1px solid black;
+$string: 'string';
+$map: (
+  number: 2em,
+  string: 'mapstring'
+);
+
+div {
+  $number1: 100px !global;
+  $number2: $number1 * 2 !global;
+  $color: red !global;
+}
