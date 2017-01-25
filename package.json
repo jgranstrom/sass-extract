@@ -6,11 +6,13 @@
   "scripts": {
     "test": "mocha test"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "John Granström <granstrom.john@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "node-sass": "^3 || ^4"
+  },
   "dependencies": {
-    "bluebird": "^3.4.7",
-    "node-sass": "^4.3.0"
+    "bluebird": "^3.4.7"
   },
   "devDependencies": {
     "chai": "^3.5.0",
