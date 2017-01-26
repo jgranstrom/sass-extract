@@ -14,6 +14,8 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global).to.have.property('$color');
   expect(rendered.vars.global).to.have.property('$list');
   expect(rendered.vars.global).to.have.property('$string');
+  expect(rendered.vars.global).to.have.property('$boolean');
+  expect(rendered.vars.global).to.have.property('$null');
 
   expect(rendered.vars.global.$number1.value).to.equal(100);
   expect(rendered.vars.global.$number1.unit).to.equal('px');
@@ -66,6 +68,20 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$string.sources[0]).to.equal(sourceFile);
   expect(rendered.vars.global.$string.expressions).to.have.length(1);
   expect(rendered.vars.global.$string.expressions[0]).to.equal('\'string\'');
+
+  expect(rendered.vars.global.$boolean.value).to.equal(true);
+  expect(rendered.vars.global.$boolean.type).to.equal('SassBoolean');
+  expect(rendered.vars.global.$boolean.sources).to.have.length(1);
+  expect(rendered.vars.global.$boolean.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$boolean.expressions).to.have.length(1);
+  expect(rendered.vars.global.$boolean.expressions[0]).to.equal('true');
+
+  expect(rendered.vars.global.$null.value).to.equal(null);
+  expect(rendered.vars.global.$null.type).to.equal('SassNull');
+  expect(rendered.vars.global.$null.sources).to.have.length(1);
+  expect(rendered.vars.global.$null.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$null.expressions).to.have.length(1);
+  expect(rendered.vars.global.$null.expressions[0]).to.equal('null');
 
   if(mapIncluded) {
     expect(rendered.vars.global.$map.type).to.equal('SassMap');
