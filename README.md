@@ -394,6 +394,13 @@ There are other solutions to the same problem such as placing some of your style
 
 ## Contributing
 
+**sass-extract** is using babel in order to take advantage of recent langugae features.
+
+##### Compile source
+```bash
+npm run compile
+```
+
 ##### Running tests
 
 ```bash
