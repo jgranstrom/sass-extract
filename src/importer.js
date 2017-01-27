@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 /**
  * Search for the likely absolute path from a relative path using known paths from compilation
@@ -49,7 +49,7 @@ function getImportResult(extractions, url, prev) {
  * Create an importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-function makeImporter(extractions) {
+export function makeImporter(extractions) {
   return function(url, prev, done) {
     try {
       const result = getImportResult(extractions, url, prev);
@@ -64,7 +64,7 @@ function makeImporter(extractions) {
  * Create a synchronous importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-function makeSyncImporter(extractions) {
+export function makeSyncImporter(extractions) {
   return function(url, prev) {
     try {
       const result = getImportResult(extractions, url, prev);
@@ -75,6 +75,3 @@ function makeSyncImporter(extractions) {
     }
   }
 }
-
-exports.makeImporter = makeImporter;
-exports.makeSyncImporter = makeSyncImporter;

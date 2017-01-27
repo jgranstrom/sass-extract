@@ -1,4 +1,4 @@
-const sass = require('node-sass');
+import sass from 'node-sass';
 
 /**
  * Convert a color value 0-255 to hex 00-FF
@@ -63,12 +63,10 @@ function makeValue(sassValue) {
 /**
  * Create a structured value definition from a sassValue object
  */
-function createStructuredValue(sassValue) {
+export function createStructuredValue(sassValue) {
   const value = Object.assign({ 
     type: sassValue.constructor.name,
   }, makeValue(sassValue));
 
   return value;
 };
-
-exports.createStructuredValue = createStructuredValue;

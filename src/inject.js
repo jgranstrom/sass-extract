@@ -1,4 +1,4 @@
-const { createStructuredValue } = require('./struct');
+import { createStructuredValue } from './struct';
 
 const FN_PREFIX = '___SV_INJECT';
 const FN_PREFIX_IMPLICIT_GLOBAL = 'IG';
@@ -28,7 +28,7 @@ function createInjection(fileId, categoryPrefix, declaration, declarationResultH
  * Declaration result handlers will be called with the extracted value of each declaration
  * Provided file id will be used to ensure unique function names per file
  */
-function injectExtractionFunctions(fileId, declarations, { globalDeclarationResultHandler }) {
+export function injectExtractionFunctions(fileId, declarations, { globalDeclarationResultHandler }) {
   let injectedData = ``;
   const injectedFunctions = {};
 
@@ -48,5 +48,3 @@ function injectExtractionFunctions(fileId, declarations, { globalDeclarationResu
 
   return { injectedData, injectedFunctions };
 }
-
-exports.injectExtractionFunctions = injectExtractionFunctions;

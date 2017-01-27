@@ -1,5 +1,5 @@
-const { injectExtractionFunctions } = require('./inject');
-const { parseDeclarations } = require('./parse');
+import { injectExtractionFunctions } from './inject';
+import { parseDeclarations } from './parse';
 
 /**
  * Get a string id for a filename
@@ -37,7 +37,7 @@ function processFile(filename, data) {
  * Process a set of sass files to get declarations, injected source and functions
  * Files are provided in a map of filename -> key entries
  */
-function processFiles(files) {
+export function processFiles(files) {
   const extractions = {};
 
   Object.keys(files).map(filename => {
@@ -46,5 +46,3 @@ function processFiles(files) {
 
   return extractions;
 }
-
-exports.processFiles = processFiles;

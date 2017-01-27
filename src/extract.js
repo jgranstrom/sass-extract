@@ -1,8 +1,8 @@
-const Promise = require('bluebird');
-const sass = require('node-sass');
-const { loadCompiledFiles, loadCompiledFilesSync } = require('./load');
-const { processFiles } = require('./process');
-const { makeImporter, makeSyncImporter } = require('./importer');
+import Promise from 'bluebird';
+import sass from 'node-sass';
+import { loadCompiledFiles, loadCompiledFilesSync } from './load';
+import { processFiles } from './process';
+import { makeImporter, makeSyncImporter } from './importer';
 
 Promise.promisifyAll(sass);
 
@@ -68,7 +68,7 @@ function compileExtractionResult(extractions) {
  * Extract the variables from already rendered sass file(s)
  * Returns the extracted variables
  */
-function extract(rendered, { compileOptions = {} } = {}) {
+export function extract(rendered, { compileOptions = {} } = {}) {
   const { entryFilename, includedFiles } = getRenderedStats(rendered);
 
   return loadCompiledFiles(includedFiles, entryFilename, compileOptions.data)
@@ -88,7 +88,7 @@ function extract(rendered, { compileOptions = {} } = {}) {
  * Synchronously extract the variables from already rendered sass file(s)
  * Returns the extracted variables
  */
-function extractSync(rendered, { compileOptions = {} } = {}) {
+export function extractSync(rendered, { compileOptions = {} } = {}) {
   const { entryFilename, includedFiles } = getRenderedStats(rendered);
 
   const compiledFiles = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
@@ -100,6 +100,3 @@ function extractSync(rendered, { compileOptions = {} } = {}) {
 
   return compileExtractionResult(extractions);  
 }
-
-exports.extract = extract;
-exports.extractSync = extractSync;

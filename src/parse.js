@@ -1,4 +1,4 @@
-const sass = require('node-sass');
+import sass from 'node-sass';
 
 const REGEX_VARIABLE_GLOBAL_IMPLICIT = /(\$[\w-_]+)\s*:\s*((.*?\n?)+?);/g;
 const REGEX_VARIABLE_GLOBAL_EXPLICIT = /(\$[\w-_]+)\s*:\s*(.*?)\s+!global\s*;/g;
@@ -40,7 +40,7 @@ function extractVariables(data, regex) {
 /**
  * Parse variables declarations from a chunk of sass source
  */
-function parseDeclarations(data) {
+export function parseDeclarations(data) {
   const decommentedData = stripByRegex(data, REGEX_COMMENTS);
   const decontextifiedData = stripByRegex(decommentedData, REGEX_DEEP_CONTEXT);
 
@@ -49,5 +49,3 @@ function parseDeclarations(data) {
 
   return { explicitGlobals, implicitGlobals };
 }
-
-exports.parseDeclarations = parseDeclarations;

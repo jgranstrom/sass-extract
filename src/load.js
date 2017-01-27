@@ -1,5 +1,6 @@
-const Promise = require('bluebird');
-const fs = require('fs');
+import Promise from 'bluebird';
+import fs from 'fs';
+
 Promise.promisifyAll(fs);
 
 const RAW_DATA_FILE = 'data';
@@ -32,7 +33,7 @@ function loadSync(filename, encoding = 'utf8') {
 /**
  * Load all files included in a sass compilations including potential raw data input
  */
-function loadCompiledFiles(includedFiles, entryFilename, data) {
+export function loadCompiledFiles(includedFiles, entryFilename, data) {
   const files = {};
 
   return Promise.all(includedFiles.map(filename => {
@@ -49,7 +50,7 @@ function loadCompiledFiles(includedFiles, entryFilename, data) {
 /**
  * Synchronously load all files included in a sass compilations including potential raw data input
  */
-function loadCompiledFilesSync(includedFiles, entryFilename, data) {
+export function loadCompiledFilesSync(includedFiles, entryFilename, data) {
   const files = {};
 
   includedFiles.forEach(filename => {
@@ -58,6 +59,3 @@ function loadCompiledFilesSync(includedFiles, entryFilename, data) {
 
   return includeRawDataFile(files, entryFilename, data);
 }
-
-module.exports.loadCompiledFiles = loadCompiledFiles;
-module.exports.loadCompiledFilesSync = loadCompiledFilesSync;
