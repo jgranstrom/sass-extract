@@ -15,13 +15,26 @@ Demo of **sass-vars** using the [sass-vars-loader](https://github.com/jgranstrom
   - [renderSync(compileOptions)](#rendersynccompileoptions)
   - [extract(rendered, { compileOptions })](#extractrendered--compileoptions-)
   - [extractSync(rendered, { compileOptions })](#extractsyncrendered--compileoptions-)
+- [Variable context](#variable-context)
+  - [Global variables](#global-variables)
+  - [Local variables](#local-variables)
+  - [Overrides](#overrides)
+- [Data types](#data-types)
+  - [General variable value structure](#general-variable-value-structure)
+  - [SassString](#sassstring)
+  - [SassBoolean](#sassboolean)
+  - [SassNull](#sassnull)
+  - [SassNumber](#sassnumber)
+  - [SassColor](#sasscolor)
+  - [SassList](#sasslist)
+  - [SassMap](#sassmap)
 - [What is sass-vars?](#what-is-sass-vars)
 - [Requirements](#requirements)
 - [Contributing](#contributing)
-      - [Running tests](#running-tests)
+  - [Running tests](#running-tests)
 
 ## Installation
-```
+```bash
 npm install --save node-sass sass-vars
 ```
 *Note that the node-sass compiler have to be installed as it is a peer dependency of sass-vars.*
@@ -37,7 +50,7 @@ See [node-sass](https://github.com/sass/node-sass) for documentation of the comp
 
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
-```
+```js
 const sassVars = require('sass-vars');
 
 sassVars.render({
@@ -53,7 +66,7 @@ sassVars.render({
 
 A synchronous version of the `render` function.
 
-```
+```js
 const sassVars = require('sass-vars');
 
 const rendered = sassVars.render({
@@ -74,7 +87,7 @@ Generally you will pass the same compileOptions to both `node-sass` for renderin
 
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
-```
+```js
 const sass = require('node-sass');
 const sassVars = require('sass-vars');
 
@@ -94,7 +107,7 @@ sassVars.extract(rendered, {
 
 A synchronous version of the `extract` function.
 
-```
+```js
 const sass = require('node-sass');
 const sassVars = require('sass-vars');
 
@@ -113,7 +126,7 @@ console.log(vars);
 
 Sass features both global and local variables.
 
-```
+```scss
 // style.scss
 
 $globalVariable1: 123px; // global
@@ -130,23 +143,23 @@ The extracted variables returned from **sass-vars** are namespaced by the contex
 
 A global variable is accessible from anywhere withint that file, as well as from files that `@import` the file where the variable is declared. A variable is considered global when it is declared outside of any selector, or if the annotation `!global` is included after the variable expression.
 
-```
+```scss
 // styleA.scss
 $a: 123px;
 @import './styleB.scss';
 ```
 
-```
+```scss
 // styleB.scss
 $b: 456px;
 ```
 
-```
+```js
 // extracted variables of styleA.scss
 {
   global: {
-    $a: {..},
-    $b: {..}
+    $a: {/*...*/},
+    $b: {/*...*/}
   }
 }
 ```
@@ -163,19 +176,19 @@ Variables in sass can be overridden any number of times and across multiple file
 
 **sass-vars** will always extract the final computed value of a variable, no matter the number of overrides. This means however that variables can have multiple different expressions and be specified in multiple files, while still always having one value.
 
-```
+```scss
 // styleA.scss
 $a: 123px;
 $b: $a;
 @import './styleB.scss';
 ```
 
-```
+```scss
 // styleB.scss
 $a: 456px;
 ```
 
-```
+```js
 // extracted variables of styleA.scss
 {
   global: {
@@ -194,12 +207,12 @@ Sass has a few different data types that a variable can have. These are detected
 
 Each variable extracted is available under its context by a key which is the variable name as specified in the sass file.
 
-```
+```scss
 // style.scss
 $myVariable: 123px;
 ```
 
-```
+```js
 // Corresponding variable result object
 {
   global: {
@@ -224,8 +237,10 @@ Each of the variable results will have the same general structure and potentiall
 Note that `sources` and `expressions` are both arrays, see [Overrides](#overrides) for details about this.
 
 ##### SassString
+```scss
+$variable: 'string';
 ```
-// $variable: 'string';
+```js
 {
   type: 'SassString',
   value: 'string'
@@ -233,8 +248,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 ```
 
 ##### SassBoolean
+```scss
+$variable: true;
 ```
-// $variable: true;
+```js
 {
   type: 'SassBoolean',
   value: true
@@ -242,8 +259,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 ```
 
 ##### SassNull
+```scss
+$variable: null;
 ```
-// $variable: null;
+```js
 {
   type: 'SassNull',
   value: null
@@ -252,8 +271,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 
 ##### SassNumber
 *SassNumbers contains both the extracted number and their unit*
+```scss
+$variable: 123px;
 ```
-// $variable: 123px;
+```js
 {
   type: 'SassNumber',
   value: 123,
@@ -264,8 +285,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 ##### SassColor
 *SassColors contains extracted colors in both rgba and hex formats*
 
+```scss
+$variable: #FF0000;
 ```
-// $variable: #FF0000;
+```js
 {
   type: 'SassColor',
   value: {
@@ -279,8 +302,12 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 
 ```
 
+*Or alternatively*
+
+```scss
+$variable: rgba(0, 255, 0, 0.5);
 ```
-// $variable: rgba(0, 255, 0, 0.5);
+```js
 {
   type: 'SassColor',
   value: {
@@ -297,8 +324,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 ##### SassList
 *SassLists contains recursive types as an array*
 
+```scss
+$variable: 1px solid black;
 ```
-// $variable: 1px solid black;
+```js
 {
   type: 'SassList',
   value: [
@@ -328,8 +357,10 @@ Note that `sources` and `expressions` are both arrays, see [Overrides](#override
 ##### SassMap
 *SassMaps contains recursive types as an object with matching field names*
 
+```scss
+$variable: ( width: 10em, height: 5em );
 ```
-// $variable: ( width: 10em, height: 5em );
+```js
 {
   type: 'SassMap',
   value: {
@@ -365,7 +396,6 @@ There are other solutions to the same problem such as placing some of your style
 
 ##### Running tests
 
-```
+```bash
 npm test
 ```
-
