@@ -1,0 +1,16 @@
+language: node_js
+
+before_script:
+  - 'if [ "$NODE_SASS_VERSION" ]; then npm install node-sass@$NODE_SASS_VERSION; fi'
+
+node_js:
+  - "6"
+  - "5"
+  - "4"
+
+env:
+  - NODE_SASS_VERSION=3.1.0
+  - NODE_SASS_VERSION=3.4.0
+  - NODE_SASS_VERSION=3.10.1
+  - NODE_SASS_VERSION=4.0.0
+  - NODE_SASS_VERSION=^4
