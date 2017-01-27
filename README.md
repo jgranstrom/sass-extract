@@ -4,7 +4,7 @@ Extract structured variables from your sass files with no effort. Have all your 
 
 If you are using webpack make sure to also check out the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader).
 
-![demo](https://www.dropbox.com/s/ket3nlb6jrjyn59/sass-extract-demo.gif?dl=1)
+![demo](/docs/demo.gif)
 Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader)
 
 ------
@@ -414,3 +414,13 @@ In order to have readable commit messages and the ability to generate a changelo
 To make it easier install `npm install -g commitizen` and commit using `git-cz`.
 
 Generate changelog using `npm install -g conventional-changelog` and `npm run changelog`.
+
+##### Releasing new versions
+
+1. Make changes
+2. Commit those changes
+4. Set new version in package.json
+5. `npm run changelog`
+6. Commit package.json and CHANGELOG.md files
+7. Tag
+8. Push
