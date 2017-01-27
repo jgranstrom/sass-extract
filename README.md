@@ -406,3 +406,11 @@ npm run compile
 ```bash
 npm test
 ```
+
+##### Commits
+
+In order to have readable commit messages and the ability to generate a changelog the commit messages should follow a certain structure.
+
+To make it easier install `npm install -g commitizen` and commit using `git-cz`.
+
+Generate changelog using `npm install -g conventional-changelog` and `npm run changelog`.
