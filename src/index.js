@@ -1,5 +1,5 @@
-const { render, renderSync } = require('./lib/render');
-const { extract, extractSync } = require('./lib/extract');
+const { render, renderSync } = require('./render');
+const { extract, extractSync } = require('./extract');
 
 exports.render = render;
 exports.renderSync = renderSync;

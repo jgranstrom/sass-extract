@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../');
+const { render, renderSync } = require('../lib');
 
 const nestedBasicFile = path.join(__dirname, 'sass', 'nested', 'nested-basic.scss');
 const nestedSubFile = path.join(__dirname, 'sass', 'nested', 'sub', 'sub.scss');

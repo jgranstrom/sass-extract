@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../');
+const { render, renderSync } = require('../lib');
 
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
 const basicExplicitFile = path.join(__dirname, 'sass', 'basic-explicit.scss');

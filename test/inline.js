@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../');
+const { render, renderSync } = require('../lib');
 
 const inlineData = `
   $number1: 123px;
