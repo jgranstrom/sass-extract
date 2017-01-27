@@ -1,11 +1,11 @@
-# sass-vars
+# sass-extract
 
 Extract structured variables from your sass files with no effort. Have all your style variables defined in style files, while being able to use them in javascript for things that cannot be styled with css such as complex visualisations or other dynamic content.
 
-If you are using webpack make sure to also check out the [sass-vars-loader](https://github.com/jgranstrom/sass-vars-loader).
+If you are using webpack make sure to also check out the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader).
 
-![demo](https://www.dropbox.com/s/we3euzpofmibk74/sass-vars-demo.gif?dl=1)
-Demo of **sass-vars** using the [sass-vars-loader](https://github.com/jgranstrom/sass-vars-loader)
+![demo](https://www.dropbox.com/s/we3euzpofmibk74/sass-extract-demo.gif?dl=1)
+Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader)
 
 ------
 
@@ -28,19 +28,19 @@ Demo of **sass-vars** using the [sass-vars-loader](https://github.com/jgranstrom
   - [SassColor](#sasscolor)
   - [SassList](#sasslist)
   - [SassMap](#sassmap)
-- [What is sass-vars?](#what-is-sass-vars)
+- [What is sass-extract?](#what-is-sass-extract)
 - [Requirements](#requirements)
 - [Contributing](#contributing)
   - [Running tests](#running-tests)
 
 ## Installation
 ```bash
-npm install --save node-sass sass-vars
+npm install --save node-sass sass-extract
 ```
-*Note that the node-sass compiler have to be installed as it is a peer dependency of sass-vars.*
+*Note that the node-sass compiler have to be installed as it is a peer dependency of sass-extract.*
 
 ## API
-The API is deliberately kept very similar to that of `node-sass`. This is because `sass-vars` can be used as a replacement that will add variable extraction as an additional feature to compiling the sass into css.
+The API is deliberately kept very similar to that of `node-sass`. This is because `sass-extract` can be used as a replacement that will add variable extraction as an additional feature to compiling the sass into css.
 
 ### render(compileOptions)
 
@@ -51,9 +51,9 @@ See [node-sass](https://github.com/sass/node-sass) for documentation of the comp
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
 ```js
-const sassVars = require('sass-vars');
+const sassExtract = require('sass-extract');
 
-sassVars.render({
+sassExtract.render({
   file: 'path/to/my/styles.scss'
 })
 .then(rendered => {
@@ -67,9 +67,9 @@ sassVars.render({
 A synchronous version of the `render` function.
 
 ```js
-const sassVars = require('sass-vars');
+const sassExtract = require('sass-extract');
 
-const rendered = sassVars.render({
+const rendered = sassExtract.render({
   file: 'path/to/my/styles.scss'
 });
 
@@ -83,19 +83,19 @@ Extract variables for a rendered sass files.
 
 See [node-sass](https://github.com/sass/node-sass) for documentation of the compileOptions object.
 
-Generally you will pass the same compileOptions to both `node-sass` for rendering and **sass-vars** for extraction.
+Generally you will pass the same compileOptions to both `node-sass` for rendering and **sass-extract** for extraction.
 
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
 ```js
 const sass = require('node-sass');
-const sassVars = require('sass-vars');
+const sassExtract = require('sass-extract');
 
 const rendered = sass.renderSync({
   file: 'path/to/my/styles.scss'
 });
 
-sassVars.extract(rendered, {
+sassExtract.extract(rendered, {
   file: 'path/to/my/styles.scss'
 })
 .then(vars => {
@@ -109,13 +109,13 @@ A synchronous version of the `extract` function.
 
 ```js
 const sass = require('node-sass');
-const sassVars = require('sass-vars');
+const sassExtract = require('sass-extract');
 
 const rendered = sass.renderSync({
   file: 'path/to/my/styles.scss'
 });
 
-const vars = sassVars.extractSync(rendered, {
+const vars = sassExtract.extractSync(rendered, {
   file: 'path/to/my/styles.scss'
 });
 
@@ -137,7 +137,7 @@ div {
 }
 ```
 
-The extracted variables returned from **sass-vars** are namespaced by the context where they are declared, so `global` variables will be placed in `vars.global`;
+The extracted variables returned from **sass-extract** are namespaced by the context where they are declared, so `global` variables will be placed in `vars.global`;
 
 ##### Global variables
 
@@ -168,13 +168,13 @@ $b: 456px;
 
 A local variable is only accessible from within the selector where it is declared and from children to that selector.
 
-Currently sass-vars supports extraction of global variables only. Local variables based on selectors and APIs to utilize them is on the roadmap. Global variables is however covers the most likely use cases of this tool at this point, and thus made sense to be the fundamental first feature.
+Currently sass-extract supports extraction of global variables only. Local variables based on selectors and APIs to utilize them is on the roadmap. Global variables is however covers the most likely use cases of this tool at this point, and thus made sense to be the fundamental first feature.
 
 ##### Overrides
 
 Variables in sass can be overridden any number of times and across multiple files when using `@import`. A variable can only have one final value within its context, but intermediate values can be assigned to separate variables in order to be retained.
 
-**sass-vars** will always extract the final computed value of a variable, no matter the number of overrides. This means however that variables can have multiple different expressions and be specified in multiple files, while still always having one value.
+**sass-extract** will always extract the final computed value of a variable, no matter the number of overrides. This means however that variables can have multiple different expressions and be specified in multiple files, while still always having one value.
 
 ```scss
 // styleA.scss
@@ -200,7 +200,7 @@ $a: 456px;
 
 ## Data types
 
-Sass has a few different data types that a variable can have. These are detected by **sass-vars** automatically and the structure of the result of a variable value will be adapted to the type of the variables. Below follows descriptions for how each type of variable is extracted.
+Sass has a few different data types that a variable can have. These are detected by **sass-extract** automatically and the structure of the result of a variable value will be adapted to the type of the variables. Below follows descriptions for how each type of variable is extracted.
 
 
 ##### General variable value structure
@@ -378,15 +378,15 @@ $variable: ( width: 10em, height: 5em );
 }
 ```
 
-## What is sass-vars?
+## What is sass-extract?
 
-**sass-vars** is a tool that compiles sass files into a JSON object containing its variables and their computed values. This can be very useful when you need to style something that cannot be styled by css, or when you need to know details about the styles in your javascript.
+**sass-extract** is a tool that compiles sass files into a JSON object containing its variables and their computed values. This can be very useful when you need to style something that cannot be styled by css, or when you need to know details about the styles in your javascript.
 
-It is built on top of [node-sass](https://github.com/sass/node-sass) which is using the performant [libsass](http://sass-lang.com/libsass) compiler. **sass-vars** is using native features in libsass in order to extract computed variables from your stylesheet that will be identical to the values in the generated css. This means you can expect to get the correct extracted value of a variable like `$myVariable: $multiplier * 200px / 10`, even if the `$multipler` variable is a variable defined in a separate imported sass file.
+It is built on top of [node-sass](https://github.com/sass/node-sass) which is using the performant [libsass](http://sass-lang.com/libsass) compiler. **sass-extract** is using native features in libsass in order to extract computed variables from your stylesheet that will be identical to the values in the generated css. This means you can expect to get the correct extracted value of a variable like `$myVariable: $multiplier * 200px / 10`, even if the `$multipler` variable is a variable defined in a separate imported sass file.
 
 The purpose of this library is to give you the option to keep all of your style information in style files as expected. Maybe you are rendering on a canvas and cannot use css for styling the content, then this library will help you out.
 
-There are other solutions to the same problem such as placing some of your style variables in a JSON file an including them into the sass, but with **sass-vars** you can skip that additional complexity of separate files and preprocessing and just get the variables directly from the sass itself.
+There are other solutions to the same problem such as placing some of your style variables in a JSON file an including them into the sass, but with **sass-extract** you can skip that additional complexity of separate files and preprocessing and just get the variables directly from the sass itself.
 
 ## Requirements
 - `node-sass >= 3.1.0`
