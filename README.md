@@ -4,7 +4,7 @@ Extract structured variables from your sass files with no effort. Have all your 
 
 If you are using webpack make sure to also check out the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader).
 
-![demo](https://www.dropbox.com/s/we3euzpofmibk74/sass-extract-demo.gif?dl=1)
+![demo](https://www.dropbox.com/s/ket3nlb6jrjyn59/sass-extract-demo.gif?dl=1)
 Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader)
 
 ------
@@ -42,7 +42,7 @@ npm install --save node-sass sass-extract
 ## API
 The API is deliberately kept very similar to that of `node-sass`. This is because `sass-extract` can be used as a replacement that will add variable extraction as an additional feature to compiling the sass into css.
 
-### render(compileOptions)
+##### render(compileOptions)
 
 An augmented version of the `node-sass` render function that in addition to rendering css also extract sass variables into `rendered.vars`.
 
@@ -62,7 +62,7 @@ sassExtract.render({
 });
 ```
 
-### renderSync(compileOptions)
+##### renderSync(compileOptions)
 
 A synchronous version of the `render` function.
 
@@ -77,7 +77,7 @@ console.log(rendered.vars);
 console.log(rendere.css.toString());
 ```
 
-### extract(rendered, { compileOptions })
+##### extract(rendered, { compileOptions })
 
 Extract variables for a rendered sass files.
 
@@ -103,7 +103,7 @@ sassExtract.extract(rendered, {
 });
 ```
 
-### extractSync(rendered, { compileOptions })
+##### extractSync(rendered, { compileOptions })
 
 A synchronous version of the `extract` function.
 
