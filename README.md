@@ -7,6 +7,8 @@ If you are using webpack make sure to also check out the [sass-vars-loader](http
 ![demo](https://www.dropbox.com/s/we3euzpofmibk74/sass-vars-demo.gif?dl=1)
 Demo of **sass-vars** using the [sass-vars-loader](https://github.com/jgranstrom/sass-vars-loader)
 
+------
+
 - [Installation](#installation)
 - [API](#api)
   - [render(compileOptions)](#rendercompileoptions)
@@ -107,19 +109,256 @@ const vars = sassVars.extractSync(rendered, {
 console.log(vars);
 ```
 
+## Variable context
+
+Sass features both global and local variables.
+
+```
+// style.scss
+
+$globalVariable1: 123px; // global
+
+div {
+  $localVariable1: red; // Local
+  $globalVariable2: 1em !global; // global
+}
+```
+
+The extracted variables returned from **sass-vars** are namespaced by the context where they are declared, so `global` variables will be placed in `vars.global`;
+
+##### Global variables
+
+A global variable is accessible from anywhere withint that file, as well as from files that `@import` the file where the variable is declared. A variable is considered global when it is declared outside of any selector, or if the annotation `!global` is included after the variable expression.
+
+```
+// styleA.scss
+$a: 123px;
+@import './styleB.scss';
+```
+
+```
+// styleB.scss
+$b: 456px;
+```
+
+```
+// extracted variables of styleA.scss
+{
+  global: {
+    $a: {..},
+    $b: {..}
+  }
+}
+```
+
+##### Local variables
+
+A local variable is only accessible from within the selector where it is declared and from children to that selector.
+
+Currently sass-vars supports extraction of global variables only. Local variables based on selectors and APIs to utilize them is on the roadmap. Global variables is however covers the most likely use cases of this tool at this point, and thus made sense to be the fundamental first feature.
+
+##### Overrides
+
+Variables in sass can be overridden any number of times and across multiple files when using `@import`. A variable can only have one final value within its context, but intermediate values can be assigned to separate variables in order to be retained.
+
+**sass-vars** will always extract the final computed value of a variable, no matter the number of overrides. This means however that variables can have multiple different expressions and be specified in multiple files, while still always having one value.
+
+```
+// styleA.scss
+$a: 123px;
+$b: $a;
+@import './styleB.scss';
+```
+
+```
+// styleB.scss
+$a: 456px;
+```
+
+```
+// extracted variables of styleA.scss
+{
+  global: {
+    $a: { value: 456 },
+    $b: { value: 123 }
+  }
+}
+```
+
+## Data types
+
+Sass has a few different data types that a variable can have. These are detected by **sass-vars** automatically and the structure of the result of a variable value will be adapted to the type of the variables. Below follows descriptions for how each type of variable is extracted.
+
+
+##### General variable value structure
+
+Each variable extracted is available under its context by a key which is the variable name as specified in the sass file.
+
+```
+// style.scss
+$myVariable: 123px;
+```
+
+```
+// Corresponding variable result object
+{
+  global: {
+    $myVariable: {
+      type: 'SassNumber',
+      sources: [ 'path/to/style.sass' ],
+      expressions: [ '123px' ],
+      unit: 'px' // Data type specific field
+    }
+  }
+}
+```
+
+Each of the variable results will have the same general structure and potentially additional type specific fields.
+
+| field  | description |
+|---|---|
+| `type`| A string describing the data type of the extracted variables  |
+| `sources`| An array of all file paths where this variables is declared  |
+| `expressions`| An array of all expressions that defines the variable value |
+
+Note that `sources` and `expressions` are both arrays, see [Overrides](#overrides) for details about this.
+
+##### SassString
+```
+// $variable: 'string';
+{
+  type: 'SassString',
+  value: 'string'
+}
+```
+
+##### SassBoolean
+```
+// $variable: true;
+{
+  type: 'SassBoolean',
+  value: true
+}
+```
+
+##### SassNull
+```
+// $variable: null;
+{
+  type: 'SassNull',
+  value: null
+}
+```
+
+##### SassNumber
+*SassNumbers contains both the extracted number and their unit*
+```
+// $variable: 123px;
+{
+  type: 'SassNumber',
+  value: 123,
+  unit: 'px'
+}
+```
+
+##### SassColor
+*SassColors contains extracted colors in both rgba and hex formats*
+
+```
+// $variable: #FF0000;
+{
+  type: 'SassColor',
+  value: {
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 1,
+    hex: '#FF0000'
+  }
+}
+
+```
+
+```
+// $variable: rgba(0, 255, 0, 0.5);
+{
+  type: 'SassColor',
+  value: {
+    r: 0,
+    g: 255,
+    b: 0,
+    a: 0.5,
+    hex: '#00FF00'
+  }
+}
+
+```
+
+##### SassList
+*SassLists contains recursive types as an array*
+
+```
+// $variable: 1px solid black;
+{
+  type: 'SassList',
+  value: [
+    {
+      type: 'SassNumber',
+      value: 1,
+      unit: 'px'
+    },
+    {
+      type: 'SassString',
+      value: 'solid'
+    },
+    {
+      type: 'SassColor',
+      value: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+        hex: '#000000'
+      }
+    }
+  ]
+}
+```
+
+##### SassMap
+*SassMaps contains recursive types as an object with matching field names*
+
+```
+// $variable: ( width: 10em, height: 5em );
+{
+  type: 'SassMap',
+  value: {
+    width: {
+      type: 'SassNumber',
+      value: 10,
+      unit: 'em'
+    },
+    height: {
+      type: 'SassNumber',
+      value: 5,
+      unit: 'em'
+    }
+  }
+}
+```
 
 ## What is sass-vars?
 
-**sass-vars** is a tool that compiles sass style files into variables instead of css. This can be very useful when you need to style something that cannot be styled by css, or when you need to know details about the styles in your javascript.
+**sass-vars** is a tool that compiles sass files into a JSON object containing its variables and their computed values. This can be very useful when you need to style something that cannot be styled by css, or when you need to know details about the styles in your javascript.
 
-It is built on [node-sass](https://github.com/sass/node-sass) which is using the performant [libsass](http://sass-lang.com/libsass) compiler. **sass-vars** is using native features in libsass in order to extract computed variables from your stylesheet that will be identical to the values in the generated css. This means you can expect to get the correct extracted value of a variable like `$myVariable: $multiplier * 200px / 10`, even if the `$multipler` variable is a variable defined in a separate imported sass file.
+It is built on top of [node-sass](https://github.com/sass/node-sass) which is using the performant [libsass](http://sass-lang.com/libsass) compiler. **sass-vars** is using native features in libsass in order to extract computed variables from your stylesheet that will be identical to the values in the generated css. This means you can expect to get the correct extracted value of a variable like `$myVariable: $multiplier * 200px / 10`, even if the `$multipler` variable is a variable defined in a separate imported sass file.
 
 The purpose of this library is to give you the option to keep all of your style information in style files as expected. Maybe you are rendering on a canvas and cannot use css for styling the content, then this library will help you out.
 
 There are other solutions to the same problem such as placing some of your style variables in a JSON file an including them into the sass, but with **sass-vars** you can skip that additional complexity of separate files and preprocessing and just get the variables directly from the sass itself.
 
 ## Requirements
-- `node-sass >= 3.0.0`
+- `node-sass >= 3.1.0`
 - `node >= 4`
 
 ## Contributing
