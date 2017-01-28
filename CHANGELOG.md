@@ -1,8 +1,16 @@
+<a name="0.3.1"></a>
+## 0.3.1 (2017-01-28)
+
+* docs: add external assets for docs ([b68a293](https://github.com/jgranstrom/sass-extract/commit/b68a293))
+
+
+
 <a name="0.3.0"></a>
 # 0.3.0 (2017-01-27)
 
 * chore: Npm ignore docs assets ([2279b6a](https://github.com/jgranstrom/sass-extract/commit/2279b6a))
 * chore(project): Add license file ([613c702](https://github.com/jgranstrom/sass-extract/commit/613c702))
+* chore(release): 0.3.0 ([0de5770](https://github.com/jgranstrom/sass-extract/commit/0de5770))
 * docs(changelog): Added changelog automation ([5aec55d](https://github.com/jgranstrom/sass-extract/commit/5aec55d))
 * docs(readme): Added commit and release guidelines ([386b5a6](https://github.com/jgranstrom/sass-extract/commit/386b5a6))
 * docs(readme): Include demo gif in repo ([3128a4e](https://github.com/jgranstrom/sass-extract/commit/3128a4e))
