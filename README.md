@@ -389,7 +389,7 @@ The purpose of this library is to give you the option to keep all of your style 
 There are other solutions to the same problem such as placing some of your style variables in a JSON file an including them into the sass, but with **sass-extract** you can skip that additional complexity of separate files and preprocessing and just get the variables directly from the sass itself.
 
 ## Requirements
-- `node-sass >= 3.1.0`
+- `node-sass >= 3.6.0`
 - `node >= 4`
 
 ## Contributing
