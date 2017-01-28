@@ -1,6 +1,18 @@
+<a name="0.3.2"></a>
+## 0.3.2 (2017-01-28)
+
+* build(do not include tests and ci config in package): ([29e5880](https://github.com/jgranstrom/sass-extract/commit/29e5880))
+* build: narrow old version requirement on node-sass ([1462516](https://github.com/jgranstrom/sass-extract/commit/1462516))
+* build(node-sass): update requirements on node-sass version ([76b5d36](https://github.com/jgranstrom/sass-extract/commit/76b5d36))
+* ci: rename travis config ([afcef88](https://github.com/jgranstrom/sass-extract/commit/afcef88))
+* ci: update ci tested node-sass versions ([11c6f7f](https://github.com/jgranstrom/sass-extract/commit/11c6f7f))
+
+
+
 <a name="0.3.1"></a>
 ## 0.3.1 (2017-01-28)
 
+* chore(release): 0.3.1 ([d4144d3](https://github.com/jgranstrom/sass-extract/commit/d4144d3))
 * docs: add external assets for docs ([b68a293](https://github.com/jgranstrom/sass-extract/commit/b68a293))
 
 
