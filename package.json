@@ -10,6 +10,16 @@
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0"
   },
   "author": "John Granström <granstrom.john@gmail.com>",
+  "description": "Extract structured variables from sass files. Fast and accurate.",
+  "keywords": [
+    "sass",
+    "scss",
+    "variables",
+    "convert",
+    "extract",
+    "import",
+    "json"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=4"
