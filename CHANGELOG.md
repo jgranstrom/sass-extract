@@ -1,6 +1,14 @@
+<a name="0.3.4"></a>
+## 0.3.4 (2017-01-28)
+
+* docs: added package description and keywords ([13937da](https://github.com/jgranstrom/sass-extract/commit/13937da))
+
+
+
 <a name="0.3.3"></a>
 ## 0.3.3 (2017-01-28)
 
+* chore(release): 0.3.3 ([8565afe](https://github.com/jgranstrom/sass-extract/commit/8565afe))
 * docs(readme): add badges ([24dc6b8](https://github.com/jgranstrom/sass-extract/commit/24dc6b8))
 
 
