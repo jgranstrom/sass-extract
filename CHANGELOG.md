@@ -1,6 +1,14 @@
+<a name="0.3.3"></a>
+## 0.3.3 (2017-01-28)
+
+* docs(readme): add badges ([24dc6b8](https://github.com/jgranstrom/sass-extract/commit/24dc6b8))
+
+
+
 <a name="0.3.2"></a>
 ## 0.3.2 (2017-01-28)
 
+* chore(release): 0.3.2 ([1bd314b](https://github.com/jgranstrom/sass-extract/commit/1bd314b))
 * build(do not include tests and ci config in package): ([29e5880](https://github.com/jgranstrom/sass-extract/commit/29e5880))
 * build: narrow old version requirement on node-sass ([1462516](https://github.com/jgranstrom/sass-extract/commit/1462516))
 * build(node-sass): update requirements on node-sass version ([76b5d36](https://github.com/jgranstrom/sass-extract/commit/76b5d36))
