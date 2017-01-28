@@ -4,7 +4,7 @@ Extract structured variables from your sass files with no effort. Have all your 
 
 If you are using webpack make sure to also check out the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader).
 
-![demo](/docs/demo.gif)
+[![demo.gif](https://s27.postimg.org/w40sdzqjn/demo.gif)](https://postimg.org/image/oba4m0kkf/)
 Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader)
 
 ------
