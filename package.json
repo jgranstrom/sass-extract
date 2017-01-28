@@ -9,6 +9,7 @@
     "test": "npm run compile && mocha --compilers js:babel-core/register",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0"
   },
+  "repository": "jgranstrom/sass-extract",
   "author": "John Granström <granstrom.john@gmail.com>",
   "description": "Extract structured variables from sass files. Fast and accurate.",
   "keywords": [
