@@ -1,18 +1,29 @@
 import Promise from 'bluebird';
 import sass from 'node-sass';
+import path from 'path';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
 
 Promise.promisifyAll(sass);
 
+const NORMALIZED_PATH_SEPARATOR = '/';
+const PLATFORM_PATH_SEPARATOR = path.sep;
+
+/**
+ * Normalize path across platforms
+ */
+function normalizePath(path) {
+  return path.split(PLATFORM_PATH_SEPARATOR).join(NORMALIZED_PATH_SEPARATOR);
+}
+
 /**
  * Get rendered stats required for extraction
  */
 function getRenderedStats(rendered) {
   return {
-    entryFilename: rendered.stats.entry,
-    includedFiles: rendered.stats.includedFiles,
+    entryFilename: normalizePath(rendered.stats.entry),
+    includedFiles: rendered.stats.includedFiles.map(normalizePath),
   };
 }
 
