@@ -20,11 +20,11 @@ function findAbsolutePath(extractions, relativePath) {
  * If the @import is made from a raw data section a best guess path is returned
  */
 function getImportAbsolutePath(extractions, url, prev) {
-  let absolutePath = path.join(path.dirname(prev), url);
-  let extension = path.extname(prev);
+  let absolutePath = path.posix.join(path.posix.dirname(prev), url);
+  let extension = path.posix.extname(prev);
 
   // Ensure that both @import 'file' and @import 'file.scss' is mapped correctly
-  if(path.extname(absolutePath) !== extension) {
+  if(path.posix.extname(absolutePath) !== extension) {
     absolutePath += extension;
   }
 
