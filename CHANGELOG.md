@@ -1,6 +1,7 @@
 <a name="0.4.0"></a>
 # 0.4.0 (2017-03-31)
 
+* chore: 0.4.0 ([98605ee](https://github.com/jgranstrom/sass-extract/commit/98605ee))
 * fix(extract): normalize paths from rendered stats ([65566ba](https://github.com/jgranstrom/sass-extract/commit/65566ba))
 * fix(importer): path compatibility ([7e05980](https://github.com/jgranstrom/sass-extract/commit/7e05980))
 * fix(parse): regex platform compatibility ([3c01dce](https://github.com/jgranstrom/sass-extract/commit/3c01dce))
