@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
+const { normalizePath } = require('../lib/extract');
 
 const commentFile = path.join(__dirname, 'sass', 'comments.scss');
 
@@ -16,7 +17,7 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$number1.unit).to.equal('px');
   expect(rendered.vars.global.$number1.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
-  expect(rendered.vars.global.$number1.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number1.expressions).to.have.length(1);
   expect(rendered.vars.global.$number1.expressions[0]).to.equal('100px');
 
@@ -24,7 +25,7 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$number2.unit).to.equal('px');
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
-  expect(rendered.vars.global.$number2.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number2.expressions).to.have.length(1);
   expect(rendered.vars.global.$number2.expressions[0]).to.equal('$number1 * 2');
 
@@ -35,7 +36,7 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$color.value.hex).to.equal('#ff0000');
   expect(rendered.vars.global.$color.type).to.equal('SassColor');
   expect(rendered.vars.global.$color.sources).to.have.length(1);
-  expect(rendered.vars.global.$color.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$color.expressions).to.have.length(1);
   expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
 }

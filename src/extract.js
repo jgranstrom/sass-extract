@@ -13,7 +13,7 @@ const PLATFORM_PATH_SEPARATOR = path.sep;
 /**
  * Normalize path across platforms
  */
-function normalizePath(path) {
+export function normalizePath(path) {
   return path.split(PLATFORM_PATH_SEPARATOR).join(NORMALIZED_PATH_SEPARATOR);
 }
 

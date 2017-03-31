@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
+const { normalizePath } = require('../lib/extract');
 
 const nestedBasicFile = path.join(__dirname, 'sass', 'nested', 'nested-basic.scss');
 const nestedSubFile = path.join(__dirname, 'sass', 'nested', 'sub', 'sub.scss');
@@ -20,7 +21,7 @@ function verifyNestedBasic(rendered) {
   expect(rendered.vars.global.$a.unit).to.equal('px');
   expect(rendered.vars.global.$a.type).to.equal('SassNumber');
   expect(rendered.vars.global.$a.sources).to.have.length(1);
-  expect(rendered.vars.global.$a.sources[0]).to.equal(nestedBasicFile);
+  expect(rendered.vars.global.$a.sources[0]).to.equal(normalizePath(nestedBasicFile));
   expect(rendered.vars.global.$a.expressions).to.have.length(1);
   expect(rendered.vars.global.$a.expressions[0]).to.equal('100px');
 
@@ -28,7 +29,7 @@ function verifyNestedBasic(rendered) {
   expect(rendered.vars.global.$b.unit).to.equal('px');
   expect(rendered.vars.global.$b.type).to.equal('SassNumber');
   expect(rendered.vars.global.$b.sources).to.have.length(1);
-  expect(rendered.vars.global.$b.sources[0]).to.equal(nestedSubFile);
+  expect(rendered.vars.global.$b.sources[0]).to.equal(normalizePath(nestedSubFile));
   expect(rendered.vars.global.$b.expressions).to.have.length(1);
   expect(rendered.vars.global.$b.expressions[0]).to.equal('200px');
 
@@ -36,7 +37,7 @@ function verifyNestedBasic(rendered) {
   expect(rendered.vars.global.$c.unit).to.equal('px');
   expect(rendered.vars.global.$c.type).to.equal('SassNumber');
   expect(rendered.vars.global.$c.sources).to.have.length(1);
-  expect(rendered.vars.global.$c.sources[0]).to.equal(nestedSub2File);
+  expect(rendered.vars.global.$c.sources[0]).to.equal(normalizePath(nestedSub2File));
   expect(rendered.vars.global.$c.expressions).to.have.length(1);
   expect(rendered.vars.global.$c.expressions[0]).to.equal('300px');
 }
@@ -52,7 +53,7 @@ function verifyNestedOverrides(rendered, sourceFile) {
   expect(rendered.vars.global.$a.unit).to.equal('px');
   expect(rendered.vars.global.$a.type).to.equal('SassNumber');
   expect(rendered.vars.global.$a.sources).to.have.length(2);
-  expect(rendered.vars.global.$a.sources).to.include.members([nestedOverridesFile, nestedOverridesSubFile]);
+  expect(rendered.vars.global.$a.sources).to.include.members([normalizePath(nestedOverridesFile), normalizePath(nestedOverridesSubFile)]);
   expect(rendered.vars.global.$a.expressions).to.have.length(2);
   expect(rendered.vars.global.$a.expressions).to.include.members(['100px', '200px']);
 
@@ -60,7 +61,7 @@ function verifyNestedOverrides(rendered, sourceFile) {
   expect(rendered.vars.global.$b.unit).to.equal('px');
   expect(rendered.vars.global.$b.type).to.equal('SassNumber');
   expect(rendered.vars.global.$b.sources).to.have.length(1);
-  expect(rendered.vars.global.$b.sources[0]).to.equal(nestedOverridesSubFile);
+  expect(rendered.vars.global.$b.sources[0]).to.equal(normalizePath(nestedOverridesSubFile));
   expect(rendered.vars.global.$b.expressions).to.have.length(1);
   expect(rendered.vars.global.$b.expressions[0]).to.equal('$a');
 }

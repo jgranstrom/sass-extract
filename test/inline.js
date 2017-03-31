@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
+const { normalizePath } = require('../lib/extract');
 
 const inlineData = `
   $number1: 123px;
@@ -29,7 +30,7 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$number1.unit).to.equal('px');
   expect(rendered.vars.global.$number1.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
-  expect(rendered.vars.global.$number1.sources[0]).to.equal(number1Source);
+  expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(number1Source));
   expect(rendered.vars.global.$number1.expressions).to.have.length(1);
   expect(rendered.vars.global.$number1.expressions[0]).to.equal('123px');
 
@@ -37,7 +38,7 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$number2.unit).to.equal('px');
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
-  expect(rendered.vars.global.$number2.sources[0]).to.equal(number2Source);
+  expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(number2Source));
   expect(rendered.vars.global.$number2.expressions).to.have.length(1);
   expect(rendered.vars.global.$number2.expressions[0]).to.equal('2 * $number1');
 
@@ -48,7 +49,7 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$color.value.hex).to.equal('#ff0000');
   expect(rendered.vars.global.$color.type).to.equal('SassColor');
   expect(rendered.vars.global.$color.sources).to.have.length(1);
-  expect(rendered.vars.global.$color.sources[0]).to.equal(colorSource);
+  expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(colorSource));
   expect(rendered.vars.global.$color.expressions).to.have.length(1);
   expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
 }

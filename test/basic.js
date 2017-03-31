@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
+const { normalizePath } = require('../lib/extract');
 
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
 const basicExplicitFile = path.join(__dirname, 'sass', 'basic-explicit.scss');
@@ -21,7 +22,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$number1.unit).to.equal('px');
   expect(rendered.vars.global.$number1.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
-  expect(rendered.vars.global.$number1.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number1.expressions).to.have.length(1);
   expect(rendered.vars.global.$number1.expressions[0]).to.equal('100px');
 
@@ -29,7 +30,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$number2.unit).to.equal('px');
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
-  expect(rendered.vars.global.$number2.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number2.expressions).to.have.length(1);
   expect(rendered.vars.global.$number2.expressions[0]).to.equal('$number1 * 2');
 
@@ -40,14 +41,14 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$color.value.hex).to.equal('#ff0000');
   expect(rendered.vars.global.$color.type).to.equal('SassColor');
   expect(rendered.vars.global.$color.sources).to.have.length(1);
-  expect(rendered.vars.global.$color.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$color.expressions).to.have.length(1);
   expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
 
   expect(rendered.vars.global.$list.value).to.have.length(3);
   expect(rendered.vars.global.$list.type).to.equal('SassList');
   expect(rendered.vars.global.$list.sources).to.have.length(1);
-  expect(rendered.vars.global.$list.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$list.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$list.expressions).to.have.length(1);
   expect(rendered.vars.global.$list.expressions[0]).to.equal('1px solid black');
   expect(rendered.vars.global.$list.value[0].value).to.equal(1);
@@ -65,21 +66,21 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$string.value).to.equal('string');
   expect(rendered.vars.global.$string.type).to.equal('SassString');
   expect(rendered.vars.global.$string.sources).to.have.length(1);
-  expect(rendered.vars.global.$string.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$string.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$string.expressions).to.have.length(1);
   expect(rendered.vars.global.$string.expressions[0]).to.equal('\'string\'');
 
   expect(rendered.vars.global.$boolean.value).to.equal(true);
   expect(rendered.vars.global.$boolean.type).to.equal('SassBoolean');
   expect(rendered.vars.global.$boolean.sources).to.have.length(1);
-  expect(rendered.vars.global.$boolean.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$boolean.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$boolean.expressions).to.have.length(1);
   expect(rendered.vars.global.$boolean.expressions[0]).to.equal('true');
 
   expect(rendered.vars.global.$null.value).to.equal(null);
   expect(rendered.vars.global.$null.type).to.equal('SassNull');
   expect(rendered.vars.global.$null.sources).to.have.length(1);
-  expect(rendered.vars.global.$null.sources[0]).to.equal(sourceFile);
+  expect(rendered.vars.global.$null.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$null.expressions).to.have.length(1);
   expect(rendered.vars.global.$null.expressions[0]).to.equal('null');
 
@@ -91,7 +92,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
     expect(rendered.vars.global.$map.value.string.value).to.equal('mapstring');
     expect(rendered.vars.global.$map.value.string.type).to.equal('SassString');
     expect(rendered.vars.global.$map.sources).to.have.length(1);
-    expect(rendered.vars.global.$map.sources[0]).to.equal(sourceFile);
+    expect(rendered.vars.global.$map.sources[0]).to.equal(normalizePath(sourceFile));
     expect(rendered.vars.global.$map.expressions).to.have.length(1);
     expect(rendered.vars.global.$map.expressions[0]).to.equal('(\n  number: 2em,\n  string: \'mapstring\'\n)');
   }
