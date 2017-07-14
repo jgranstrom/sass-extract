@@ -1,35 +1,41 @@
 import path from 'path';
 
 /**
- * Search for the likely absolute path from a relative path using known paths from compilation
+ * Search for the imported file in order of included paths
  */
-function findAbsolutePath(extractions, relativePath) {
-  const filenames = Object.keys(extractions);
-  
-  for(let i = 0; i < filenames.length; i++) {
-    if(filenames[i].match(relativePath)) {
-      return filenames[i];
+function findImportedPath(url, includedFilesMap, includedPaths) {
+  for(let i = 0; i < includedPaths.length; i++) {
+    const includedPath = includedPaths[i];
+    const candidatePath = path.posix.join(includedPath, url);
+
+    if(includedFilesMap[candidatePath]) {
+      return candidatePath;
     }
   }
 
-  return relativePath;
+  return null;
 }
 
 /**
  * Get the absolute file path for a relative @import like './sub/file.scsss'
  * If the @import is made from a raw data section a best guess path is returned
  */
-function getImportAbsolutePath(extractions, url, prev) {
-  let absolutePath = path.posix.join(path.posix.dirname(prev), url);
-  let extension = path.posix.extname(prev);
-
+function getImportAbsolutePath(extractions, url, prev, includedFilesMap, includedPaths = []) {
   // Ensure that both @import 'file' and @import 'file.scss' is mapped correctly
-  if(path.posix.extname(absolutePath) !== extension) {
-    absolutePath += extension;
+  let extension = path.posix.extname(prev);
+  if(path.posix.extname(url) !== extension) {
+    url += extension;
   }
 
-  if(prev === 'stdin') {
-    absolutePath = findAbsolutePath(extractions, absolutePath);
+  let absolutePath = path.posix.join(path.posix.dirname(prev), url);
+
+  if(prev === 'stdin' || !includedFilesMap[absolutePath]) {
+    // Find absolute path from included paths as url is not relative to statement origin
+    absolutePath = findImportedPath(url, includedFilesMap, includedPaths);
+
+    if(!absolutePath) {
+      throw new Error(`Can not determine imported file for url '${url}' imported in ${prev}`);
+    }
   }
 
   return absolutePath;
@@ -38,21 +44,29 @@ function getImportAbsolutePath(extractions, url, prev) {
 /**
  * Get the resulting source and path for a given @import request
  */
-function getImportResult(extractions, url, prev) {
-  const absolutePath = getImportAbsolutePath(extractions, url, prev);
+function getImportResult(extractions, url, prev, includedFilesMap, includedPaths) {
+  const absolutePath = getImportAbsolutePath(extractions, url, prev, includedFilesMap, includedPaths);
   const contents = extractions[absolutePath].injectedData;
 
   return { file: absolutePath, contents };
+}
+
+function getIncludedFilesMap(includedFiles) {
+  const includedFilesMap = {};
+  includedFiles.forEach(file => includedFilesMap[file] = true);
+  return includedFilesMap;
 }
 
 /**
  * Create an importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-export function makeImporter(extractions) {
+export function makeImporter(extractions, includedFiles, includedPaths) {
+  const includedFilesMap = getIncludedFilesMap(includedFiles);
+
   return function(url, prev, done) {
     try {
-      const result = getImportResult(extractions, url, prev);
+      const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
       done(result);
     } catch(err) {
       done(err);
@@ -64,10 +78,12 @@ export function makeImporter(extractions) {
  * Create a synchronous importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-export function makeSyncImporter(extractions) {
+export function makeSyncImporter(extractions, includedFiles, includedPaths) {
+  const includedFilesMap = getIncludedFilesMap(includedFiles);
+
   return function(url, prev) {
     try {
-      const result = getImportResult(extractions, url, prev);
+      const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
       return result;
     } catch(err) {
       // note: importer must return errors

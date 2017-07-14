@@ -20,10 +20,11 @@ export function normalizePath(path) {
 /**
  * Get rendered stats required for extraction
  */
-function getRenderedStats(rendered) {
+function getRenderedStats(rendered, compileOptions) {
   return {
     entryFilename: normalizePath(rendered.stats.entry),
     includedFiles: rendered.stats.includedFiles.map(normalizePath),
+    includedPaths: (compileOptions.includePaths || []).map(normalizePath)
   };
 }
 
@@ -82,12 +83,12 @@ function compileExtractionResult(extractions) {
  * Returns the extracted variables
  */
 export function extract(rendered, { compileOptions = {} } = {}) {
-  const { entryFilename, includedFiles } = getRenderedStats(rendered);
+  const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   return loadCompiledFiles(includedFiles, entryFilename, compileOptions.data)
   .then(compiledFiles => {
     const extractions = processFiles(compiledFiles);
-    const importer = makeImporter(extractions);
+    const importer = makeImporter(extractions, includedFiles, includedPaths);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
     
     return sass.renderAsync(extractionCompileOptions)
@@ -102,11 +103,11 @@ export function extract(rendered, { compileOptions = {} } = {}) {
  * Returns the extracted variables
  */
 export function extractSync(rendered, { compileOptions = {} } = {}) {
-  const { entryFilename, includedFiles } = getRenderedStats(rendered);
+  const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   const compiledFiles = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
   const extractions = processFiles(compiledFiles);
-  const importer = makeSyncImporter(extractions);
+  const importer = makeSyncImporter(extractions, includedFiles, includedPaths);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
   sass.renderSync(extractionCompileOptions);
