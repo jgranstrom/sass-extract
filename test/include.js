@@ -12,6 +12,7 @@ const includeSubDir = path.join(__dirname, 'sass', 'include', 'sub');
 const includeSubConflictDir = path.join(__dirname, 'sass', 'include', 'sub-conflict');
 const includeSubConflictFile = path.join(__dirname, 'sass', 'include', 'sub-conflict', 'included.scss');
 const includeSubConflictFile2 = path.join(__dirname, 'sass', 'include', 'sub-conflict', 'included2.scss');
+const relativeIncludeSubDir = path.join('./test/sass/include/sub');
 
 const SUB_INCLUDED_COLOR = '#0000ff';
 const SUB_INCLUDED2_COLOR = '#000000';
@@ -202,6 +203,62 @@ describe('include', () => {
       describe('async', () => {
         it('should extract all variables', () => {
           return render({ file: includeRoot3File, includePaths: [includeSubConflictDir, includeSubDir] })
+          .then(rendered => {
+            verifyFunctions(rendered, includeRoot3File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+          });
+        });
+      });
+    });
+  });
+
+  describe('relative include path', () => {
+    describe('root1', () => {
+      describe('sync', () => {
+        it('should extract all variables', () => {
+          const rendered = renderSync({ file: includeRootFile, includePaths: [relativeIncludeSubDir] });
+          verifyFunctions(rendered, includeRootFile, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+        });
+      });
+
+      describe('async', () => {
+        it('should extract all variables', () => {
+          return render({ file: includeRootFile, includePaths: [relativeIncludeSubDir] })
+          .then(rendered => {
+            verifyFunctions(rendered, includeRootFile, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+          });
+        });
+      });
+    });
+
+    describe('root2', () => {
+      describe('sync', () => {
+        it('should extract all variables', () => {
+          const rendered = renderSync({ file: includeRoot2File, includePaths: [relativeIncludeSubDir] });
+          verifyFunctions(rendered, includeRoot2File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+        });
+      });
+
+      describe('async', () => {
+        it('should extract all variables', () => {
+          return render({ file: includeRoot2File, includePaths: [relativeIncludeSubDir] })
+          .then(rendered => {
+            verifyFunctions(rendered, includeRoot2File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+          });
+        });
+      });
+    });
+
+    describe('root3', () => {
+      describe('sync', () => {
+        it('should extract all variables', () => {
+          const rendered = renderSync({ file: includeRoot3File, includePaths: [relativeIncludeSubDir] });
+          verifyFunctions(rendered, includeRoot3File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+        });
+      });
+
+      describe('async', () => {
+        it('should extract all variables', () => {
+          return render({ file: includeRoot3File, includePaths: [relativeIncludeSubDir] })
           .then(rendered => {
             verifyFunctions(rendered, includeRoot3File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
           });

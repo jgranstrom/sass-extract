@@ -5,7 +5,13 @@ import path from 'path';
  */
 function findImportedPath(url, includedFilesMap, includedPaths) {
   for(let i = 0; i < includedPaths.length; i++) {
-    const includedPath = includedPaths[i];
+    let includedPath = includedPaths[i];
+
+    // Ensure we get absolute included path
+    if(!path.posix.isAbsolute(includedPath)) {
+      includedPath = path.posix.join(process.cwd(), includedPath);
+    }
+
     const candidatePath = path.posix.join(includedPath, url);
 
     if(includedFilesMap[candidatePath]) {
@@ -20,7 +26,7 @@ function findImportedPath(url, includedFilesMap, includedPaths) {
  * Get the absolute file path for a relative @import like './sub/file.scsss'
  * If the @import is made from a raw data section a best guess path is returned
  */
-function getImportAbsolutePath(extractions, url, prev, includedFilesMap, includedPaths = []) {
+function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) {
   // Ensure that both @import 'file' and @import 'file.scss' is mapped correctly
   let extension = path.posix.extname(prev);
   if(path.posix.extname(url) !== extension) {
@@ -45,7 +51,7 @@ function getImportAbsolutePath(extractions, url, prev, includedFilesMap, include
  * Get the resulting source and path for a given @import request
  */
 function getImportResult(extractions, url, prev, includedFilesMap, includedPaths) {
-  const absolutePath = getImportAbsolutePath(extractions, url, prev, includedFilesMap, includedPaths);
+  const absolutePath = getImportAbsolutePath(url, prev, includedFilesMap, includedPaths);
   const contents = extractions[absolutePath].injectedData;
 
   return { file: absolutePath, contents };

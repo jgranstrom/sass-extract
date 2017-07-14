@@ -17,13 +17,21 @@ export function normalizePath(path) {
   return path.split(PLATFORM_PATH_SEPARATOR).join(NORMALIZED_PATH_SEPARATOR);
 }
 
+export function makeAbsolute(maybeRelativePath) {
+  if(path.posix.isAbsolute(maybeRelativePath)) {
+    return maybeRelativePath;
+  } else {
+    return path.posix.join(process.cwd(), maybeRelativePath);
+  }
+}
+
 /**
  * Get rendered stats required for extraction
  */
 function getRenderedStats(rendered, compileOptions) {
   return {
     entryFilename: normalizePath(rendered.stats.entry),
-    includedFiles: rendered.stats.includedFiles.map(normalizePath),
+    includedFiles: rendered.stats.includedFiles.map(f => normalizePath(makeAbsolute(f))),
     includedPaths: (compileOptions.includePaths || []).map(normalizePath)
   };
 }
