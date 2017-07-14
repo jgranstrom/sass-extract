@@ -41,9 +41,11 @@ function makeExtractionCompileOptions(compileOptions, entryFilename, extractions
     Object.assign(extractionFunctions, extractions[extractionKey].injectedFunctions);
   });
 
-  extractionCompileOptions.functions = extractionFunctions;
+  extractionCompileOptions.functions = Object.assign(extractionFunctions, compileOptions.functions);
   extractionCompileOptions.data = extractions[entryFilename].injectedData;
-  extractionCompileOptions.importer = importer;
+  if(!makeExtractionCompileOptions.imported) {
+    extractionCompileOptions.importer = importer;
+  }
 
   return extractionCompileOptions;
 }
