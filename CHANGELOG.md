@@ -1,7 +1,20 @@
+<a name="0.5.0"></a>
+# 0.5.0 (2017-07-14)
+
+* docs(readme): fix badge ([3b70eb7](https://github.com/jgranstrom/sass-extract/commit/3b70eb7))
+* fix(deps): node-sass peer dependency updated include all major 4 ([b8dbacb](https://github.com/jgranstrom/sass-extract/commit/b8dbacb))
+* fix(importer): ensure relative included paths are normalized ([f2bc8b1](https://github.com/jgranstrom/sass-extract/commit/f2bc8b1))
+* feat(extract): allow existing custom defined functions ([23090de](https://github.com/jgranstrom/sass-extract/commit/23090de))
+* feat(importer): extend support for includePaths lookup in custom importer ([398659b](https://github.com/jgranstrom/sass-extract/commit/398659b))
+* test: add udf to basic tests ([cc79568](https://github.com/jgranstrom/sass-extract/commit/cc79568))
+
+
+
 <a name="0.4.0"></a>
 # 0.4.0 (2017-03-31)
 
 * chore: 0.4.0 ([98605ee](https://github.com/jgranstrom/sass-extract/commit/98605ee))
+* chore: update changelog ([60a8ab8](https://github.com/jgranstrom/sass-extract/commit/60a8ab8))
 * fix(extract): normalize paths from rendered stats ([65566ba](https://github.com/jgranstrom/sass-extract/commit/65566ba))
 * fix(importer): path compatibility ([7e05980](https://github.com/jgranstrom/sass-extract/commit/7e05980))
 * fix(parse): regex platform compatibility ([3c01dce](https://github.com/jgranstrom/sass-extract/commit/3c01dce))
