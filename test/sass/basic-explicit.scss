@@ -1,7 +1,11 @@
+@function get-color() {
+  @return red;
+}
+
 div {
   $number1: 100px !global;
   $number2: $number1 * 2 !global;
-  $color: red !global;
+  $color: get-color() !global;
   $list: 1px solid black !global;
   $string: 'string' !global;
   $boolean: true !global;

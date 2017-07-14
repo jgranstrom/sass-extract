@@ -44,7 +44,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$color.sources).to.have.length(1);
   expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$color.expressions).to.have.length(1);
-  expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
+  expect(rendered.vars.global.$color.expressions[0]).to.equal('get-color()');
 
   expect(rendered.vars.global.$list.value).to.have.length(3);
   expect(rendered.vars.global.$list.type).to.equal('SassList');

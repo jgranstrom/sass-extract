@@ -1,6 +1,10 @@
+@function get-color() {
+  @return red;
+}
+
 $number1: 100px;
 $number2: $number1 * 2;
-$color: red;
+$color: get-color();
 $list: 1px solid black;
 $string: 'string';
 $boolean: true;

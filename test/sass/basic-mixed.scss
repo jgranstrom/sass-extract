@@ -1,3 +1,7 @@
+@function get-color() {
+  @return red;
+}
+
 $list: 1px solid black;
 $string: 'string';
 $map: (
@@ -8,7 +12,7 @@ $map: (
 div {
   $number1: 100px !global;
   $number2: $number1 * 2 !global;
-  $color: red !global;
+  $color: get-color() !global;
 }
 
 $boolean: true;
