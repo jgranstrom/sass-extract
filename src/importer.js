@@ -3,19 +3,37 @@ import path from 'path';
 /**
  * Search for the imported file in order of included paths
  */
-function findImportedPath(url, includedFilesMap, includedPaths) {
-  for(let i = 0; i < includedPaths.length; i++) {
-    let includedPath = includedPaths[i];
+function findImportedPath(url, prev, includedFilesMap, includedPaths) {
+  let candidateFromPaths;
+
+  if(prev !== 'stdin') {
+    const prevPath = path.posix.dirname(prev);
+    candidateFromPaths = [prevPath, ...includedPaths];
+  } else {
+    candidateFromPaths = [...includedPaths];
+  }
+
+  for(let i = 0; i < candidateFromPaths.length; i++) {
+    let candidateFromPath = candidateFromPaths[i];
 
     // Ensure we get absolute included path
-    if(!path.posix.isAbsolute(includedPath)) {
-      includedPath = path.posix.join(process.cwd(), includedPath);
+    if(!path.posix.isAbsolute(candidateFromPath)) {
+      candidateFromPath = path.posix.join(process.cwd(), candidateFromPath);
     }
 
-    const candidatePath = path.posix.join(includedPath, url);
+    let candidatePath = path.posix.join(candidateFromPath, url);
 
     if(includedFilesMap[candidatePath]) {
       return candidatePath;
+    } else {
+      let urlBasename = path.posix.basename(url);
+      let indexOfBasename = url.lastIndexOf(urlBasename);
+      let partialUrl = `${url.substring(0, indexOfBasename)}_${urlBasename}`;
+
+      candidatePath = path.posix.join(candidateFromPath, partialUrl);
+      if(includedFilesMap[candidatePath]) {
+        return candidatePath;
+      }
     }
   }
 
@@ -33,15 +51,10 @@ function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) 
     url += extension;
   }
 
-  let absolutePath = path.posix.join(path.posix.dirname(prev), url);
+  const absolutePath = findImportedPath(url, prev, includedFilesMap, includedPaths);
 
-  if(prev === 'stdin' || !includedFilesMap[absolutePath]) {
-    // Find absolute path from included paths as url is not relative to statement origin
-    absolutePath = findImportedPath(url, includedFilesMap, includedPaths);
-
-    if(!absolutePath) {
-      throw new Error(`Can not determine imported file for url '${url}' imported in ${prev}`);
-    }
+  if(!absolutePath) {
+    throw new Error(`Can not determine imported file for url '${url}' imported in ${prev}`);
   }
 
   return absolutePath;

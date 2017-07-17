@@ -32,7 +32,7 @@ function getRenderedStats(rendered, compileOptions) {
   return {
     entryFilename: normalizePath(rendered.stats.entry),
     includedFiles: rendered.stats.includedFiles.map(f => normalizePath(makeAbsolute(f))),
-    includedPaths: (compileOptions.includePaths || []).map(normalizePath)
+    includedPaths: (compileOptions.includePaths || []).map(normalizePath),
   };
 }
 
