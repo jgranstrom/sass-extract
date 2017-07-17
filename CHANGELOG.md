@@ -1,6 +1,15 @@
+<a name="0.5.1"></a>
+## 0.5.1 (2017-07-17)
+
+* fix(importer): fix @import of partials without leading underscore in url ([c1fce2b](https://github.com/jgranstrom/sass-extract/commit/c1fce2b)), closes [#9](https://github.com/jgranstrom/sass-extract/issues/9)
+* fix(parse): reduce complexity of comments expression, prevent freeze ([f074c04](https://github.com/jgranstrom/sass-extract/commit/f074c04)), closes [#2](https://github.com/jgranstrom/sass-extract/issues/2)
+
+
+
 <a name="0.5.0"></a>
 # 0.5.0 (2017-07-14)
 
+* chore: 0.5.0 ([277df0a](https://github.com/jgranstrom/sass-extract/commit/277df0a))
 * docs(readme): fix badge ([3b70eb7](https://github.com/jgranstrom/sass-extract/commit/3b70eb7))
 * fix(deps): node-sass peer dependency updated include all major 4 ([b8dbacb](https://github.com/jgranstrom/sass-extract/commit/b8dbacb))
 * fix(importer): ensure relative included paths are normalized ([f2bc8b1](https://github.com/jgranstrom/sass-extract/commit/f2bc8b1))
