@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/extract');
+const { normalizePath } = require('../lib/util');
 
 const includeRootFile = path.join(__dirname, 'sass', 'include', 'root.scss');
 const includeRoot2File = path.join(__dirname, 'sass', 'include', 'root2.scss');
@@ -45,10 +45,10 @@ function verifyFunctions(rendered, sourceFile, includedColor, separateColor, inc
 describe('include', () => {
   describe('sub only', () => {
     describe('root1', () => {
-    describe('sync', () => {
-      it('should extract all variables', () => {
-        const rendered = renderSync({ file: includeRootFile, includePaths: [includeSubDir] });
-        verifyFunctions(rendered, includeRootFile, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+      describe('sync', () => {
+        it('should extract all variables', () => {
+          const rendered = renderSync({ file: includeRootFile, includePaths: [includeSubDir] });
+          verifyFunctions(rendered, includeRootFile, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
         });
       });
 

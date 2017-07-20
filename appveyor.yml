@@ -1,36 +1,24 @@
 environment:
   matrix:
-    - nodejs_version: "4"
+    - nodejs_version: "6"
       sass_version: "3.8.0"
-    - nodejs_version: "4"
-      sass_version: "^3"
-    - nodejs_version: "4"
-      sass_version: "4.0.0"
-    - nodejs_version: "4"
-      sass_version: "^4"
+    - nodejs_version: "6"
+      sass_version: "3"
+    - nodejs_version: "6"
+      sass_version: "4"
 
-    - nodejs_version: "5"
+    - nodejs_version: "4"
       sass_version: "3.8.0"
-    - nodejs_version: "5"
-      sass_version: "^3"
-    - nodejs_version: "5"
-      sass_version: "4.0.0"
-    - nodejs_version: "5"
-      sass_version: "^4"
-
-    - nodejs_version: "6"
-      sass_version: "3.8.0"
-    - nodejs_version: "6"
-      sass_version: "^3"
-    - nodejs_version: "6"
-      sass_version: "4.0.0"
-    - nodejs_version: "6"
-      sass_version: "^4"
+    - nodejs_version: "4"
+      sass_version: "3"
+    - nodejs_version: "4"
+      sass_version: "4"
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - ps: npm install node-sass@$env:sass_version
-  - npm install
+  - ps: npm install -g --loglevel=error node-gyp
+  - ps: npm install --loglevel=error node-sass@$env:sass_version
+  - npm install --loglevel=error
 
 test_script:
   - node --version

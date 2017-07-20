@@ -1,6 +1,7 @@
 # sass-extract
 
 [![Build Status](https://travis-ci.org/jgranstrom/sass-extract.svg?branch=master&style=flat)](https://travis-ci.org/jgranstrom/sass-extract)
+[![Build status](https://ci.appveyor.com/api/projects/status/ne21r9yv64of2iah?svg=true)](https://ci.appveyor.com/project/jgranstrom/sass-extract)
 [![npm version](https://badge.fury.io/js/sass-extract.svg)](http://badge.fury.io/js/sass-extract)
 [![dependencies Status](https://david-dm.org/jgranstrom/sass-extract/status.svg)](https://david-dm.org/jgranstrom/sass-extract)
 [![devDependencies Status](https://david-dm.org/jgranstrom/sass-extract/dev-status.svg)](https://david-dm.org/jgranstrom/sass-extract?type=dev)

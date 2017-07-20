@@ -4,12 +4,18 @@ before_script:
   - 'if [ "$NODE_SASS_VERSION" ]; then npm install node-sass@$NODE_SASS_VERSION; fi'
 
 node_js:
+  - "8"
   - "6"
-  - "5"
   - "4"
 
 env:
   - NODE_SASS_VERSION=3.8.0
-  - NODE_SASS_VERSION=^3
-  - NODE_SASS_VERSION=4.0.0
-  - NODE_SASS_VERSION=^4
+  - NODE_SASS_VERSION=3
+  - NODE_SASS_VERSION=4
+
+matrix:
+  exclude:
+    - node_js: "8"
+      env: NODE_SASS_VERSION=3.8.0
+    - node_js: "8"
+      env: NODE_SASS_VERSION=3

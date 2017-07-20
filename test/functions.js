@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/extract');
+const { normalizePath } = require('../lib/util');
 const { types } = require('node-sass');
 
 const functionsFile = path.join(__dirname, 'sass', 'functions.scss');

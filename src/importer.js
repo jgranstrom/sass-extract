@@ -1,4 +1,5 @@
 import path from 'path';
+import { normalizePath, makeAbsolute } from './util';
 
 /**
  * Search for the imported file in order of included paths
@@ -14,13 +15,8 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
   }
 
   for(let i = 0; i < candidateFromPaths.length; i++) {
-    let candidateFromPath = candidateFromPaths[i];
-
-    // Ensure we get absolute included path
-    if(!path.posix.isAbsolute(candidateFromPath)) {
-      candidateFromPath = path.posix.join(process.cwd(), candidateFromPath);
-    }
-
+    // Get normalize absolute candidate from path
+    let candidateFromPath = normalizePath(makeAbsolute(candidateFromPaths[i]));
     let candidatePath = path.posix.join(candidateFromPath, url);
 
     if(includedFilesMap[candidatePath]) {
