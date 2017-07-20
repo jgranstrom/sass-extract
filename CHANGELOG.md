@@ -1,6 +1,22 @@
+<a name="0.5.2"></a>
+## 0.5.2 (2017-07-20)
+
+* docs: add appveyor badge ([72ae503](https://github.com/jgranstrom/sass-extract/commit/72ae503))
+* ci: config type ([f1bad5c](https://github.com/jgranstrom/sass-extract/commit/f1bad5c))
+* ci: globally install node-gyp ([a4cae31](https://github.com/jgranstrom/sass-extract/commit/a4cae31))
+* ci: update version matrix ([60064ed](https://github.com/jgranstrom/sass-extract/commit/60064ed))
+* test: add appveyor windows tests ([c21a9e9](https://github.com/jgranstrom/sass-extract/commit/c21a9e9))
+* test: fix appveyor yaml ([2004cd5](https://github.com/jgranstrom/sass-extract/commit/2004cd5))
+* test: supress npm warnings and update tested versions ([ee86a08](https://github.com/jgranstrom/sass-extract/commit/ee86a08))
+* test(compat): ci compatibility fix ([89efb83](https://github.com/jgranstrom/sass-extract/commit/89efb83))
+* fix(compat): fix window path resolution compatibility issues ([835f542](https://github.com/jgranstrom/sass-extract/commit/835f542))
+
+
+
 <a name="0.5.1"></a>
 ## 0.5.1 (2017-07-17)
 
+* chore: 0.5.1 ([a5d49e6](https://github.com/jgranstrom/sass-extract/commit/a5d49e6))
 * fix(importer): fix @import of partials without leading underscore in url ([c1fce2b](https://github.com/jgranstrom/sass-extract/commit/c1fce2b)), closes [#9](https://github.com/jgranstrom/sass-extract/issues/9)
 * fix(parse): reduce complexity of comments expression, prevent freeze ([f074c04](https://github.com/jgranstrom/sass-extract/commit/f074c04)), closes [#2](https://github.com/jgranstrom/sass-extract/issues/2)
 
