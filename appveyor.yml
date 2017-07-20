@@ -1,0 +1,40 @@
+environment:
+  matrix:
+    - nodejs_version: "4"
+      sass_version: "3.8.0"
+    - nodejs_version: "4"
+      sass_version: "^3"
+    - nodejs_version: "4"
+      sass_version: "4.0.0"
+    - nodejs_version: "4"
+      sass_version: "^4"
+
+    - nodejs_version: "5"
+      sass_version: "3.8.0"
+    - nodejs_version: "5"
+      sass_version: "^3"
+    - nodejs_version: "5"
+      sass_version: "4.0.0"
+    - nodejs_version: "5"
+      sass_version: "^4"
+
+    - nodejs_version: "6"
+      sass_version: "3.8.0"
+    - nodejs_version: "6"
+      sass_version: "^3"
+    - nodejs_version: "6"
+      sass_version: "4.0.0"
+    - nodejs_version: "6"
+      sass_version: "^4"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install
+  - npm install node-sass@$env:sass_version
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+build: off
