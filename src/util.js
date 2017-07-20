@@ -1,0 +1,23 @@
+import path from 'path';
+
+const NORMALIZED_PATH_SEPARATOR = '/';
+const PLATFORM_PATH_SEPARATOR = path.sep;
+
+/**
+ * Normalize path across platforms
+ */
+export function normalizePath(path) {
+  return path.split(PLATFORM_PATH_SEPARATOR).join(NORMALIZED_PATH_SEPARATOR);
+}
+
+/**
+ * Make a potentially relative path absolute relative to cwd
+ */
+export function makeAbsolute(maybeRelativePath) {
+  if(path.isAbsolute(maybeRelativePath)) {
+    return maybeRelativePath;
+  } else {
+    return path.posix.join(process.cwd(), maybeRelativePath);
+  }
+}
+

@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/extract');
+const { normalizePath } = require('../lib/util');
 const { EOL } = require('os');
 
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
@@ -62,7 +62,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$list.value[2].value.b).to.equal(0);
   expect(rendered.vars.global.$list.value[2].value.a).to.equal(1);
   expect(rendered.vars.global.$list.value[2].value.hex).to.equal('#000000');
-  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor');
+  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor'); 
 
   expect(rendered.vars.global.$string.value).to.equal('string');
   expect(rendered.vars.global.$string.type).to.equal('SassString');

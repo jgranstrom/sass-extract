@@ -1,29 +1,11 @@
 import Promise from 'bluebird';
 import sass from 'node-sass';
-import path from 'path';
+import { normalizePath, makeAbsolute } from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
 
 Promise.promisifyAll(sass);
-
-const NORMALIZED_PATH_SEPARATOR = '/';
-const PLATFORM_PATH_SEPARATOR = path.sep;
-
-/**
- * Normalize path across platforms
- */
-export function normalizePath(path) {
-  return path.split(PLATFORM_PATH_SEPARATOR).join(NORMALIZED_PATH_SEPARATOR);
-}
-
-export function makeAbsolute(maybeRelativePath) {
-  if(path.posix.isAbsolute(maybeRelativePath)) {
-    return maybeRelativePath;
-  } else {
-    return path.posix.join(process.cwd(), maybeRelativePath);
-  }
-}
 
 /**
  * Get rendered stats required for extraction
