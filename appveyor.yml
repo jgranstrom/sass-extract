@@ -29,8 +29,8 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - ps: npm install node-sass@$env:sass_version
   - npm install
-  - npm install node-sass@$env:sass_version
 
 test_script:
   - node --version
