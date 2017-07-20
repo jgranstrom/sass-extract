@@ -95,7 +95,10 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
     expect(rendered.vars.global.$map.sources).to.have.length(1);
     expect(rendered.vars.global.$map.sources[0]).to.equal(normalizePath(sourceFile));
     expect(rendered.vars.global.$map.expressions).to.have.length(1);
-    expect(rendered.vars.global.$map.expressions[0]).to.equal(`(${EOL}  number: 2em,${EOL}  string: 'mapstring'${EOL})`);
+    expect(rendered.vars.global.$map.expressions[0]).to.be.oneOf([
+      `(${EOL}  number: 2em,${EOL}  string: 'mapstring'${EOL})`,
+      `(\n  number: 2em,\n  string: 'mapstring'\n)`,
+      ]);
   }
 }
 
