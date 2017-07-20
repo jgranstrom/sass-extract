@@ -29,6 +29,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - ps: npm install -g node-gyp
   - ps: npm install node-sass@$env:sass_version
   - npm install
 
