@@ -1,12 +1,5 @@
 environment:
   matrix:
-    - nodejs_version: "8"
-      sass_version: "3.8.0"
-    - nodejs_version: "8"
-      sass_version: "3"
-    - nodejs_version: "8"
-      sass_version: "4"
-
     - nodejs_version: "6"
       sass_version: "3.8.0"
     - nodejs_version: "6"

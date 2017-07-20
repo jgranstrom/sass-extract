@@ -12,3 +12,10 @@ env:
   - NODE_SASS_VERSION=3.8.0
   - NODE_SASS_VERSION=3
   - NODE_SASS_VERSION=4
+
+matrix:
+  exclude:
+    - node_js: "8"
+      env: NODE_SASS_VERSION=3.8.0
+    - node_js: "8"
+      env: NODE_SASS_VERSION=4
