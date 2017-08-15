@@ -8,12 +8,18 @@ const RAW_DATA_FILE = 'data';
 /**
  * Include any raw compilation data as a 'data' file
  */
-function includeRawDataFile(files, entryFilename, data) {
+function includeRawDataFile(includedFiles, files, entryFilename, data) {
+  let orderedFiles = includedFiles;
+
   if(entryFilename === RAW_DATA_FILE && data) {
     files[RAW_DATA_FILE] = data;
+    orderedFiles = [RAW_DATA_FILE, ...orderedFiles];
   }
 
-  return files;
+  return {
+    compiledFiles: files,
+    orderedFiles,
+  };
 }
 
 /**
@@ -43,7 +49,7 @@ export function loadCompiledFiles(includedFiles, entryFilename, data) {
     });
   }))
   .then(() => {
-    return includeRawDataFile(files, entryFilename, data);
+    return includeRawDataFile(includedFiles, files, entryFilename, data);
   });
 }
 
@@ -57,5 +63,5 @@ export function loadCompiledFilesSync(includedFiles, entryFilename, data) {
     files[filename] = loadSync(filename);
   });
 
-  return includeRawDataFile(files, entryFilename, data);
+  return includeRawDataFile(includedFiles, files, entryFilename, data);
 }

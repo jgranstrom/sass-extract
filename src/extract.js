@@ -44,24 +44,26 @@ function makeExtractionCompileOptions(compileOptions, entryFilename, extractions
 /**
  * Compile extracted variables per file into a complete result object
  */
-function compileExtractionResult(extractions) {
+function compileExtractionResult(orderedFiles, extractions) {
   const extractedVariables = { global: {} };
 
-  Object.keys(extractions).map(filename => {
+  orderedFiles.map(filename => {
     const globalFileVariables = extractions[filename].variables.global;
 
     Object.keys(globalFileVariables).map(variableKey => {
       let variable = extractedVariables.global[variableKey];
+      let variableSources = [];
+      let variableExpressions = [];
 
-      if(!variable) {
-        variable = extractedVariables.global[variableKey] = Object.assign({}, globalFileVariables[variableKey].value, {
-          sources: [],
-          expressions: [],
-        });
+      if(variable) {
+        variableSources = variable.sources;
+        variableExpressions = variable.expressions;
       }
 
-      variable.sources.push(filename);
-      variable.expressions.push(globalFileVariables[variableKey].expression);
+      variable = extractedVariables.global[variableKey] = Object.assign({}, globalFileVariables[variableKey].value, {
+        sources: [...variableSources, filename],
+        expressions: [...variableExpressions, globalFileVariables[variableKey].expression],
+      });
     });
   });
 
@@ -76,14 +78,14 @@ export function extract(rendered, { compileOptions = {} } = {}) {
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   return loadCompiledFiles(includedFiles, entryFilename, compileOptions.data)
-  .then(compiledFiles => {
+  .then(({ compiledFiles, orderedFiles }) => {
     const extractions = processFiles(compiledFiles);
     const importer = makeImporter(extractions, includedFiles, includedPaths);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
-    
+
     return sass.renderAsync(extractionCompileOptions)
     .then(() => {
-      return compileExtractionResult(extractions)
+      return compileExtractionResult(orderedFiles, extractions)
     });
   });
 }
@@ -95,12 +97,12 @@ export function extract(rendered, { compileOptions = {} } = {}) {
 export function extractSync(rendered, { compileOptions = {} } = {}) {
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
-  const compiledFiles = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
+  const { compiledFiles, orderedFiles } = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
   const extractions = processFiles(compiledFiles);
   const importer = makeSyncImporter(extractions, includedFiles, includedPaths);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
   sass.renderSync(extractionCompileOptions);
 
-  return compileExtractionResult(extractions);  
+  return compileExtractionResult(orderedFiles, extractions);  
 }
