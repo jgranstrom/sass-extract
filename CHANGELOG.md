@@ -1,6 +1,14 @@
+<a name="0.5.3"></a>
+## 0.5.3 (2017-08-15)
+
+* fix(extract): fixes undefined ordering behavior on extraction ([bb0c34c](https://github.com/jgranstrom/sass-extract/commit/bb0c34c)), closes [#13](https://github.com/jgranstrom/sass-extract/issues/13)
+
+
+
 <a name="0.5.2"></a>
 ## 0.5.2 (2017-07-20)
 
+* chore: 0.5.2 ([023ca1b](https://github.com/jgranstrom/sass-extract/commit/023ca1b))
 * docs: add appveyor badge ([72ae503](https://github.com/jgranstrom/sass-extract/commit/72ae503))
 * ci: config type ([f1bad5c](https://github.com/jgranstrom/sass-extract/commit/f1bad5c))
 * ci: globally install node-gyp ([a4cae31](https://github.com/jgranstrom/sass-extract/commit/a4cae31))
