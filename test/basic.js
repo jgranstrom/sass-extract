@@ -1,14 +1,14 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/util');
+const { render, renderSync } = require('../src');
+const { normalizePath } = require('../src/util');
 const { EOL } = require('os');
 
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
 const basicExplicitFile = path.join(__dirname, 'sass', 'basic-explicit.scss');
 const basicMixedFile = path.join(__dirname, 'sass', 'basic-mixed.scss');
 
-function verifyBasic(rendered, sourceFile, mapIncluded) {
+function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$number1');
@@ -18,6 +18,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global).to.have.property('$string');
   expect(rendered.vars.global).to.have.property('$boolean');
   expect(rendered.vars.global).to.have.property('$null');
+  expect(rendered.vars.global).to.have.property('$map');
 
   expect(rendered.vars.global.$number1.value).to.equal(100);
   expect(rendered.vars.global.$number1.unit).to.equal('px');
@@ -25,7 +26,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
   expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number1.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number1.expressions[0]).to.equal('100px');
+  expect(rendered.vars.global.$number1.expressions[0]).to.equal(`100px${ explicit || mixed ? ' !global' : ''}`);
 
   expect(rendered.vars.global.$number2.value).to.equal(200);
   expect(rendered.vars.global.$number2.unit).to.equal('px');
@@ -33,7 +34,7 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
   expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$number2.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number2.expressions[0]).to.equal('$number1 * 2');
+  expect(rendered.vars.global.$number2.expressions[0]).to.equal(`$number1 * 2${ explicit || mixed ? ' !global' : ''}`);
 
   expect(rendered.vars.global.$color.value.r).to.equal(255);
   expect(rendered.vars.global.$color.value.g).to.equal(0);
@@ -44,14 +45,14 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$color.sources).to.have.length(1);
   expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$color.expressions).to.have.length(1);
-  expect(rendered.vars.global.$color.expressions[0]).to.equal('get-color()');
+  expect(rendered.vars.global.$color.expressions[0]).to.equal(`get-color()${ explicit || mixed ? ' !global' : ''}`);
 
   expect(rendered.vars.global.$list.value).to.have.length(3);
   expect(rendered.vars.global.$list.type).to.equal('SassList');
   expect(rendered.vars.global.$list.sources).to.have.length(1);
   expect(rendered.vars.global.$list.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$list.expressions).to.have.length(1);
-  expect(rendered.vars.global.$list.expressions[0]).to.equal('1px solid black');
+  expect(rendered.vars.global.$list.expressions[0]).to.equal(`1px solid black${ explicit ? ' !global' : ''}`);
   expect(rendered.vars.global.$list.value[0].value).to.equal(1);
   expect(rendered.vars.global.$list.value[0].unit).to.equal('px');
   expect(rendered.vars.global.$list.value[0].type).to.equal('SassNumber');
@@ -69,44 +70,42 @@ function verifyBasic(rendered, sourceFile, mapIncluded) {
   expect(rendered.vars.global.$string.sources).to.have.length(1);
   expect(rendered.vars.global.$string.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$string.expressions).to.have.length(1);
-  expect(rendered.vars.global.$string.expressions[0]).to.equal('\'string\'');
+  expect(rendered.vars.global.$string.expressions[0]).to.equal(`\'string\'${ explicit ? ' !global' : ''}`);
 
   expect(rendered.vars.global.$boolean.value).to.equal(true);
   expect(rendered.vars.global.$boolean.type).to.equal('SassBoolean');
   expect(rendered.vars.global.$boolean.sources).to.have.length(1);
   expect(rendered.vars.global.$boolean.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$boolean.expressions).to.have.length(1);
-  expect(rendered.vars.global.$boolean.expressions[0]).to.equal('true');
+  expect(rendered.vars.global.$boolean.expressions[0]).to.equal(`true${ explicit ? ' !global' : ''}`);
 
   expect(rendered.vars.global.$null.value).to.equal(null);
   expect(rendered.vars.global.$null.type).to.equal('SassNull');
   expect(rendered.vars.global.$null.sources).to.have.length(1);
   expect(rendered.vars.global.$null.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$null.expressions).to.have.length(1);
-  expect(rendered.vars.global.$null.expressions[0]).to.equal('null');
+  expect(rendered.vars.global.$null.expressions[0]).to.equal(`null${ explicit ? ' !global' : ''}`);
 
-  if(mapIncluded) {
-    expect(rendered.vars.global.$map.type).to.equal('SassMap');
-    expect(rendered.vars.global.$map.value.number.value).to.equal(2);
-    expect(rendered.vars.global.$map.value.number.unit).to.equal('em');
-    expect(rendered.vars.global.$map.value.number.type).to.equal('SassNumber');
-    expect(rendered.vars.global.$map.value.string.value).to.equal('mapstring');
-    expect(rendered.vars.global.$map.value.string.type).to.equal('SassString');
-    expect(rendered.vars.global.$map.sources).to.have.length(1);
-    expect(rendered.vars.global.$map.sources[0]).to.equal(normalizePath(sourceFile));
-    expect(rendered.vars.global.$map.expressions).to.have.length(1);
-    expect(rendered.vars.global.$map.expressions[0]).to.be.oneOf([
-      `(${EOL}  number: 2em,${EOL}  string: 'mapstring'${EOL})`,
-      `(\n  number: 2em,\n  string: 'mapstring'\n)`,
-      ]);
-  }
+  expect(rendered.vars.global.$map.type).to.equal('SassMap');
+  expect(rendered.vars.global.$map.value.number.value).to.equal(2);
+  expect(rendered.vars.global.$map.value.number.unit).to.equal('em');
+  expect(rendered.vars.global.$map.value.number.type).to.equal('SassNumber');
+  expect(rendered.vars.global.$map.value.string.value).to.equal('mapstring');
+  expect(rendered.vars.global.$map.value.string.type).to.equal('SassString');
+  expect(rendered.vars.global.$map.sources).to.have.length(1);
+  expect(rendered.vars.global.$map.sources[0]).to.equal(normalizePath(sourceFile));
+  expect(rendered.vars.global.$map.expressions).to.have.length(1);
+  expect(rendered.vars.global.$map.expressions[0]).to.be.oneOf([
+    `(${EOL}  number: 2em,${EOL}  string: 'mapstring'${EOL})${ explicit ? ' !global' : ''}`,
+    `(\n  number: 2em,\n  string: 'mapstring'\n)${ explicit ? ' !global' : ''}`,
+  ]);
 }
 
 describe('basic-implicit', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
       const rendered = renderSync({ file: basicImplicitFile })
-      verifyBasic(rendered, basicImplicitFile, true);
+      verifyBasic(rendered, basicImplicitFile, false, false);
     });
   });
 
@@ -114,7 +113,7 @@ describe('basic-implicit', () => {
     it('should extract all variables', () => {
       return render({ file: basicImplicitFile })
       .then(rendered => {
-        verifyBasic(rendered, basicImplicitFile, true);
+        verifyBasic(rendered, basicImplicitFile, false, false);
       });
     });
   });
@@ -124,7 +123,7 @@ describe('basic-explicit', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
       const rendered = renderSync({ file: basicExplicitFile })
-      verifyBasic(rendered, basicExplicitFile, false);
+      verifyBasic(rendered, basicExplicitFile, true, false);
     });
   });
 
@@ -132,7 +131,7 @@ describe('basic-explicit', () => {
     it('should extract all variables', () => {
       return render({ file: basicExplicitFile })
       .then(rendered => {
-        verifyBasic(rendered, basicExplicitFile, false);
+        verifyBasic(rendered, basicExplicitFile, true, false);
       });
     });
   });
@@ -142,7 +141,7 @@ describe('basic-mixed', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
       const rendered = renderSync({ file: basicMixedFile })
-      verifyBasic(rendered, basicMixedFile, true);
+      verifyBasic(rendered, basicMixedFile, false, true);
     });
   });
 
@@ -150,7 +149,7 @@ describe('basic-mixed', () => {
     it('should extract all variables', () => {
       return render({ file: basicMixedFile })
       .then(rendered => {
-        verifyBasic(rendered, basicMixedFile, true);
+        verifyBasic(rendered, basicMixedFile, false, true);
       });
     });
   });

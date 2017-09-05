@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/util');
+const { render, renderSync } = require('../src');
+const { normalizePath } = require('../src/util');
 
 const commentFile = path.join(__dirname, 'sass', 'comments.scss');
 

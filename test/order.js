@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/util');
+const { render, renderSync } = require('../src');
+const { normalizePath } = require('../src/util');
 
 const orderFile = path.join(__dirname, 'sass', 'order.scss');
 const order1File = path.join(__dirname, 'sass', 'order', '1.scss');

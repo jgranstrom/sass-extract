@@ -1,51 +1,78 @@
-import sass from 'node-sass';
-
-const REGEX_VARIABLE_GLOBAL_IMPLICIT = /(\$[\w-_]+)\s*:\s*((.*?[\r\n]?)+?);/g;
-const REGEX_VARIABLE_GLOBAL_EXPLICIT = /(\$[\w-_]+)\s*:\s*(.*?)\s+!global\s*;/g;
-const REGEX_DEEP_CONTEXT = /({[^{}]*})/g;
-const REGEX_COMMENTS = /(?:(?:\/\*[\w\W]*\*\/)|(?:\/\/[^\r\n]*[\r\n]?))/g;
+import { parse, stringify } from 'scss-parser';
+import createQueryWrapper from 'query-ast';
 
 /**
- * Strip a string for all occurences that matches provided regex
+ * Check if a declaration node has a '!' operator followed by a '<flag>' identifier in its value
  */
-function stripByRegex(data, regex) {
-  let strippedData = data;
-
-  let match;
-  while(match = strippedData.match(regex)) {
-    strippedData = strippedData.replace(match[0], '');
-  }
-
-  return strippedData;
+function declarationHasFlag($ast, node, flag) {
+  return $ast(node)
+  .children('value').children('operator')
+  .filter(operator => operator.node.value === '!')
+  .nextAll('identifier') // nextAll to account for potential space tokens following operator
+  .filter(identifier => identifier.node.value === flag)
+  .length() > 0
 }
 
 /**
- * Extract variable declaration and expression from a chunk of sass source using provided regex
+ * Check if a declaration node has a '!' operator followed by the 'default' identifier in its value
  */
-function extractVariables(data, regex) {
-  const variables = [];
-
-  let matches;
-  while(matches = regex.exec(data)) {
-    const declaration = matches[1];
-    const expression = matches[2];
-    const declarationClean = declaration.replace('$', '');
-
-    variables.push({ declaration, expression, declarationClean });
-  }
-
-  return variables;
+function isExplicitGlobalDeclaration($ast, node) {
+  return declarationHasFlag($ast, node, 'global');
 }
 
 /**
- * Parse variables declarations from a chunk of sass source
+ * Check if a declaration node has a '!' operator followed by the 'global' identifier in its value
+ */
+function isDefaultDeclaration($ast, node) {
+  return declarationHasFlag($ast, node, 'default');
+}
+
+/**
+ * Parse the raw expression of a variable declaration excluding flags
+ */
+function parseExpression($ast, declaration) {
+  let flagsReached = false;
+  
+  return stringify($ast(declaration)
+  .children('value')
+  .get(0))
+  .trim();
+}
+
+/**
+ * Parse declaration node into declaration object
+ */
+function parseDeclaration($ast, declaration) {
+  const variable = {};
+  
+  variable.declarationClean = $ast(declaration)
+  .children('property')
+  .value();
+
+  variable.declaration = `$${variable.declarationClean}`;
+
+  variable.expression = parseExpression($ast, declaration);
+  variable.flags = {
+    default: isDefaultDeclaration($ast, declaration),
+    global: isExplicitGlobalDeclaration($ast, declaration),
+  };
+
+  return variable;
+}
+
+/**
+ * Parse variable declarations from a chunk of sass source
  */
 export function parseDeclarations(data) {
-  const decommentedData = stripByRegex(data, REGEX_COMMENTS);
-  const decontextifiedData = stripByRegex(decommentedData, REGEX_DEEP_CONTEXT);
+  const ast = parse(data);
+  const $ast = createQueryWrapper(ast);
 
-  const explicitGlobals = extractVariables(decommentedData, REGEX_VARIABLE_GLOBAL_EXPLICIT);
-  const implicitGlobals = extractVariables(decontextifiedData, REGEX_VARIABLE_GLOBAL_IMPLICIT);
+  const implicitGlobalDeclarations = $ast('declaration').hasParent('stylesheet');
+  const explicitGlobalDeclarations = $ast('declaration').hasParent('block')
+  .filter(node => isExplicitGlobalDeclaration($ast, node));
+
+  let implicitGlobals = implicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration));
+  let explicitGlobals = explicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration));
 
   return { explicitGlobals, implicitGlobals };
 }

@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../lib');
-const { normalizePath } = require('../lib/util');
+const { render, renderSync } = require('../src');
+const { normalizePath } = require('../src/util');
 
 const includeRootFile = path.join(__dirname, 'sass', 'include', 'root.scss');
 const includeRoot2File = path.join(__dirname, 'sass', 'include', 'root2.scss');
