@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "bluebird": "^3.4.7",
+    "parse-color": "^1.0.0",
     "query-ast": "^1.0.1",
     "scss-parser": "^1.0.0"
   },
