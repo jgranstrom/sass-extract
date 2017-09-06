@@ -1,0 +1,42 @@
+$someDefault: 'default-val';
+
+@mixin mixin1 {
+  $mixin1: 'm-variable-1' !global;
+}
+
+@mixin mixin2($param1, $param2: null, $param3: $someDefault, $param4: 123) {
+  $mixin2: 'm-variable-2' !global;
+}
+
+@mixin mixin3($param1, $param2: null, $param3: $someDefault, $param4: 123) {
+  $mixin3: $someDefault !global;
+}
+
+@function func1() {
+  $function1: 'fn-variable-1' !global;
+  @return null;
+}
+
+@function func2($param4, $param5, $param6: 123, $param7: $someDefault) {
+  $function2: 'fn-variable-2' !global;
+  @return null;
+}
+
+@function func3($param4, $param5, $param6: 123, $param7: $someDefault) {
+  $function3: $param7 !global;
+  @return null;
+}
+
+@function func4($param: 'default') {
+  $someGlobalSetOnInvoke1: $param !global;
+  @return null;
+}
+
+@function func5($param: 'default') {
+  $someGlobalSetOnInvoke2: $param !global;
+  @return null;
+}
+
+$invoked: func3(null, null, null, 'provided-val');
+
+$invoked2: func5('provided');

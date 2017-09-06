@@ -4,12 +4,14 @@ const FN_PREFIX = '___SV_INJECT';
 const FN_PREFIX_IMPLICIT_GLOBAL = 'IG';
 const FN_PREFIX_EXPLICIT_GLOBAL = 'EG';
 const FN_SUFFIX_VALUE = 'VALUE';
+const TMP_VAR_PREFIX = '____SV_TEMP_VAR';
 
 /**
  * Create injection function and source for a file, category, declaration and result handler
  */
 function createInjection(fileId, categoryPrefix, declaration, declarationResultHandler) {
   const fnName = `${FN_PREFIX}_${fileId}_${categoryPrefix}_${declaration.declarationClean}`;
+  const tmpVariableName = `${TMP_VAR_PREFIX}_${fileId}`;
 
   const injectedFunction = function(sassValue) {
     const value = createStructuredValue(sassValue);
@@ -17,7 +19,31 @@ function createInjection(fileId, categoryPrefix, declaration, declarationResultH
     return sassValue;
   };
 
-  const injectedCode = `$${fnName}: ${fnName}(${declaration.declaration});\n`
+  let injectedCode = `$${fnName}: ${fnName}(${declaration.declaration});\n`
+
+  const mixinDep = declaration.deps.mixin;
+  const functionDep = declaration.deps.function;
+
+  // Inject mixin and function invocations if necessary
+  if(mixinDep) {
+    const mixinInvocation = `
+    ${declaration.declaration}: null !default;
+    @if ${declaration.declaration} == null {
+      @include ${mixinDep.name}(${new Array(mixinDep.argsCount.required).fill('null').join(', ')});
+    }
+    `;
+    injectedCode = `${mixinInvocation}${injectedCode}\n`;
+  }
+
+  if(functionDep) {
+    const functionInvocation = `
+    ${declaration.declaration}: null !default;
+    @if ${declaration.declaration} == null {
+      $${tmpVariableName}: ${functionDep.name}(${new Array(functionDep.argsCount.required).fill('null').join(', ')});
+    }
+    `;
+    injectedCode = `${functionInvocation}${injectedCode}\n`; 
+  }
 
   return { fnName, injectedFunction, injectedCode };
 }
