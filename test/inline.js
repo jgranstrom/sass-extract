@@ -31,16 +31,16 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$number1.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
   expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(number1Source));
-  expect(rendered.vars.global.$number1.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number1.expressions[0]).to.equal('123px');
+  expect(rendered.vars.global.$number1.declarations).to.have.length(1);
+  expect(rendered.vars.global.$number1.declarations[0].expression).to.equal('123px');
 
   expect(rendered.vars.global.$number2.value).to.equal(246);
   expect(rendered.vars.global.$number2.unit).to.equal('px');
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
   expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(number2Source));
-  expect(rendered.vars.global.$number2.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number2.expressions[0]).to.equal('2 * $number1');
+  expect(rendered.vars.global.$number2.declarations).to.have.length(1);
+  expect(rendered.vars.global.$number2.declarations[0].expression).to.equal('2 * $number1');
 
   expect(rendered.vars.global.$color.value.r).to.equal(255);
   expect(rendered.vars.global.$color.value.g).to.equal(0);
@@ -50,8 +50,8 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$color.type).to.equal('SassColor');
   expect(rendered.vars.global.$color.sources).to.have.length(1);
   expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(colorSource));
-  expect(rendered.vars.global.$color.expressions).to.have.length(1);
-  expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
+  expect(rendered.vars.global.$color.declarations).to.have.length(1);
+  expect(rendered.vars.global.$color.declarations[0].expression).to.equal('red');
 }
 
 describe('inline', () => {

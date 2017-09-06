@@ -51,18 +51,24 @@ function compileExtractionResult(orderedFiles, extractions) {
     const globalFileVariables = extractions[filename].variables.global;
 
     Object.keys(globalFileVariables).map(variableKey => {
-      let variable = extractedVariables.global[variableKey];
-      let variableSources = [];
-      let variableExpressions = [];
+      globalFileVariables[variableKey].forEach(extractedVariable => {
+        let variable = extractedVariables.global[variableKey];
+        let currentVariableSources = [];
+        let currentVariableDeclarations = [];
 
-      if(variable) {
-        variableSources = variable.sources;
-        variableExpressions = variable.expressions;
-      }
+        if(variable) {
+          currentVariableSources = variable.sources;
+          currentVariableDeclarations = variable.declarations;
+        }
 
-      variable = extractedVariables.global[variableKey] = Object.assign({}, globalFileVariables[variableKey].value, {
-        sources: [...variableSources, filename],
-        expressions: [...variableExpressions, globalFileVariables[variableKey].expression],
+        variable = extractedVariables.global[variableKey] = Object.assign({}, extractedVariable.value);
+        variable.sources = currentVariableSources.indexOf(filename) < 0 ? [...currentVariableSources, filename] : currentVariableSources;
+        variable.declarations = [...currentVariableDeclarations, {
+          expression: extractedVariable.declaration.expression,
+          flags: extractedVariable.declaration.flags,
+          in: filename,
+          position: extractedVariable.declaration.position,
+        }];
       });
     });
   });

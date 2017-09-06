@@ -98,9 +98,11 @@ function getDeclarationDeps($ast, declaration, scope) {
 function parseDeclaration($ast, declaration, scope) {
   const variable = {};
   
-  variable.declarationClean = $ast(declaration)
-  .children('property')
-  .value();
+  const propertyNode = $ast(declaration)
+  .children('property');
+
+  variable.declarationClean = propertyNode.value();
+  variable.position = propertyNode.get(0).start;
 
   variable.declaration = `$${variable.declarationClean}`;
 

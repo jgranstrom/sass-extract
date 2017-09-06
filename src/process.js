@@ -16,7 +16,10 @@ function processFile(filename, data) {
   const variables = { global: {} };
 
   const globalDeclarationResultHandler = (declaration, value) => {
-    variables.global[declaration.declaration] = { value, expression: declaration.expression };
+    if(!variables.global[declaration.declaration]) {
+      variables.global[declaration.declaration] = [];
+    }
+    variables.global[declaration.declaration].push({ declaration, value });
   }
 
   const fileId = getFileId(filename);

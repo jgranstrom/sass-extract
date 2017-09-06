@@ -20,16 +20,16 @@ function verifyFunctions(rendered, sourceFile) {
   expect(rendered.vars.global.$fColor.type).to.equal('SassColor');
   expect(rendered.vars.global.$fColor.sources).to.have.length(1);
   expect(rendered.vars.global.$fColor.sources[0]).to.equal(normalizePath(sourceFile));
-  expect(rendered.vars.global.$fColor.expressions).to.have.length(1);
-  expect(rendered.vars.global.$fColor.expressions[0]).to.equal('fn-color()');
+  expect(rendered.vars.global.$fColor.declarations).to.have.length(1);
+  expect(rendered.vars.global.$fColor.declarations[0].expression).to.equal('fn-color()');
 
   expect(rendered.vars.global.$fSize.value).to.equal(20);
   expect(rendered.vars.global.$fSize.unit).to.equal('px');
   expect(rendered.vars.global.$fSize.type).to.equal('SassNumber');
   expect(rendered.vars.global.$fSize.sources).to.have.length(1);
   expect(rendered.vars.global.$fSize.sources[0]).to.equal(normalizePath(sourceFile));
-  expect(rendered.vars.global.$fSize.expressions).to.have.length(1);
-  expect(rendered.vars.global.$fSize.expressions[0]).to.equal('fn-size(2)');
+  expect(rendered.vars.global.$fSize.declarations).to.have.length(1);
+  expect(rendered.vars.global.$fSize.declarations[0].expression).to.equal('fn-size(2)');
 }
 
 const functions = {

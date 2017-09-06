@@ -225,9 +225,15 @@ $myVariable: 123px;
   global: {
     $myVariable: {
       type: 'SassNumber',
-      sources: [ 'path/to/style.sass' ],
-      expressions: [ '123px' ],
-      unit: 'px' // Data type specific field
+      sources: [ 'path/to/style.scss' ],
+      value: 123, // Extracted value
+      unit: 'px', // Data type specific metadata
+      declarations: [
+        expression: '123px',
+        flags: { default: false, global: false },
+        in: 'path/to/style.scss',
+        position: { cursor: 0, line: 1, column: 0 }
+      ]
     }
   }
 }
@@ -239,7 +245,11 @@ Each of the variable results will have the same general structure and potentiall
 |---|---|
 | `type`| A string describing the data type of the extracted variables  |
 | `sources`| An array of all file paths where this variables is declared  |
-| `expressions`| An array of all expressions that defines the variable value |
+| `declarations`| An array of declarations of the variable |
+| `declarations.expression`| The raw expression of the variable definition |
+| `declarations.flags`| Describes any present flags such as `!default` or `!global` |
+| `declarations.in`| The file where the declaration was found |
+| `declarations.position`| The exact position of the declaration in the file |
 
 Note that `sources` and `expressions` are both arrays, see [Overrides](#overrides) for details about this.
 

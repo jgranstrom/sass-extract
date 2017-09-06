@@ -18,16 +18,16 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$number1.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number1.sources).to.have.length(1);
   expect(rendered.vars.global.$number1.sources[0]).to.equal(normalizePath(sourceFile));
-  expect(rendered.vars.global.$number1.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number1.expressions[0]).to.equal('100px');
+  expect(rendered.vars.global.$number1.declarations).to.have.length(1);
+  expect(rendered.vars.global.$number1.declarations[0].expression).to.equal('100px');
 
   expect(rendered.vars.global.$number2.value).to.equal(200);
   expect(rendered.vars.global.$number2.unit).to.equal('px');
   expect(rendered.vars.global.$number2.type).to.equal('SassNumber');
   expect(rendered.vars.global.$number2.sources).to.have.length(1);
   expect(rendered.vars.global.$number2.sources[0]).to.equal(normalizePath(sourceFile));
-  expect(rendered.vars.global.$number2.expressions).to.have.length(1);
-  expect(rendered.vars.global.$number2.expressions[0]).to.equal('$number1 * 2');
+  expect(rendered.vars.global.$number2.declarations).to.have.length(1);
+  expect(rendered.vars.global.$number2.declarations[0].expression).to.equal('$number1 * 2');
 
   expect(rendered.vars.global.$color.value.r).to.equal(255);
   expect(rendered.vars.global.$color.value.g).to.equal(0);
@@ -37,8 +37,8 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$color.type).to.equal('SassColor');
   expect(rendered.vars.global.$color.sources).to.have.length(1);
   expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(sourceFile));
-  expect(rendered.vars.global.$color.expressions).to.have.length(1);
-  expect(rendered.vars.global.$color.expressions[0]).to.equal('red');
+  expect(rendered.vars.global.$color.declarations).to.have.length(1);
+  expect(rendered.vars.global.$color.declarations[0].expression).to.equal('red');
 }
 
 describe('comments', () => {
