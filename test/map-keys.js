@@ -12,31 +12,73 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global).to.have.property('$map');
 
   expect(rendered.vars.global.$map.type).to.equal('SassMap');
-  expect(rendered.vars.global.$map.value).to.deep.equal({
-    string: { type: 'SassNumber', value: 1, unit: 'em' },
-    '1px': { type: 'SassString', value: 'number' },
-    white: { type: 'SassString', value: 'color-string' },
-    '#123456': { type: 'SassString', value: 'color-hex' },
-    'rgba(0,1,2,0.5)': { type: 'SassString', value: 'color-rgba' },
-    black: { type: 'SassString', value: 'color-black-rgba' },
-    true: { type: 'SassString', value: 'boolean' },
-    null: { type: 'SassString', value: 'null' },
-    '1 2 3': { type: 'SassString', value: 'list' },
-    '(a: map)': { type: 'SassString', value: 'map' },
-    '(b: nested) (c: maps)': { type: 'SassString', value: 'list-maps' },
-    '(d: map)': { 
-      type: 'SassMap',
-      value: { 
-        nested: { 
-          type: 'SassMap',
-          value: { 
-            '1 2 3': { type: 'SassString', value: 'list' } 
-          } 
-        } 
-      } 
-    },
-    '#807f7f': { type: 'SassString', value: 'darkened-white' },
-    'somekey': { type: 'SassString', value: 'key-variable' },
+
+  expect(rendered.vars.global.$map.value).to.have.property('string');
+  expect(rendered.vars.global.$map.value).to.have.property('1px');
+  expect(rendered.vars.global.$map.value).to.have.property('white');
+  expect(rendered.vars.global.$map.value).to.have.property('#123456');
+  expect(rendered.vars.global.$map.value).to.have.property('rgba(0,1,2,0.5)');
+  expect(rendered.vars.global.$map.value).to.have.property('black');
+  expect(rendered.vars.global.$map.value).to.have.property('true');
+  expect(rendered.vars.global.$map.value).to.have.property('null');
+  expect(rendered.vars.global.$map.value).to.have.property('1 2 3');
+  expect(rendered.vars.global.$map.value).to.have.property('(a: map)');
+  expect(rendered.vars.global.$map.value).to.have.property('(b: nested) (c: maps)');
+  expect(rendered.vars.global.$map.value).to.have.property('(d: map)');
+  expect(rendered.vars.global.$map.value).to.have.property('#807f7f');
+  expect(rendered.vars.global.$map.value).to.have.property('somekey');
+
+  expect(rendered.vars.global.$map.value.string).to.deep.include({
+    type: 'SassNumber', value: 1, unit: 'em'
+  });
+  expect(rendered.vars.global.$map.value['1px']).to.deep.include({
+    type: 'SassString', value: 'number'
+  });
+  expect(rendered.vars.global.$map.value.white).to.deep.include({
+    type: 'SassString', value: 'color-string'
+  });
+  expect(rendered.vars.global.$map.value['#123456']).to.deep.include({
+    type: 'SassString', value: 'color-hex'
+  });
+  expect(rendered.vars.global.$map.value['rgba(0,1,2,0.5)']).to.deep.include({
+    type: 'SassString', value: 'color-rgba'
+  });
+  expect(rendered.vars.global.$map.value.black).to.deep.include({
+    type: 'SassString', value: 'color-black-rgba'
+  });
+  expect(rendered.vars.global.$map.value.true).to.deep.include({
+    type: 'SassString', value: 'boolean'
+  });
+  expect(rendered.vars.global.$map.value.null).to.deep.include({
+    type: 'SassString', value: 'null'
+  });
+  expect(rendered.vars.global.$map.value['1 2 3']).to.deep.include({
+    type: 'SassString', value: 'list'
+  });
+  expect(rendered.vars.global.$map.value['(a: map)']).to.deep.include({
+    type: 'SassString', value: 'map'
+  });
+  expect(rendered.vars.global.$map.value['(b: nested) (c: maps)']).to.deep.include({
+    type: 'SassString', value: 'list-maps'
+  });
+
+  expect(rendered.vars.global.$map.value['(d: map)']).to.deep.include({
+    type: 'SassMap',
+  });
+  expect(rendered.vars.global.$map.value['(d: map)'].value).to.have.property('nested');
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested).to.deep.include({
+    type: 'SassMap',
+  });
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3');
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3']).to.deep.include({
+    type: 'SassString', value: 'list'
+  });
+
+  expect(rendered.vars.global.$map.value['#807f7f']).to.deep.include({
+    type: 'SassString', value: 'darkened-white'
+  });
+  expect(rendered.vars.global.$map.value.somekey).to.deep.include({
+    type: 'SassString', value: 'key-variable'
   });
 }
 
