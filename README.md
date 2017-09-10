@@ -420,7 +420,7 @@ For examples see the bundled plugins in `src/plugins`.
 
 ##### Bundled plugins
 
-There are some bundled plugins that comes with the library. To use them simply `require('sass-extract/plugins/<plugin>')` and add them to the plugin array of the extraction options.
+There are some bundled plugins that comes with the library. To use them simply `require('sass-extract/lib/plugins/<plugin>')` and add them to the plugin array of the extraction options, or specify them by module name such as `{ plugins: ['minimal'] }`.
 
 - **serialize**: Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }`
 - **compact**: Remove all metadata about variables and only output the actual value for each variable
