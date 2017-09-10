@@ -16,8 +16,8 @@ function verifyOrder(rendered, sourceFile, partialFile) {
   expect(rendered.vars.global.$var.sources[0]).to.equal(normalizePath(order1File));
   expect(rendered.vars.global.$var.sources[1]).to.equal(normalizePath(order2File));
   expect(rendered.vars.global.$var.declarations).to.have.length(2);
-  expect(rendered.vars.global.$var.declarations[0].in).to.equal(order1File);
-  expect(rendered.vars.global.$var.declarations[1].in).to.equal(order2File);
+  expect(rendered.vars.global.$var.declarations[0].in).to.equal(normalizePath(order1File));
+  expect(rendered.vars.global.$var.declarations[1].in).to.equal(normalizePath(order2File));
   expect(rendered.vars.global.$var.declarations[0].expression).to.equal('1');
   expect(rendered.vars.global.$var.declarations[1].expression).to.equal('2');
 }
