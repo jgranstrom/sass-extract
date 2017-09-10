@@ -18,10 +18,11 @@ Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgra
 
 - [Installation](#installation)
 - [API](#api)
-  - [render(compileOptions)](#rendercompileoptions)
-  - [renderSync(compileOptions)](#rendersynccompileoptions)
-  - [extract(rendered, { compileOptions })](#extractrendered--compileoptions-)
-  - [extractSync(rendered, { compileOptions })](#extractsyncrendered--compileoptions-)
+  - [render(compileOptions, extractOptions)](#render-compileoptions--extractoptions-)
+  - [renderSync(compileOptions, extractOptions)](#rendersync-compileoptions--extractoptions-)
+  - [extract(rendered, { compileOptions, extractOptions })](#extract-rendered----compileoptions--extractoptions---)
+  - [extractSync(rendered, { compileOptions, extractOptions })](#extractsync-rendered----compileoptions--extractoptions---)
+- [Extract options](#extract-options)
 - [Variable context](#variable-context)
   - [Global variables](#global-variables)
   - [Local variables](#local-variables)
@@ -35,6 +36,9 @@ Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgra
   - [SassColor](#sasscolor)
   - [SassList](#sasslist)
   - [SassMap](#sassmap)
+- [Plugins](#plugins)
+  - [Pluggable stages](#pluggable-stages)
+  - [Bundled plugins](#bundled-plugins)
 - [What is sass-extract?](#what-is-sass-extract)
 - [Requirements](#requirements)
 - [Contributing](#contributing)
@@ -49,7 +53,7 @@ npm install --save node-sass sass-extract
 ## API
 The API is deliberately kept very similar to that of `node-sass`. This is because `sass-extract` can be used as a replacement that will add variable extraction as an additional feature to compiling the sass into css.
 
-##### render(compileOptions)
+##### render(compileOptions, extractOptions)
 
 An augmented version of the `node-sass` render function that in addition to rendering css also extract sass variables into `rendered.vars`.
 
@@ -69,7 +73,7 @@ sassExtract.render({
 });
 ```
 
-##### renderSync(compileOptions)
+##### renderSync(compileOptions, extractOptions)
 
 A synchronous version of the `render` function.
 
@@ -84,7 +88,7 @@ console.log(rendered.vars);
 console.log(rendere.css.toString());
 ```
 
-##### extract(rendered, { compileOptions })
+##### extract(rendered, { compileOptions, extractOptions })
 
 Extract variables for a rendered sass files.
 
@@ -110,7 +114,7 @@ sassExtract.extract(rendered, {
 });
 ```
 
-##### extractSync(rendered, { compileOptions })
+##### extractSync(rendered, { compileOptions, extractOptions })
 
 A synchronous version of the `extract` function.
 
@@ -128,6 +132,12 @@ const vars = sassExtract.extractSync(rendered, {
 
 console.log(vars);
 ```
+
+## Extract options
+
+Can be provided in all `render` or `extract` methods.
+
+- `extractOptions.plugins: []`: Provide any plugins to be used during the extraction
 
 ## Variable context
 
@@ -394,6 +404,27 @@ $variable: ( width: 10em, height: 5em );
   }
 }
 ```
+
+## Plugins
+
+**sass-extract** has plugin support which can be used to modify the behavior and output of the extraction process.
+
+A plugin is a simple object containing a `run()` function. This will be called at each extraction run. The run function should return a plugin interface with a function for each stage of the process where the plugin want to be injected. Each hook can return a modified version of its input which will modify the final output. Plugins are run in order as a pipeline, and one plugin can modify the input of a plugin later in the chain. Plugins can store state between stages within the `run` function as it is called once for each extraction run.
+
+For examples see the bundled plugins in `src/plugins`.
+
+##### Pluggable stages
+
+- `postValue({ value, sassValue }) => { value, sassValue }`: Executed for each extracted variable value with the computed value as well as the raw value provided by sass. The returned `value` object can be modified in order to change the output of that variable
+- `postExtract(extractedVariables) => extractedVariables`: Executed at the end of an extraction with the complete result. The return `extractedVariables` object can be modified in order to change the final result of the extraction
+
+##### Bundled plugins
+
+There are some bundled plugins that comes with the library. To use them simply `require('sass-extract/plugins/<plugin>')` and add them to the plugin array of the extraction options.
+
+- **serialize**: Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }`
+- **compact**: Remove all metadata about variables and only output the actual value for each variable
+- **minimal** Combines serialize and compact to create a small serialized representation of the extracted variables
 
 ## What is sass-extract?
 
