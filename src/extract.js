@@ -4,6 +4,7 @@ import { normalizePath, makeAbsolute } from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
+import { Pluggable } from './pluggable';
 
 Promise.promisifyAll(sass);
 
@@ -80,18 +81,20 @@ function compileExtractionResult(orderedFiles, extractions) {
  * Extract the variables from already rendered sass file(s)
  * Returns the extracted variables
  */
-export function extract(rendered, { compileOptions = {} } = {}) {
+export function extract(rendered, { compileOptions = {}, extractOptions = {} } = {}) {
+  const pluggable = new Pluggable(extractOptions.plugins).init();
+
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   return loadCompiledFiles(includedFiles, entryFilename, compileOptions.data)
   .then(({ compiledFiles, orderedFiles }) => {
-    const extractions = processFiles(compiledFiles);
+    const extractions = processFiles(compiledFiles, pluggable);
     const importer = makeImporter(extractions, includedFiles, includedPaths);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
     return sass.renderAsync(extractionCompileOptions)
     .then(() => {
-      return compileExtractionResult(orderedFiles, extractions)
+      return pluggable.run(Pluggable.POST_EXTRACT, compileExtractionResult(orderedFiles, extractions));
     });
   });
 }
@@ -100,15 +103,17 @@ export function extract(rendered, { compileOptions = {} } = {}) {
  * Synchronously extract the variables from already rendered sass file(s)
  * Returns the extracted variables
  */
-export function extractSync(rendered, { compileOptions = {} } = {}) {
+export function extractSync(rendered, { compileOptions = {}, extractOptions = {} } = {}) {
+  const pluggable = new Pluggable(extractOptions.plugins).init();
+
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   const { compiledFiles, orderedFiles } = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
-  const extractions = processFiles(compiledFiles);
+  const extractions = processFiles(compiledFiles, pluggable);
   const importer = makeSyncImporter(extractions, includedFiles, includedPaths);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
   sass.renderSync(extractionCompileOptions);
 
-  return compileExtractionResult(orderedFiles, extractions);  
+  return pluggable.run(Pluggable.POST_EXTRACT, compileExtractionResult(orderedFiles, extractions));
 }
