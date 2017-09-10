@@ -1,6 +1,30 @@
+<a name="1.0.0"></a>
+# 1.0.0 (2017-09-10)
+
+* docs: add tests for mutliline comments ([0bb6fef](https://github.com/jgranstrom/sass-extract/commit/0bb6fef))
+* docs: added docs for plugins ([62a1963](https://github.com/jgranstrom/sass-extract/commit/62a1963))
+* feat(parse): add support for explicit global declarations within mixin and function blocks ([9780f13](https://github.com/jgranstrom/sass-extract/commit/9780f13))
+* feat(parse): use AST for parsing declarations, removing usage of regex ([dfc9796](https://github.com/jgranstrom/sass-extract/commit/dfc9796))
+* feat(plugins): add bundled plugins for alternative formatting ([b923f4d](https://github.com/jgranstrom/sass-extract/commit/b923f4d))
+* feat(plugins): added basic plugin support ([a86528e](https://github.com/jgranstrom/sass-extract/commit/a86528e))
+* feat(serialize): serialize map keys to support maps with arbitray key data types ([847d1bb](https://github.com/jgranstrom/sass-extract/commit/847d1bb))
+* fix(extract): properly handle multiple overriding declarations in the same source file ([0216f20](https://github.com/jgranstrom/sass-extract/commit/0216f20))
+* fix(serialize): serialize lists space separated without parenthesis unless nested ([5789815](https://github.com/jgranstrom/sass-extract/commit/5789815))
+* fix(struct): make sure colors are properly rounded ([8cad631](https://github.com/jgranstrom/sass-extract/commit/8cad631))
+* test: add previously failing sass examples mentioned in #12 ([b4551f3](https://github.com/jgranstrom/sass-extract/commit/b4551f3))
+* test: add tests for default flag behavior ([223961f](https://github.com/jgranstrom/sass-extract/commit/223961f))
+
+
+### BREAKING CHANGE
+
+* the structure of returned declaration metadata has been changed, only affects the
+previously available `expressions` field on extracted variables
+
+
 <a name="0.5.3"></a>
 ## 0.5.3 (2017-08-15)
 
+* chore: 0.5.3 ([bbf6694](https://github.com/jgranstrom/sass-extract/commit/bbf6694))
 * fix(extract): fixes undefined ordering behavior on extraction ([bb0c34c](https://github.com/jgranstrom/sass-extract/commit/bb0c34c)), closes [#13](https://github.com/jgranstrom/sass-extract/issues/13)
 
 
