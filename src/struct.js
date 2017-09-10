@@ -23,7 +23,7 @@ function makeValue(sassValue) {
         value: {
           r, g, b,
           a: sassValue.getA(),
-          hex: `#${toColorHex(sassValue.getR())}${toColorHex(sassValue.getG())}${toColorHex(sassValue.getB())}`
+          hex: `#${toColorHex(r)}${toColorHex(g)}${toColorHex(b)}`
         },
       };
 
