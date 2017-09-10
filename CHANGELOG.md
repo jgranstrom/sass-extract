@@ -1,6 +1,18 @@
+<a name="1.0.1"></a>
+## 1.0.1 (2017-09-10)
+
+* docs: update plugins doc ([1ce284a](https://github.com/jgranstrom/sass-extract/commit/1ce284a))
+* feat(plugins): allow plugin to be applied by module name ([d755564](https://github.com/jgranstrom/sass-extract/commit/d755564))
+* test: fix rounding issue across sass versions ([c1421de](https://github.com/jgranstrom/sass-extract/commit/c1421de))
+* test: fix tested order of map test ([6f3a454](https://github.com/jgranstrom/sass-extract/commit/6f3a454))
+* test: fix windows compat in order test ([9ead430](https://github.com/jgranstrom/sass-extract/commit/9ead430))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-09-10)
 
+* chore(release): 1.0.0 ([518411b](https://github.com/jgranstrom/sass-extract/commit/518411b))
 * docs: add tests for mutliline comments ([0bb6fef](https://github.com/jgranstrom/sass-extract/commit/0bb6fef))
 * docs: added docs for plugins ([62a1963](https://github.com/jgranstrom/sass-extract/commit/62a1963))
 * feat(parse): add support for explicit global declarations within mixin and function blocks ([9780f13](https://github.com/jgranstrom/sass-extract/commit/9780f13))
