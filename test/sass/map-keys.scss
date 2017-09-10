@@ -17,6 +17,6 @@ $map: (
       (1, 2, 3): 'list'
     )
   ),
-  darken(white, 50%): 'darkened-white',
+  darken(white, 1%): 'darkened-white',
   $keyvar: 'key-variable',
 );

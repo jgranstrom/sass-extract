@@ -25,7 +25,7 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value).to.have.property('(a: map)');
   expect(rendered.vars.global.$map.value).to.have.property('(b: nested) (c: maps)');
   expect(rendered.vars.global.$map.value).to.have.property('(d: map)');
-  expect(rendered.vars.global.$map.value).to.have.property('#807f7f');
+  expect(rendered.vars.global.$map.value).to.have.property('#fcfcfc');
   expect(rendered.vars.global.$map.value).to.have.property('somekey');
 
   expect(rendered.vars.global.$map.value.string).to.deep.include({
@@ -74,7 +74,7 @@ function verifyMapKeys(rendered, sourceFile) {
     type: 'SassString', value: 'list'
   });
 
-  expect(rendered.vars.global.$map.value['#807f7f']).to.deep.include({
+  expect(rendered.vars.global.$map.value['#fcfcfc']).to.deep.include({
     type: 'SassString', value: 'darkened-white'
   });
   expect(rendered.vars.global.$map.value.somekey).to.deep.include({
