@@ -4,7 +4,7 @@ import sass from 'node-sass';
  * Convert a color value 0-255 to hex 00-FF
  */
 function toColorHex(value) {
-  let colorHex = value.toString(16);
+  let colorHex = Math.round(value).toString(16);
 
   if(colorHex.length < 2) {
     colorHex = `0${colorHex}`;
@@ -36,7 +36,7 @@ function makeValue(sassValue) {
         },
       };
 
-    case sass.types.Null: 
+    case sass.types.Null:
       return { value: null };
 
     case sass.types.List:
@@ -64,7 +64,7 @@ function makeValue(sassValue) {
  * Create a structured value definition from a sassValue object
  */
 export function createStructuredValue(sassValue) {
-  const value = Object.assign({ 
+  const value = Object.assign({
     type: sassValue.constructor.name,
   }, makeValue(sassValue));
 
