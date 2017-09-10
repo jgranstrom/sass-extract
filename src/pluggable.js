@@ -1,3 +1,9 @@
+const RESERVED_PLUGINS = {
+  'compact': true,
+  'minimal': true,
+  'serialize': true,
+}
+
 export class Pluggable {
   static get POST_EXTRACT() { return 'postExtract' };
   static get POST_VALUE() { return 'postValue' };
@@ -14,13 +20,23 @@ export class Pluggable {
     this._stagePlugins = {};
   }
 
+  requirePlugin(plugin) {
+    if(typeof plugin === 'string') {
+      if(RESERVED_PLUGINS[plugin]) {
+        return require(`./plugins/${plugin}`);
+      } else {
+        return require(plugin);
+      }
+    } else {
+      return plugin;
+    }
+  }
+
   init() {
     this._plugins.forEach(plugin => {
-      if(!plugin) {
-        throw new Error('undefined plugin provided');
-      }
+      const requiredPlugin = this.requirePlugin(plugin);
 
-      const pluginRun = plugin.run;
+      const pluginRun = requiredPlugin.run;
 
       if(typeof pluginRun !== 'function') {
         throw new Error('Plugins must provide a run function');
