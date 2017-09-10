@@ -21,16 +21,16 @@ function verifyMapKeys(rendered, sourceFile) {
     black: { type: 'SassString', value: 'color-black-rgba' },
     true: { type: 'SassString', value: 'boolean' },
     null: { type: 'SassString', value: 'null' },
-    '(1, 2, 3)': { type: 'SassString', value: 'list' },
+    '1 2 3': { type: 'SassString', value: 'list' },
     '(a: map)': { type: 'SassString', value: 'map' },
-    '((b: nested), (c: maps))': { type: 'SassString', value: 'list-maps' },
+    '(b: nested) (c: maps)': { type: 'SassString', value: 'list-maps' },
     '(d: map)': { 
       type: 'SassMap',
       value: { 
         nested: { 
           type: 'SassMap',
           value: { 
-            '(1, 2, 3)': { type: 'SassString', value: 'list' } 
+            '1 2 3': { type: 'SassString', value: 'list' } 
           } 
         } 
       } 

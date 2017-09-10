@@ -28,7 +28,7 @@ function serializeColor(sassColor) {
 /**
  * Transform a SassValue into a serialized string
  */
-function serializeValue(sassValue) {
+function serializeValue(sassValue, isInList) {
   switch(sassValue.constructor) {
     case sass.types.String:
     case sass.types.Boolean:
@@ -47,9 +47,14 @@ function serializeValue(sassValue) {
       const listLength = sassValue.getLength();
       const listElement = [];
       for(let i = 0; i < listLength; i++) {
-        listElement.push(serialize(sassValue.getValue(i)));
+        listElement.push(serialize(sassValue.getValue(i), true));
       }
-      return `(${listElement.join(', ')})`;
+      // Make sure nested lists are serialized with surrounding parenthesis
+      if(isInList) {
+        return `(${listElement.join(' ')})`;
+      } else {
+        return `${listElement.join(' ')}`;
+      }
 
     case sass.types.Map:
       const mapLength = sassValue.getLength();
@@ -70,6 +75,6 @@ function serializeValue(sassValue) {
 /**
  * Create a serialized string from a sassValue object
  */
-export function serialize(sassValue) {
-  return serializeValue(sassValue);
+export function serialize(sassValue, isInList) {
+  return serializeValue(sassValue, isInList);
 };
