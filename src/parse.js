@@ -1,5 +1,6 @@
-import { parse, stringify } from 'scss-parser';
+import { stringify } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
+import gonzales from 'gonzales-pe';
 
 const SCOPE_IMPICIT = 'implicit';
 const SCOPE_EXPLICIT = 'explicit';
@@ -39,7 +40,7 @@ function isDefaultDeclaration($ast, node) {
  */
 function parseExpression($ast, declaration) {
   let flagsReached = false;
-  
+
   return stringify($ast(declaration)
   .children('value')
   .get(0))
@@ -75,7 +76,7 @@ function getDeclarationDeps($ast, declaration, scope) {
   const requiredArgsCount = argumentsNode.children('variable').length();
   const optionalArgsCount = argumentsNode.children('declaration').length();
   const totalArgsCount = requiredArgsCount + optionalArgsCount;
-  
+
   if(!DEP_KEYWORDS[atKeyword]) {
     return {};
   }
@@ -89,7 +90,7 @@ function getDeclarationDeps($ast, declaration, scope) {
         optional: optionalArgsCount,
       },
     },
-  }; 
+  };
 }
 
 /**
@@ -97,7 +98,7 @@ function getDeclarationDeps($ast, declaration, scope) {
  */
 function parseDeclaration($ast, declaration, scope) {
   const variable = {};
-  
+
   const propertyNode = $ast(declaration)
   .children('property');
 
@@ -121,15 +122,28 @@ function parseDeclaration($ast, declaration, scope) {
  * Parse variable declarations from a chunk of sass source
  */
 export function parseDeclarations(data) {
-  const ast = parse(data);
-  const $ast = createQueryWrapper(ast);
+  const ast = JSON.parse(gonzales.parse(data, {syntax: 'scss'}).toJson());
+
+  let options = {
+    hasChildren: (node) => Array.isArray(node.content),
+    getChildren: (node) => node.content,
+    toJSON: (node, children) => {
+      return Object.assign({}, node, {
+        content: children ? children : node.content
+      })
+    },
+    toString: (node) => {
+      return typeof node.content === 'string' ? node.content : ''
+    }
+  }
+  const $ast = createQueryWrapper(ast, options);
 
   const implicitGlobalDeclarations = $ast('declaration').hasParent('stylesheet');
   const explicitGlobalDeclarations = $ast('declaration').hasParent('block')
   .filter(node => isExplicitGlobalDeclaration($ast, node));
 
   let implicitGlobals = implicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration, SCOPE_IMPICIT));
-  let explicitGlobals = explicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration, SCOPE_EXPLICIT));  
+  let explicitGlobals = explicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration, SCOPE_EXPLICIT));
 
   return { explicitGlobals, implicitGlobals };
 }
