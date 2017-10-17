@@ -72,7 +72,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global.$list.value[2].value.b).to.equal(0);
   expect(rendered.vars.global.$list.value[2].value.a).to.equal(1);
   expect(rendered.vars.global.$list.value[2].value.hex).to.equal('#000000');
-  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor'); 
+  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor');
   if(explicit) {
     expect(rendered.vars.global.$list.declarations[0].flags.global).to.equal(true);
   }
@@ -146,7 +146,7 @@ describe('basic-implicit', () => {
 describe('basic-explicit', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: basicExplicitFile })
+      const rendered = renderSync({ file: basicExplicitFile });
       verifyBasic(rendered, basicExplicitFile, true, false);
     });
   });

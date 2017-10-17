@@ -1,6 +1,6 @@
-import { stringify } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 import gonzales from 'gonzales-pe';
+import { stringify } from './stringify';
 
 const SCOPE_IMPICIT = 'implicit';
 const SCOPE_EXPLICIT = 'explicit';
@@ -14,10 +14,7 @@ const DEP_KEYWORDS = {
  */
 function declarationHasFlag($ast, node, flag) {
   return $ast(node)
-  .children('value').children('operator')
-  .filter(operator => operator.node.value === '!')
-  .nextAll('identifier') // nextAll to account for potential space tokens following operator
-  .filter(identifier => identifier.node.value === flag)
+  .children('value').children(flag)
   .length() > 0
 }
 
