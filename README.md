@@ -69,7 +69,7 @@ sassExtract.render({
 })
 .then(rendered => {
   console.log(rendered.vars);
-  console.log(rendere.css.toString());
+  console.log(rendered.css.toString());
 });
 ```
 
@@ -85,7 +85,7 @@ const rendered = sassExtract.render({
 });
 
 console.log(rendered.vars);
-console.log(rendere.css.toString());
+console.log(rendered.css.toString());
 ```
 
 ##### extract(rendered, { compileOptions, extractOptions })
