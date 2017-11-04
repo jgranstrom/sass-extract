@@ -15,6 +15,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global).to.have.property('$number2');
   expect(rendered.vars.global).to.have.property('$color');
   expect(rendered.vars.global).to.have.property('$list');
+  expect(rendered.vars.global).to.have.property('$listComma');
   expect(rendered.vars.global).to.have.property('$string');
   expect(rendered.vars.global).to.have.property('$boolean');
   expect(rendered.vars.global).to.have.property('$null');
@@ -72,9 +73,25 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global.$list.value[2].value.b).to.equal(0);
   expect(rendered.vars.global.$list.value[2].value.a).to.equal(1);
   expect(rendered.vars.global.$list.value[2].value.hex).to.equal('#000000');
-  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor'); 
+  expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor');
+  expect(rendered.vars.global.$list.commaSeparator).to.equal(false);
   if(explicit) {
     expect(rendered.vars.global.$list.declarations[0].flags.global).to.equal(true);
+  }
+
+  expect(rendered.vars.global.$listComma.value).to.have.length(2);
+  expect(rendered.vars.global.$listComma.type).to.equal('SassList');
+  expect(rendered.vars.global.$listComma.sources).to.have.length(1);
+  expect(rendered.vars.global.$listComma.sources[0]).to.equal(normalizePath(sourceFile));
+  expect(rendered.vars.global.$listComma.declarations).to.have.length(1);
+  expect(rendered.vars.global.$listComma.declarations[0].expression).to.equal(`tahoma, arial${ explicit ? ' !global' : ''}`);
+  expect(rendered.vars.global.$listComma.value[0].value).to.equal('tahoma');
+  expect(rendered.vars.global.$listComma.value[0].type).to.equal('SassString');
+  expect(rendered.vars.global.$listComma.value[1].value).to.equal('arial');
+  expect(rendered.vars.global.$listComma.value[1].type).to.equal('SassString');
+  expect(rendered.vars.global.$listComma.commaSeparator).to.equal(true);
+  if(explicit) {
+    expect(rendered.vars.global.$listComma.declarations[0].flags.global).to.equal(true);
   }
 
   expect(rendered.vars.global.$string.value).to.equal('string');
