@@ -27,7 +27,7 @@ function makeValue(sassValue) {
         },
       };
 
-    case sass.types.Null: 
+    case sass.types.Null:
       return { value: null };
 
     case sass.types.List:
@@ -36,7 +36,7 @@ function makeValue(sassValue) {
       for(let i = 0; i < listLength; i++) {
         listValue.push(createStructuredValue(sassValue.getValue(i)));
       }
-      return { value: listValue };
+      return { value: listValue, commaSeparator: sassValue.getSeparator() };
 
     case sass.types.Map:
       const mapLength = sassValue.getLength();
@@ -57,7 +57,7 @@ function makeValue(sassValue) {
  * Create a structured value definition from a sassValue object
  */
 export function createStructuredValue(sassValue) {
-  const value = Object.assign({ 
+  const value = Object.assign({
     type: sassValue.constructor.name,
   }, makeValue(sassValue));
 

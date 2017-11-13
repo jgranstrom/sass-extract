@@ -7,6 +7,7 @@ div {
   $number2: $number1 * 2 !global;
   $color: get-color() !global;
   $list: 1px solid black !global;
+  $listComma: tahoma, arial !global;
   $string: 'string' !global;
   $boolean: true !global;
   $null: null !global;
