@@ -46,14 +46,15 @@ function serializeValue(sassValue, isInList) {
     case sass.types.List:
       const listLength = sassValue.getLength();
       const listElement = [];
+      const hasSeparator = sassValue.getSeparator();
       for(let i = 0; i < listLength; i++) {
         listElement.push(serialize(sassValue.getValue(i), true));
       }
       // Make sure nested lists are serialized with surrounding parenthesis
       if(isInList) {
-        return `(${listElement.join(' ')})`;
+        return `(${listElement.join(hasSeparator ? ',' : ' ')})`;
       } else {
-        return `${listElement.join(' ')}`;
+        return `${listElement.join(hasSeparator ? ',' : ' ')}`;
       }
 
     case sass.types.Map:

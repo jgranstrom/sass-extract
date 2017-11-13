@@ -74,7 +74,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global.$list.value[2].value.a).to.equal(1);
   expect(rendered.vars.global.$list.value[2].value.hex).to.equal('#000000');
   expect(rendered.vars.global.$list.value[2].type).to.equal('SassColor');
-  expect(rendered.vars.global.$list.commaSeparator).to.equal(false);
+  expect(rendered.vars.global.$list.separator).to.equal(' ');
   if(explicit) {
     expect(rendered.vars.global.$list.declarations[0].flags.global).to.equal(true);
   }
@@ -89,7 +89,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global.$listComma.value[0].type).to.equal('SassString');
   expect(rendered.vars.global.$listComma.value[1].value).to.equal('arial');
   expect(rendered.vars.global.$listComma.value[1].type).to.equal('SassString');
-  expect(rendered.vars.global.$listComma.commaSeparator).to.equal(true);
+  expect(rendered.vars.global.$listComma.separator).to.equal(',');
   if(explicit) {
     expect(rendered.vars.global.$listComma.declarations[0].flags.global).to.equal(true);
   }

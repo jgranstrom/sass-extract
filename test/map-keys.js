@@ -21,9 +21,10 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value).to.have.property('black');
   expect(rendered.vars.global.$map.value).to.have.property('true');
   expect(rendered.vars.global.$map.value).to.have.property('null');
-  expect(rendered.vars.global.$map.value).to.have.property('1 2 3');
+  expect(rendered.vars.global.$map.value).to.have.property('1,2,3');
+  expect(rendered.vars.global.$map.value).to.have.property('1 2 3 4');
   expect(rendered.vars.global.$map.value).to.have.property('(a: map)');
-  expect(rendered.vars.global.$map.value).to.have.property('(b: nested) (c: maps)');
+  expect(rendered.vars.global.$map.value).to.have.property('(b: nested),(c: maps)');
   expect(rendered.vars.global.$map.value).to.have.property('(d: map)');
   expect(rendered.vars.global.$map.value).to.have.property('#fcfcfc');
   expect(rendered.vars.global.$map.value).to.have.property('somekey');
@@ -52,13 +53,16 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value.null).to.deep.include({
     type: 'SassString', value: 'null'
   });
-  expect(rendered.vars.global.$map.value['1 2 3']).to.deep.include({
+  expect(rendered.vars.global.$map.value['1,2,3']).to.deep.include({
     type: 'SassString', value: 'list'
+  });
+  expect(rendered.vars.global.$map.value['1 2 3 4']).to.deep.include({
+    type: 'SassString', value: 'list-spaces'
   });
   expect(rendered.vars.global.$map.value['(a: map)']).to.deep.include({
     type: 'SassString', value: 'map'
   });
-  expect(rendered.vars.global.$map.value['(b: nested) (c: maps)']).to.deep.include({
+  expect(rendered.vars.global.$map.value['(b: nested),(c: maps)']).to.deep.include({
     type: 'SassString', value: 'list-maps'
   });
 
@@ -69,9 +73,13 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested).to.deep.include({
     type: 'SassMap',
   });
-  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3');
-  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3']).to.deep.include({
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1,2,3');
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1,2,3']).to.deep.include({
     type: 'SassString', value: 'list'
+  });
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3 4');
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3 4']).to.deep.include({
+    type: 'SassString', value: 'list-spaces'
   });
 
   expect(rendered.vars.global.$map.value['#fcfcfc']).to.deep.include({

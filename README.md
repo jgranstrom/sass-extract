@@ -357,7 +357,7 @@ $variable: 1px solid black;
 ```js
 {
   type: 'SassList',
-  commaSeparator: false,
+  separator: ' ',
   value: [
     {
       type: 'SassNumber',
@@ -390,7 +390,7 @@ $variable: tahoma, arial;
 ```js
 {
   type: 'SassList',
-  commaSeparator: true,
+  separator: ',',
   value: [
     {
       type: 'SassString',
