@@ -31,7 +31,6 @@
   "dependencies": {
     "bluebird": "^3.4.7",
     "gonzales-pe": "^4.2.2",
-    "node-sass": "^4.5.3",
     "parse-color": "^1.0.0",
     "query-ast": "^1.0.1"
   },
