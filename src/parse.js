@@ -4,9 +4,15 @@ import { stringify } from './stringify';
 
 const SCOPE_IMPICIT = 'implicit';
 const SCOPE_EXPLICIT = 'explicit';
+
 const DEP_KEYWORDS = {
   mixin: 'mixin',
   function: 'function',
+};
+
+const DEP_HOST = {
+  mixin: depParentNode => depParentNode,
+  function: depParentNode => depParentNode.children('function'),
 };
 
 /**
@@ -36,38 +42,57 @@ function isDefaultDeclaration($ast, node) {
  * Parse the raw expression of a variable declaration excluding flags
  */
 function parseExpression($ast, declaration) {
-  let flagsReached = false;
-
   return stringify($ast(declaration)
   .children('value')
   .get(0))
   .trim();
 }
 
+/**
+ * Get dependencies required to extract variables such as mixins or function invocations
+ */
 function getDeclarationDeps($ast, declaration, scope) {
   if(scope !== SCOPE_EXPLICIT) {
     return {};
   }
 
-  let atruleNode = $ast(declaration)
-  .hasParents('atrule');
+  const depParentNodes = $ast(declaration).parents(node => {
+    if(node.node.type === 'mixin') {
+      return true;
+    } else if(node.node.type === 'atrule') {
+      const atruleIdentNode = $ast(node).children('atkeyword').children('ident');
+      return atruleIdentNode.length() > 0 && atruleIdentNode.first().value() === 'function'
+    } else {
+      return false;
+    }
+  });
 
-  if(atruleNode.length() < 1) {
+  if(depParentNodes.length() === 0) {
     return {};
   }
 
-  atruleNode = atruleNode.parentsUntil('atrule').parent();
+  const depParentNode = depParentNodes.last();
+  const depKeywordNode = depParentNode.children('atkeyword').children('ident');
 
-  const atKeywordNode = atruleNode.children('atkeyword');
-  const atIdentifierNode = atruleNode.children('identifier');
-  const argumentsNode = atruleNode.children('arguments');
-
-  if(atKeywordNode.length() === 0 || atIdentifierNode.length() === 0) {
+  if(depKeywordNode.length() === 0) {
     return {};
   }
 
-  const atKeyword = atKeywordNode.first().value();
-  const atIdentifier = atIdentifierNode.first().value();
+  const atKeyword = depKeywordNode.first().value();
+
+  if(!DEP_HOST[atKeyword]) {
+    return {};
+  }
+
+  const depHostNode = DEP_HOST[atKeyword](depParentNode);
+  const atKeywordIdentifierNode = depHostNode.children('ident');
+
+  if(atKeywordIdentifierNode.length() === 0) {
+    return {};
+  }
+
+  const atIdentifier = atKeywordIdentifierNode.first().value();
+  const argumentsNode = depHostNode.children('arguments');
 
   // Count arguments to mixin/function @atrule
   const requiredArgsCount = argumentsNode.children('variable').length();
@@ -133,6 +158,7 @@ export function parseDeclarations(data) {
       return typeof node.content === 'string' ? node.content : ''
     }
   }
+
   const $ast = createQueryWrapper(ast, options);
 
   const implicitGlobalDeclarations = $ast('declaration').hasParent('stylesheet');
