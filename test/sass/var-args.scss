@@ -1,0 +1,27 @@
+@function echo($vars...) {
+  @return $vars;
+}
+
+@function optionally($last, $vars...) {
+  @return append($vars, last);
+}
+
+@function oneOf($n, $stuff...) {
+  @return nth($stuff, $n);
+}
+
+@mixin echoMixin($vars...) {
+  $echoedMixin: $vars !global;
+}
+
+$echoedArgs: echo(1, 2, 3);
+$echoedArg: echo('hello');
+
+$optionallySingle: optionally('last');
+$optionallyMultiple: optionally('last', 1, 2, 3);
+
+$oneString: oneOf(2, 'a', 'b', 'c');
+$oneNumber: oneOf(3, 'a', 'b', 5, ('d', 'e'));
+$oneList: oneOf(4, 'a', 'b', 5, ('d', 'e'), 1, 2);
+
+@include echoMixin(5, 6, 7);
