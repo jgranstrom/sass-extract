@@ -37,6 +37,12 @@ $someDefault: 'default-val';
   @return null;
 }
 
-$invoked: func3(null, null, null, 'provided-val');
+@include mixin1;
+@include mixin2('abc');
+@include mixin3('def');
 
-$invoked2: func5('provided');
+$invoked: func1();
+$invoked2: func2('a', 'b');
+$invoked3: func3('a', 'b', 'c', 'provided-val');
+$invoked4: func4();
+$invoked5: func5('provided');
