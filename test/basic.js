@@ -7,8 +7,9 @@ const { EOL } = require('os');
 const basicImplicitFile = path.join(__dirname, 'sass', 'basic-implicit.scss');
 const basicExplicitFile = path.join(__dirname, 'sass', 'basic-explicit.scss');
 const basicMixedFile = path.join(__dirname, 'sass', 'basic-mixed.scss');
+const basicMixedFileWinLe = path.join(__dirname, 'sass', 'basic-mixed-win-le.scss');
 
-function verifyBasic(rendered, sourceFile, explicit, mixed) {
+function verifyBasic(rendered, sourceFile, explicit, mixed, expectedEol = EOL) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$number1');
@@ -117,7 +118,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed) {
   expect(rendered.vars.global.$map.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$map.declarations).to.have.length(1);
   expect(rendered.vars.global.$map.declarations[0].expression).to.be.oneOf([
-    `(${EOL}  number: 2em,${EOL}  string: 'mapstring'${EOL})${ explicit ? ' !global' : ''}`,
+    `(${expectedEol}  number: 2em,${expectedEol}  string: 'mapstring'${expectedEol})${ explicit ? ' !global' : ''}`,
     `(\n  number: 2em,\n  string: 'mapstring'\n)${ explicit ? ' !global' : ''}`,
   ]);
   if(explicit) {
@@ -174,6 +175,24 @@ describe('basic-mixed', () => {
       return render({ file: basicMixedFile })
       .then(rendered => {
         verifyBasic(rendered, basicMixedFile, false, true);
+      });
+    });
+  });
+});
+
+describe('basic-mixed-win-le', () => {
+  describe('sync', () => {
+    it('should extract all variables', () => {
+      const rendered = renderSync({ file: basicMixedFileWinLe })
+      verifyBasic(rendered, basicMixedFileWinLe, false, true, '\r\n');
+    });
+  });
+
+  describe('async', () => {
+    it('should extract all variables', () => {
+      return render({ file: basicMixedFileWinLe })
+      .then(rendered => {
+        verifyBasic(rendered, basicMixedFileWinLe, false, true, '\r\n');
       });
     });
   });

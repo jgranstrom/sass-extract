@@ -1,0 +1,27 @@
+@mixin fg($color: green) {
+  color: $color;
+}
+@function get-color() {
+  @return red;
+}
+
+@function test($attr1, $attr2, $attr3: null, $attr4: null, $attr5: null) {
+  @return 'hello';
+}
+
+
+$list: 1px solid black;
+$string: 'string';
+$map: (
+  number: 2em,
+  string: 'mapstring'
+);
+
+div {
+  $number1: 100px !global;
+  $number2: $number1 * 2 !global;
+  $color: get-color() !global;
+}
+
+$boolean: true;
+$null: null;
