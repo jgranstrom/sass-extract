@@ -13,7 +13,9 @@ function includeRawDataFile(includedFiles, files, entryFilename, data) {
 
   if(entryFilename === RAW_DATA_FILE && data) {
     files[RAW_DATA_FILE] = data;
-    orderedFiles = [RAW_DATA_FILE, ...orderedFiles];
+    orderedFiles = [...orderedFiles, RAW_DATA_FILE];
+  } else if(orderedFiles.length > 0) {
+    orderedFiles = [...orderedFiles.slice(1), orderedFiles[0]];
   }
 
   return {

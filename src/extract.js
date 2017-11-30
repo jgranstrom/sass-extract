@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import sass from 'node-sass';
 import { normalizePath, makeAbsolute } from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
-import { processFiles } from './process';
+import { processFiles, parseFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
 import { Pluggable } from './pluggable';
 
@@ -62,7 +62,12 @@ function compileExtractionResult(orderedFiles, extractions) {
           currentVariableDeclarations = variable.declarations;
         }
 
-        variable = extractedVariables.global[variableKey] = Object.assign({}, extractedVariable.value);
+        const hasOnlyDefaults = currentVariableDeclarations.every(declaration => declaration.flags.default);
+        const currentIsDefault = extractedVariable.declaration.flags.default;
+
+        if(currentVariableDeclarations.length === 0 || !currentIsDefault || hasOnlyDefaults) {
+          variable = extractedVariables.global[variableKey] = Object.assign({}, extractedVariable.value);
+        }
         variable.sources = currentVariableSources.indexOf(filename) < 0 ? [...currentVariableSources, filename] : currentVariableSources;
         variable.declarations = [...currentVariableDeclarations, {
           expression: extractedVariable.declaration.expression,
@@ -88,7 +93,8 @@ export function extract(rendered, { compileOptions = {}, extractOptions = {} } =
 
   return loadCompiledFiles(includedFiles, entryFilename, compileOptions.data)
   .then(({ compiledFiles, orderedFiles }) => {
-    const extractions = processFiles(compiledFiles, pluggable);
+    const parsedDeclarations = parseFiles(compiledFiles);
+    const extractions = processFiles(orderedFiles, compiledFiles, parsedDeclarations, pluggable);
     const importer = makeImporter(extractions, includedFiles, includedPaths);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
@@ -109,7 +115,8 @@ export function extractSync(rendered, { compileOptions = {}, extractOptions = {}
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 
   const { compiledFiles, orderedFiles } = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
-  const extractions = processFiles(compiledFiles, pluggable);
+  const parsedDeclarations = parseFiles(compiledFiles);
+  const extractions = processFiles(orderedFiles, compiledFiles, parsedDeclarations, pluggable);
   const importer = makeSyncImporter(extractions, includedFiles, includedPaths);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
