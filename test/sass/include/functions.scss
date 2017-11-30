@@ -1,0 +1,46 @@
+@function func1() {
+  @if true {
+    $functionVariable: 'function-variable' !global;
+  }
+  @if false {
+    $functionVariable: 'should-not-happen' !global;
+  }
+  @return bar;
+}
+
+@function func-with-default() {
+  $defaultedAtFirst: 'defaulted' !default !global;
+  @return bar;
+}
+
+@function func-that-overrides() {
+  $defaultedAtFirst: 'actual' !global; 
+  @return bar;
+}
+
+@function func-default() {
+  $someDefault: 'a' !default !global;
+  @return bar;
+}
+@function func-not-default() {
+  $someDefault: 'c' !global;
+  @return bar;
+}
+
+@function func-other-default-1() {
+  $someOtherDefault: 1 !default !global;
+  @return bar;
+}
+@function func-other-default-2() {
+  $someOtherDefault: 2 !default !global;
+  @return bar;
+}
+
+@function func-multiple-default-1() {
+  $multipleDefault: 'x' !default !global;
+  @return bar;
+}
+@function func-multiple-default-2() {
+  $multipleDefault: 'y' !default !global;
+  @return bar;
+}
