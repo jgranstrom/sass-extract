@@ -6,9 +6,11 @@
   "scripts": {
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
-    "test": "mocha --compilers js:babel-core/register",
+    "test": "mocha --compilers js:babel-core/register --timeout 10000",
+    "test:fast": "FAST_TEST=true mocha --compilers js:babel-core/register",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
-    "watch": "mocha --watch --reporter min --compilers js:babel-core/register"
+    "watch": "mocha --watch --reporter min --compilers js:babel-core/register --timeout 10000",
+    "watch:fast": "FAST_TEST=true mocha --watch --reporter min --compilers js:babel-core/register"
   },
   "repository": "jgranstrom/sass-extract",
   "author": "John Granström <granstrom.john@gmail.com>",
@@ -39,7 +41,9 @@
     "babel-core": "^6.22.1",
     "babel-preset-es2015": "^6.22.0",
     "chai": "^3.5.0",
+    "chai-subset": "^1.6.0",
     "cz-conventional-changelog": "^1.2.0",
+    "foundation-sites": "^6.4.3",
     "mocha": "^3.2.0"
   },
   "config": {
