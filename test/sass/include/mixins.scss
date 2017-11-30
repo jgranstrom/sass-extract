@@ -1,0 +1,32 @@
+@mixin mixin1 {
+  $mixinVariable: 'mixin-variable' !global;
+}
+
+@mixin mixin-with-default {
+  $defaultedAtFirst: 'defaulted' !default !global;
+}
+
+@mixin mixin-that-overrides {
+  $defaultedAtFirst: 'actual' !global; 
+}
+
+@mixin mixin-default {
+  $someDefault: 'a' !default !global;
+}
+@mixin mixin-not-default {
+  $someDefault: 'c' !global;
+}
+
+@mixin mixin-other-default-1 {
+  $someOtherDefault: 1 !default !global;
+}
+@mixin mixin-other-default-2 {
+  $someOtherDefault: 2 !default !global;
+}
+
+@mixin mixin-multiple-default-1 {
+  $multipleDefault: 'x' !default !global;
+}
+@mixin mixin-multiple-default-2 {
+  $multipleDefault: 'y' !default !global;
+}
