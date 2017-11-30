@@ -36,7 +36,7 @@ function makeValue(sassValue) {
       for(let i = 0; i < listLength; i++) {
         listValue.push(createStructuredValue(sassValue.getValue(i)));
       }
-      return { value: listValue };
+      return { value: listValue, separator: sassValue.getSeparator() ? ',' : ' ' };
 
     case sass.types.Map:
       const mapLength = sassValue.getLength();
