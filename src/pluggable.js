@@ -2,6 +2,7 @@ const RESERVED_PLUGINS = {
   'compact': true,
   'minimal': true,
   'serialize': true,
+  'filter': true,
 }
 
 export class Pluggable {
@@ -33,7 +34,10 @@ export class Pluggable {
   }
 
   init() {
-    this._plugins.forEach(plugin => {
+    this._plugins.forEach(pluginDescription => {
+      const plugin = pluginDescription.plugin ? pluginDescription.plugin : pluginDescription;
+      const options = pluginDescription.options || {};
+
       const requiredPlugin = this.requirePlugin(plugin);
 
       const pluginRun = requiredPlugin.run;
@@ -42,7 +46,7 @@ export class Pluggable {
         throw new Error('Plugins must provide a run function');
       }
 
-      const pluginInstance = pluginRun();
+      const pluginInstance = pluginRun(options);
       if(!pluginInstance) {
         throw new Error('Plugins must return a plugin interface from run function');
       }
@@ -64,8 +68,8 @@ export class Pluggable {
   run(stage, data) {
     const stagePlugins = this._stagePlugins[stage] || [];
     
-    return stagePlugins.reduce((nextData, pluginInstace) => {
-      return pluginInstace[stage](nextData);
+    return stagePlugins.reduce((nextData, pluginInstance) => {
+      return pluginInstance[stage](nextData);
     }, data);
   }
 }

@@ -39,6 +39,7 @@ Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgra
 - [Plugins](#plugins)
   - [Pluggable stages](#pluggable-stages)
   - [Bundled plugins](#bundled-plugins)
+  - [Bundled plugin options](#bundled-plugin-options)
 - [What is sass-extract?](#what-is-sass-extract)
 - [Requirements](#requirements)
 - [Contributing](#contributing)
@@ -137,7 +138,7 @@ console.log(vars);
 
 Can be provided in all `render` or `extract` methods.
 
-- `extractOptions.plugins: []`: Provide any plugins to be used during the extraction
+- `extractOptions.plugins: []`: Provide any plugins to be used during the extraction. Provide a string `'<plugin>'` for the node module or bundled plugin name, or alternatively an object `{ plugin: '<plugin>', options: {} }` to provide any options to the plugin. *Note: A plugin instance can be passed directly instead of a plugin name which allows importing the plugin separately*
 
 ## Variable context
 
@@ -251,15 +252,15 @@ $myVariable: 123px;
 
 Each of the variable results will have the same general structure and potentially additional type specific fields.
 
-| field  | description |
-|---|---|
+| Field  | Description |
+|:---|:---|
 | `type`| A string describing the data type of the extracted variables  |
 | `sources`| An array of all file paths where this variables is declared  |
 | `declarations`| An array of declarations of the variable |
-| `declarations.expression`| The raw expression of the variable definition |
-| `declarations.flags`| Describes any present flags such as `!default` or `!global` |
-| `declarations.in`| The file where the declaration was found |
-| `declarations.position`| The exact position of the declaration in the file |
+| `declarations[i].expression`| The raw expression of the variable definition |
+| `declarations[i].flags`| Describes any present flags such as `!default` or `!global` |
+| `declarations[i].in`| The file where the declaration was found |
+| `declarations[i].position`| The exact position of the declaration in the file |
 
 Note that `sources` and `expressions` are both arrays, see [Overrides](#overrides) for details about this.
 
@@ -432,7 +433,7 @@ $variable: ( width: 10em, height: 5em );
 
 **sass-extract** has plugin support which can be used to modify the behavior and output of the extraction process.
 
-A plugin is a simple object containing a `run()` function. This will be called at each extraction run. The run function should return a plugin interface with a function for each stage of the process where the plugin want to be injected. Each hook can return a modified version of its input which will modify the final output. Plugins are run in order as a pipeline, and one plugin can modify the input of a plugin later in the chain. Plugins can store state between stages within the `run` function as it is called once for each extraction run.
+A plugin is a simple object containing a `run(options)` function. This will be called at each extraction run. The run function should return a plugin interface with a function for each stage of the process where the plugin want to be injected. Each hook can return a modified version of its input which will modify the final output. Plugins are run in order as a pipeline, and one plugin can modify the input of a plugin later in the chain. Plugins can store state between stages within the `run` function as it is called once for each extraction run. Plugins provided to the plugin through `render` or `extract` APIs will be passed as the only argument to the `run` function.
 
 For examples see the bundled plugins in `src/plugins`.
 
@@ -445,9 +446,25 @@ For examples see the bundled plugins in `src/plugins`.
 
 There are some bundled plugins that comes with the library. To use them simply `require('sass-extract/lib/plugins/<plugin>')` and add them to the plugin array of the extraction options, or specify them by module name such as `{ plugins: ['minimal'] }`.
 
-- **serialize**: Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }`
-- **compact**: Remove all metadata about variables and only output the actual value for each variable
-- **minimal** Combines serialize and compact to create a small serialized representation of the extracted variables
+|Plugin|Description
+|:-------------|:-------------|
+|`serialize`|Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }`|
+|`compact`|Remove all metadata about variables and only output the actual value for each variable|
+|`minimal`|Combines serialize and compact to create a small serialized representation of the extracted variables|
+|`filter`|Filter the results based on a combination of property names and/or variable types|
+
+##### Bundled plugin options
+
+###### `filter`
+|Option field|Description|
+|:-------------|:-----|
+|`except.props = ['$my-prop']`|Will remove any properties with a name in the provided array|
+|`except.types = ['SassNumber']`|Will remove any properties with a type in the provided array|
+|`only.props = ['$my-prop']`|Will remove any properties with a name **not** in the provided array|
+|`only.types = ['SassNumber']`|Will remove any properties with a type **not** in the provided array|
+
+*Note*: Empty arrays are ignored and treated as no filtering should be applied for that selection
+
 
 ## What is sass-extract?
 
