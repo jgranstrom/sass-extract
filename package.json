@@ -1,6 +1,6 @@
 {
   "name": "sass-extract",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Extract structured variables from sass files. Fast and accurate.",
   "main": "lib/index.js",
   "scripts": {

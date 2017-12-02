@@ -1,6 +1,37 @@
+<a name="2.0.0"></a>
+# 2.0.0 (2017-12-02)
+
+* build(dep): upgrade chai@4 ([7f98676](https://github.com/jgranstrom/sass-extract/commit/7f98676))
+* build(dep): upgrade cz-c-c@2.1 ([d561205](https://github.com/jgranstrom/sass-extract/commit/d561205))
+* build(dep): upgrade mocha@4 ([88c3ed9](https://github.com/jgranstrom/sass-extract/commit/88c3ed9))
+* build(package): remove node-sass as hard dependency ([1091bea](https://github.com/jgranstrom/sass-extract/commit/1091bea))
+* feat(parse): replace scss-extract with gonzales-pe ([b1f26b5](https://github.com/jgranstrom/sass-extract/commit/b1f26b5)), closes [#18](https://github.com/jgranstrom/sass-extract/issues/18)
+* feat(plugin): add plugin options support and a bundled filter plugin ([198a98a](https://github.com/jgranstrom/sass-extract/commit/198a98a))
+* feat(process): modify processing order and dependent declarations injections to better handle dynami ([aedd820](https://github.com/jgranstrom/sass-extract/commit/aedd820))
+* feat(serialize): generalize list separator and serialize lists with known separator ([0eb3443](https://github.com/jgranstrom/sass-extract/commit/0eb3443))
+* feat(struct): add separator info to list ([2e44151](https://github.com/jgranstrom/sass-extract/commit/2e44151))
+* test: add test for ie type hacks ([3f7498f](https://github.com/jgranstrom/sass-extract/commit/3f7498f))
+* test: add tests against entire foundation-sites scss source tree ([d7a9594](https://github.com/jgranstrom/sass-extract/commit/d7a9594))
+* test: add tests for variable arguments ([80d1924](https://github.com/jgranstrom/sass-extract/commit/80d1924))
+* test(appveyor): retry npm install in test script ([bbd3a54](https://github.com/jgranstrom/sass-extract/commit/bbd3a54))
+* test(function): add tests for combinations of functions with nested blocks, default values and overr ([0ff9893](https://github.com/jgranstrom/sass-extract/commit/0ff9893))
+* test(mixin): add tests for combinations of mixins with default values and overrides ([2777abd](https://github.com/jgranstrom/sass-extract/commit/2777abd))
+* test(win): add tests for windows line endings ([257db5f](https://github.com/jgranstrom/sass-extract/commit/257db5f))
+* fix(dependencies): add missing scss-parser dependency ([c97153a](https://github.com/jgranstrom/sass-extract/commit/c97153a))
+* fix(inject): remove implicit invocation of mixin and function dependencies ([ed90fbd](https://github.com/jgranstrom/sass-extract/commit/ed90fbd))
+* fix(parse): fix declaration dependency parsing with gonzales-pe ([4bfa93c](https://github.com/jgranstrom/sass-extract/commit/4bfa93c))
+* fix(parse): fix parsing flags and stringify ([64c7219](https://github.com/jgranstrom/sass-extract/commit/64c7219))
+* refactor(deps): remove lodash from stringify ([bb8e560](https://github.com/jgranstrom/sass-extract/commit/bb8e560))
+* chore(editor): add editorconfig ([dc20a54](https://github.com/jgranstrom/sass-extract/commit/dc20a54))
+* chore(package): remove package lock ([f046f82](https://github.com/jgranstrom/sass-extract/commit/f046f82))
+* Fix typo in code example ([e0531e5](https://github.com/jgranstrom/sass-extract/commit/e0531e5))
+
+
+
 <a name="1.0.1"></a>
 ## 1.0.1 (2017-09-10)
 
+* chore(release): 1.0.1 ([1eb9af1](https://github.com/jgranstrom/sass-extract/commit/1eb9af1))
 * docs: update plugins doc ([1ce284a](https://github.com/jgranstrom/sass-extract/commit/1ce284a))
 * feat(plugins): allow plugin to be applied by module name ([d755564](https://github.com/jgranstrom/sass-extract/commit/d755564))
 * test: fix rounding issue across sass versions ([c1421de](https://github.com/jgranstrom/sass-extract/commit/c1421de))
