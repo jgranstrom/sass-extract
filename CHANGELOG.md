@@ -1,6 +1,17 @@
+<a name="2.1.0"></a>
+# 2.1.0 (2018-01-17)
+
+* feat(importer): add support for custom importers ([fc919a0](https://github.com/jgranstrom/sass-extract/commit/fc919a0))
+* docs(readme): add gitter badge ([88ea499](https://github.com/jgranstrom/sass-extract/commit/88ea499))
+
+
+
 <a name="2.0.0"></a>
 # 2.0.0 (2017-12-02)
 
+* chore(editor): add editorconfig ([dc20a54](https://github.com/jgranstrom/sass-extract/commit/dc20a54))
+* chore(package): remove package lock ([f046f82](https://github.com/jgranstrom/sass-extract/commit/f046f82))
+* chore(release): 2.0.0 ([1f7cc43](https://github.com/jgranstrom/sass-extract/commit/1f7cc43))
 * build(dep): upgrade chai@4 ([7f98676](https://github.com/jgranstrom/sass-extract/commit/7f98676))
 * build(dep): upgrade cz-c-c@2.1 ([d561205](https://github.com/jgranstrom/sass-extract/commit/d561205))
 * build(dep): upgrade mocha@4 ([88c3ed9](https://github.com/jgranstrom/sass-extract/commit/88c3ed9))
@@ -22,8 +33,6 @@
 * fix(parse): fix declaration dependency parsing with gonzales-pe ([4bfa93c](https://github.com/jgranstrom/sass-extract/commit/4bfa93c))
 * fix(parse): fix parsing flags and stringify ([64c7219](https://github.com/jgranstrom/sass-extract/commit/64c7219))
 * refactor(deps): remove lodash from stringify ([bb8e560](https://github.com/jgranstrom/sass-extract/commit/bb8e560))
-* chore(editor): add editorconfig ([dc20a54](https://github.com/jgranstrom/sass-extract/commit/dc20a54))
-* chore(package): remove package lock ([f046f82](https://github.com/jgranstrom/sass-extract/commit/f046f82))
 * Fix typo in code example ([e0531e5](https://github.com/jgranstrom/sass-extract/commit/e0531e5))
 
 
