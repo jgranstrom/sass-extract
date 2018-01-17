@@ -1,3 +1,4 @@
+import Promise from 'bluebird';
 import path from 'path';
 import { normalizePath, makeAbsolute } from './util';
 
@@ -15,9 +16,14 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
   }
 
   for(let i = 0; i < candidateFromPaths.length; i++) {
-    // Get normalize absolute candidate from path
+    let candidatePath;
     let candidateFromPath = normalizePath(makeAbsolute(candidateFromPaths[i]));
-    let candidatePath = path.posix.join(candidateFromPath, url);
+    if (path.isAbsolute(url)) {
+      candidatePath = normalizePath(url);
+    } else {
+      // Get normalize absolute candidate from path
+      candidatePath = path.posix.join(candidateFromPath, url);
+    }
 
     if(includedFilesMap[candidatePath]) {
       return candidatePath;
@@ -26,7 +32,12 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
       let indexOfBasename = url.lastIndexOf(urlBasename);
       let partialUrl = `${url.substring(0, indexOfBasename)}_${urlBasename}`;
 
-      candidatePath = path.posix.join(candidateFromPath, partialUrl);
+      if (path.isAbsolute(partialUrl)) {
+        candidatePath = normalizePath(partialUrl);
+      } else {
+        candidatePath = path.posix.join(candidateFromPath, partialUrl);
+      }
+
       if(includedFilesMap[candidatePath]) {
         return candidatePath;
       }
@@ -76,13 +87,45 @@ function getIncludedFilesMap(includedFiles) {
  * Create an importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-export function makeImporter(extractions, includedFiles, includedPaths) {
+export function makeImporter(extractions, includedFiles, includedPaths, customImporter) {
   const includedFilesMap = getIncludedFilesMap(includedFiles);
 
   return function(url, prev, done) {
     try {
-      const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
-      done(result);
+      let promise = Promise.resolve();
+      if (customImporter) {
+        promise = new Promise(resolve => {
+          if (Array.isArray(customImporter)) {
+            const promises = [];
+            customImporter.forEach(importer => {
+              const thisPromise = new Promise(res => {
+                const modifiedUrl = importer(url, prev, res);
+                if (modifiedUrl !== undefined) {
+                  res(modifiedUrl);
+                }
+              });
+              promises.push(thisPromise);
+            })
+            Promise.all(promises).then(results => {
+              resolve(results.find(item => item !== null));
+            });
+          } else {
+            const modifiedUrl = customImporter(url, prev, resolve);
+            if (modifiedUrl !== undefined) {
+              resolve(modifiedUrl);
+            }
+          }
+        });
+      }
+      promise.then(modifiedUrl => {
+        if (modifiedUrl && modifiedUrl.file) {
+          url = modifiedUrl.file;
+        }
+        const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
+        done(result);
+      }).catch(err => {
+        done(err);
+      });
     } catch(err) {
       done(err);
     }
@@ -93,11 +136,24 @@ export function makeImporter(extractions, includedFiles, includedPaths) {
  * Create a synchronous importer that will resolve @import directives with the injected
  * data found in provided extractions object
  */
-export function makeSyncImporter(extractions, includedFiles, includedPaths) {
+export function makeSyncImporter(extractions, includedFiles, includedPaths, customImporter) {
   const includedFilesMap = getIncludedFilesMap(includedFiles);
 
   return function(url, prev) {
     try {
+      if (customImporter) {
+        let modifiedUrl;
+        if (Array.isArray(customImporter)) {
+          customImporter.forEach(importer => {
+            modifiedUrl = modifiedUrl || importer(url, prev);
+          })
+        } else {
+          modifiedUrl = customImporter(url, prev);
+        }
+        if (modifiedUrl && modifiedUrl.file) {
+          url = modifiedUrl.file;
+        }
+      }
       const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
       return result;
     } catch(err) {

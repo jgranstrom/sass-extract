@@ -95,7 +95,7 @@ export function extract(rendered, { compileOptions = {}, extractOptions = {} } =
   .then(({ compiledFiles, orderedFiles }) => {
     const parsedDeclarations = parseFiles(compiledFiles);
     const extractions = processFiles(orderedFiles, compiledFiles, parsedDeclarations, pluggable);
-    const importer = makeImporter(extractions, includedFiles, includedPaths);
+    const importer = makeImporter(extractions, includedFiles, includedPaths, compileOptions.importer);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
     return sass.renderAsync(extractionCompileOptions)
@@ -117,7 +117,7 @@ export function extractSync(rendered, { compileOptions = {}, extractOptions = {}
   const { compiledFiles, orderedFiles } = loadCompiledFilesSync(includedFiles, entryFilename, compileOptions.data);
   const parsedDeclarations = parseFiles(compiledFiles);
   const extractions = processFiles(orderedFiles, compiledFiles, parsedDeclarations, pluggable);
-  const importer = makeSyncImporter(extractions, includedFiles, includedPaths);
+  const importer = makeSyncImporter(extractions, includedFiles, includedPaths, compileOptions.importer);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
   sass.renderSync(extractionCompileOptions);

@@ -6,6 +6,7 @@ const { normalizePath } = require('../src/util');
 const includeRootFile = path.join(__dirname, 'sass', 'include', 'root.scss');
 const includeRoot2File = path.join(__dirname, 'sass', 'include', 'root2.scss');
 const includeRoot3File = path.join(__dirname, 'sass', 'include', 'root3.scss');
+const includeRoot4File = path.join(__dirname, 'sass', 'include', 'root4.scss');
 const includeSubFile = path.join(__dirname, 'sass', 'include', 'sub', 'included.scss');
 const includeSubFile2 = path.join(__dirname, 'sass', 'include', 'sub', 'included2.scss');
 const includeSubDir = path.join(__dirname, 'sass', 'include', 'sub');
@@ -262,6 +263,66 @@ describe('include', () => {
           .then(rendered => {
             verifyFunctions(rendered, includeRoot3File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
           });
+        });
+      });
+    });
+  });
+
+  describe('custom importer', () => {
+    const getNewUrl = url => url === 'foo' ? './included.scss' : url;
+
+    describe('sync', () => {
+      it('should extract all variables', () => {
+        const rendered = renderSync({ file: includeRoot4File, includePaths: [includeSubDir], importer: url => ({ file: getNewUrl(url) }) });
+        verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+      });
+    });
+
+    describe('async', () => {
+      it('should extract all variables', () => {
+        return render({ file: includeRoot4File, includePaths: [includeSubDir], importer: (url, prev, done) => { done({ file: getNewUrl(url) }); } })
+        .then(rendered => {
+          verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+        });
+      });
+    });
+  });
+
+  describe('array of custom importers', () => {
+    const getNewUrl = url => url === 'foo' ? './included.scss' : url;
+
+    describe('sync', () => {
+      it('should extract all variables', () => {
+        const rendered = renderSync({ file: includeRoot4File, includePaths: [includeSubDir], importer: [() => null, url => ({ file: getNewUrl(url) })] });
+        verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+      });
+    });
+
+    describe('async', () => {
+      it('should extract all variables', () => {
+        return render({ file: includeRoot4File, includePaths: [includeSubDir], importer: [(url, prev, done) => { done(null); }, (url, prev, done) => { done({ file: getNewUrl(url) }); }] })
+        .then(rendered => {
+          verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+        });
+      });
+    });
+  });
+
+  describe('absolute include path', () => {
+    const getNewUrl = url => url === 'foo' ? path.join(__dirname, 'sass', 'include', 'sub', 'included.scss') : url;
+
+    describe('sync', () => {
+      it('should extract all variables', () => {
+        const rendered = renderSync({ file: includeRoot4File, importer: url => ({ file: getNewUrl(url) }) });
+        verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
+      });
+    });
+
+    describe('async', () => {
+      it('should extract all variables', () => {
+        return render({ file: includeRoot4File, importer: (url, prev, done) => { done({ file: getNewUrl(url) }); } })
+        .then(rendered => {
+          verifyFunctions(rendered, includeRoot4File, SUB_INCLUDED_COLOR, SUB_INCLUDED2_COLOR, includeSubFile,  includeSubFile2);
         });
       });
     });
