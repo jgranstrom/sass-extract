@@ -160,7 +160,7 @@ The extracted variables returned from **sass-extract** are namespaced by the con
 
 ##### Global variables
 
-A global variable is accessible from anywhere withint that file, as well as from files that `@import` the file where the variable is declared. A variable is considered global when it is declared outside of any selector, or if the annotation `!global` is included after the variable expression.
+A global variable is accessible from anywhere within that file, as well as from files that `@import` the file where the variable is declared. A variable is considered global when it is declared outside of any selector, or if the annotation `!global` is included after the variable expression.
 
 ```scss
 // styleA.scss
