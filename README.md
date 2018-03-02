@@ -82,7 +82,7 @@ A synchronous version of the `render` function.
 ```js
 const sassExtract = require('sass-extract');
 
-const rendered = sassExtract.render({
+const rendered = sassExtract.renderSync({
   file: 'path/to/my/styles.scss'
 });
 
