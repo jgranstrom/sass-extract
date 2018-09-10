@@ -71,10 +71,18 @@ function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) 
  * Get the resulting source and path for a given @import request
  */
 function getImportResult(extractions, url, prev, includedFilesMap, includedPaths) {
-  const absolutePath = getImportAbsolutePath(url, prev, includedFilesMap, includedPaths);
-  const contents = extractions[absolutePath].injectedData;
+  if (!Array.isArray(url)) {
+    url = [url]
+  }
 
-  return { file: absolutePath, contents };
+  const returnObj = url.map(url_item => {
+    const absolutePath = getImportAbsolutePath(url_item, prev, includedFilesMap, includedPaths);
+    const contents = extractions[absolutePath].injectedData;
+
+    return { file: absolutePath, contents };
+  });
+
+  return returnObj;
 }
 
 function getIncludedFilesMap(includedFiles) {
@@ -118,8 +126,12 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
         });
       }
       promise.then(modifiedUrl => {
-        if (modifiedUrl && modifiedUrl.file) {
-          url = modifiedUrl.file;
+        if (modifiedUrl) {
+          if (!Array.isArray(modifiedUrl)) {
+            modifiedUrl = [modifiedUrl];
+          }
+
+          url = modifiedUrl.map(url_item => url_item.file);
         }
         const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
         done(result);
