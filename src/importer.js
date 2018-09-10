@@ -94,6 +94,10 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
     try {
       const promises = [];
       if (customImporter) {
+        if (!Array.isArray(customImporter)) {
+          customImporter = [customImporter]
+        }
+
         customImporter.forEach(importer => {
           promises.push(new Promise(res => {
             importer(url, prev, (value) => res(value));
