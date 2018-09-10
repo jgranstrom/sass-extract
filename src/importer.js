@@ -99,7 +99,7 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
             const promises = [];
             customImporter.forEach(importer => {
               const thisPromise = new Promise(res => {
-                const modifiedUrl = importer(url, prev, res);
+                const modifiedUrl = importer.apply({}, [url, prev, res]);
                 if (modifiedUrl !== undefined) {
                   res(modifiedUrl);
                 }
@@ -110,7 +110,7 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
               resolve(results.find(item => item !== null));
             });
           } else {
-            const modifiedUrl = customImporter(url, prev, resolve);
+            const modifiedUrl = customImporter.apply({}, [url, prev, resolve]);
             if (modifiedUrl !== undefined) {
               resolve(modifiedUrl);
             }
