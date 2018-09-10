@@ -92,32 +92,15 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
 
   return function(url, prev, done) {
     try {
-      let promise = Promise.resolve();
+      const promises = [];
       if (customImporter) {
-        promise = new Promise(resolve => {
-          if (Array.isArray(customImporter)) {
-            const promises = [];
-            customImporter.forEach(importer => {
-              const thisPromise = new Promise(res => {
-                const modifiedUrl = importer(url, prev, res);
-                if (modifiedUrl !== undefined) {
-                  res(modifiedUrl);
-                }
-              });
-              promises.push(thisPromise);
-            })
-            Promise.all(promises).then(results => {
-              resolve(results.find(item => item !== null));
-            });
-          } else {
-            const modifiedUrl = customImporter(url, prev, resolve);
-            if (modifiedUrl !== undefined) {
-              resolve(modifiedUrl);
-            }
-          }
+        customImporter.forEach(importer => {
+          promises.push(new Promise(res => {
+            importer(url, prev, (value) => res(value));
+          }));
         });
       }
-      promise.then(modifiedUrl => {
+      Promise.all(promises).then(results => results.find(item => item !== null)).then(modifiedUrl => {
         if (modifiedUrl && modifiedUrl.file) {
           url = modifiedUrl.file;
         }
