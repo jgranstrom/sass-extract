@@ -28,7 +28,7 @@
     "node": ">=4"
   },
   "peerDependencies": {
-    "node-sass": "^3.8.0"
+    "node-sass": "^3.8.0 || 4"
   },
   "dependencies": {
     "bluebird": "^3.4.7",
@@ -43,7 +43,7 @@
     "chai": "^4.1.2",
     "chai-subset": "^1.6.0",
     "cz-conventional-changelog": "^2.1.0",
-    "foundation-sites": "~6.4.3",
+    "foundation-sites": "^6.4.3",
     "mocha": "^4.0.1"
   },
   "config": {
