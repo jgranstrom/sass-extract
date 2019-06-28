@@ -58,7 +58,7 @@ function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) 
     url += extension;
   }
 
-  const absolutePath = findImportedPath(url, prev, includedFilesMap, includedPaths);
+  const absolutePath = findImportedPath(normalizePath(url), prev, includedFilesMap, includedPaths);
 
   if(!absolutePath) {
     throw new Error(`Can not determine imported file for url '${url}' imported in ${prev}`);
