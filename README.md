@@ -466,6 +466,26 @@ There are some bundled plugins that comes with the library. To use them simply `
 
 *Note*: Empty arrays are ignored and treated as no filtering should be applied for that selection
 
+```js
+const sassExtract = require('sass-extract');
+
+const rendered = renderSync(
+  { file: 'path/to/my/styles.scss' },
+  {
+    plugins: [
+      {
+        plugin: 'filter',
+        options: {
+          except: { 
+            props: [ '$list' ], 
+            types: [ 'SassNumber' ] 
+          }
+        }
+      }
+    ]
+  }
+);
+```
 
 ## What is sass-extract?
 
