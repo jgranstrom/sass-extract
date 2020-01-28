@@ -4,6 +4,7 @@
   "description": "Extract structured variables from sass files. Fast and accurate.",
   "main": "lib/index.js",
   "scripts": {
+    "peers": "npx npm-install-peers",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
     "test": "mocha --require babel-core/register --timeout 10000",
