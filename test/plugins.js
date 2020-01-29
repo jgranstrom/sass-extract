@@ -51,18 +51,18 @@ function verifyMinimalResult(rendered) {
 
 const pluginsFile = path.join(__dirname, 'sass', 'plugins.scss');
 
-describe('plugins', () => {
+describe_implementation('plugins', (sass) => {
   describe('serialize', () => {
     describe('sync', () => {
       it('should serialize extracted results', () => {
-        const rendered = renderSync({ file: pluginsFile }, { plugins: [ serializePlugin ] });
+        const rendered = renderSync({ file: pluginsFile }, { plugins: [ serializePlugin ], implementation: sass });
         verifySerializedResult(rendered);
       })
     });
 
     describe('async', () => {
       it('should serialize extracted results', () => {
-        return render({ file: pluginsFile }, { plugins: [ serializePlugin ] })
+        return render({ file: pluginsFile }, { plugins: [ serializePlugin ], implementation: sass })
         .then(rendered => verifySerializedResult(rendered));
       })
     });
@@ -71,14 +71,14 @@ describe('plugins', () => {
   describe('compact', () => {
     describe('sync', () => {
       it('should compact extracted results', () => {
-        const rendered = renderSync({ file: pluginsFile }, { plugins: [ compactPlugin ] });
+        const rendered = renderSync({ file: pluginsFile }, { plugins: [ compactPlugin ], implementation: sass });
         verifyCompactResult(rendered);
       })
     });
 
     describe('async', () => {
       it('should compact extracted results', () => {
-        return render({ file: pluginsFile }, { plugins: [ compactPlugin ] })
+        return render({ file: pluginsFile }, { plugins: [ compactPlugin ], implementation: sass })
         .then(rendered => verifyCompactResult(rendered));
       })
     });
@@ -87,14 +87,14 @@ describe('plugins', () => {
   describe('compact+serialize', () => {
     describe('sync', () => {
       it('should run both compact and serialize plugins on extracted results', () => {
-        const rendered = renderSync({ file: pluginsFile }, { plugins: [ minimalPlugin ] });
+        const rendered = renderSync({ file: pluginsFile }, { plugins: [ minimalPlugin ], implementation: sass });
         verifyMinimalResult(rendered);
       })
     });
 
     describe('async', () => {
       it('should run both compact and serialize plugins on extracted results', () => {
-        return render({ file: pluginsFile }, { plugins: [ minimalPlugin ] })
+        return render({ file: pluginsFile }, { plugins: [ minimalPlugin ], implementation: sass })
         .then(rendered => verifyMinimalResult(rendered));
       })
     });
@@ -103,14 +103,14 @@ describe('plugins', () => {
   describe('minimal', () => {
     describe('sync', () => {
       it('should combine serialize and compact to get minimal extracted results', () => {
-        const rendered = renderSync({ file: pluginsFile }, { plugins: [ minimalPlugin ] });
+        const rendered = renderSync({ file: pluginsFile }, { plugins: [ minimalPlugin ], implementation: sass });
         verifyMinimalResult(rendered);
       })
     });
 
     describe('async', () => {
       it('should combine serialize and compact to get minimal extracted results', () => {
-        return render({ file: pluginsFile }, { plugins: [ minimalPlugin ] })
+        return render({ file: pluginsFile }, { plugins: [ minimalPlugin ], implementation: sass })
         .then(rendered => verifyMinimalResult(rendered));
       })
     });

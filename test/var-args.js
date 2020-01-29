@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const varArgsFile = path.join(__dirname, 'sass', 'var-args.scss');
 
@@ -117,17 +116,17 @@ function verifyVarArgs(rendered, sourceFile) {
   ]);
 }
 
-describe('var-args', () => {
+describe_implementation('var-args', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: varArgsFile });
+      const rendered = renderSync({ file: varArgsFile }, { implementation: sass });
       verifyVarArgs(rendered, varArgsFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: varArgsFile })
+      return render({ file: varArgsFile }, { implementation: sass })
       .then(rendered => {
         verifyVarArgs(rendered, varArgsFile);
       });

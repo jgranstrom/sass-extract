@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const ieHacksFile = path.join(__dirname, 'sass', 'ie-hacks.scss');
 
@@ -21,17 +20,17 @@ function verifyIeHacks(rendered, sourceFile) {
   expect(rendered.vars.global.$my.value).to.equal('variable');
 }
 
-describe('ie-hacks', () => {
+describe_implementation('ie-hacks', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: ieHacksFile });
+      const rendered = renderSync({ file: ieHacksFile }, { implementation: sass });
       verifyIeHacks(rendered, ieHacksFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: ieHacksFile })
+      return render({ file: ieHacksFile }, { implementation: sass })
       .then(rendered => {
         verifyIeHacks(rendered, ieHacksFile);
       });

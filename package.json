@@ -7,7 +7,7 @@
     "peers": "npx npm-install-peers",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
-    "test": "mocha --require babel-core/register --timeout 10000",
+    "test": "mocha --require babel-core/register --timeout 10000 --file \"./test/helpers/implementation_iterator.js\"",
     "test:fast": "FAST_TEST=true mocha --require babel-core/register",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
     "watch": "mocha --watch --reporter min --require babel-core/register --timeout 10000",

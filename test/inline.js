@@ -54,17 +54,17 @@ function verifyInline(rendered, number1Source, number2Source, colorSource) {
   expect(rendered.vars.global.$color.declarations[0].expression).to.equal('red');
 }
 
-describe('inline', () => {
+describe_implementation('inline', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ data: inlineData });
+      const rendered = renderSync({ data: inlineData }, { implementation: sass });
       verifyInline(rendered, 'data', 'data', 'data');
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ data: inlineData })
+      return render({ data: inlineData }, { implementation: sass })
       .then(rendered => {
         verifyInline(rendered, 'data', 'data', 'data');
       });
@@ -72,17 +72,17 @@ describe('inline', () => {
   });
 });
 
-describe('inline-nested', () => {
+describe_implementation('inline-nested', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ data: inlineNestedData, includePaths: [inlineNestedPath] });
+      const rendered = renderSync({ data: inlineNestedData, includePaths: [inlineNestedPath] }, { implementation: sass });
       verifyInline(rendered, inlineNested1File, 'data', inlineNested2File);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ data: inlineNestedData, includePaths: [inlineNestedPath] })
+      return render({ data: inlineNestedData, includePaths: [inlineNestedPath] }, { implementation: sass })
       .then(rendered => {
         verifyInline(rendered, inlineNested1File, 'data', inlineNested2File);
       });

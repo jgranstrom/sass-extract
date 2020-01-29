@@ -70,17 +70,17 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$colorStroke.declarations[0].expression).to.equal('#DEDADA');
 }
 
-describe('comments', () => {
+describe_implementation('comments', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: multilineCommentFile })
+      const rendered = renderSync({ file: multilineCommentFile }, { implementation: sass })
       verifyComment(rendered, multilineCommentFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: multilineCommentFile })
+      return render({ file: multilineCommentFile }, { implementation: sass })
       .then(rendered => {
         verifyComment(rendered, multilineCommentFile);
       });

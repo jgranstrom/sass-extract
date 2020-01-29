@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const mapKeysFile = path.join(__dirname, 'sass', 'map-keys.scss');
 
@@ -91,17 +90,17 @@ function verifyMapKeys(rendered, sourceFile) {
   });
 }
 
-describe('map-keys', () => {
+describe_implementation('map-keys', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: mapKeysFile });
+      const rendered = renderSync({ file: mapKeysFile }, { implementation: sass });
       verifyMapKeys(rendered, mapKeysFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: mapKeysFile })
+      return render({ file: mapKeysFile }, { implementation: sass })
       .then(rendered => {
         verifyMapKeys(rendered, mapKeysFile);
       });

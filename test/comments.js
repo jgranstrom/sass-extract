@@ -41,17 +41,17 @@ function verifyComment(rendered, sourceFile) {
   expect(rendered.vars.global.$color.declarations[0].expression).to.equal('red');
 }
 
-describe('comments', () => {
+describe_implementation('comments', (sass) => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
-      const rendered = renderSync({ file: commentFile })
+      const rendered = renderSync({ file: commentFile }, { implementation: sass })
       verifyComment(rendered, commentFile);
     });
   });
 
   describe('async', () => {
     it('should extract variables not in comments', () => {
-      return render({ file: commentFile })
+      return render({ file: commentFile }, { implementation: sass })
       .then(rendered => {
         verifyComment(rendered, commentFile);
       });

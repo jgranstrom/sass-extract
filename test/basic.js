@@ -143,17 +143,17 @@ function verifyBasic(rendered, sourceFile, explicit, mixed, expectedEol = EOL) {
   }
 }
 
-describe('basic-implicit', () => {
+describe_implementation('basic-implicit', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: basicImplicitFile })
+      const rendered = renderSync({ file: basicImplicitFile }, { implementation: sass })
       verifyBasic(rendered, basicImplicitFile, false, false);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: basicImplicitFile })
+      return render({ file: basicImplicitFile }, { implementation: sass })
       .then(rendered => {
         verifyBasic(rendered, basicImplicitFile, false, false);
       });
@@ -161,17 +161,17 @@ describe('basic-implicit', () => {
   });
 });
 
-describe('basic-explicit', () => {
+describe_implementation('basic-explicit', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: basicExplicitFile });
+      const rendered = renderSync({ file: basicExplicitFile }, { implementation: sass });
       verifyBasic(rendered, basicExplicitFile, true, false);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: basicExplicitFile })
+      return render({ file: basicExplicitFile }, { implementation: sass })
       .then(rendered => {
         verifyBasic(rendered, basicExplicitFile, true, false);
       });
@@ -179,17 +179,17 @@ describe('basic-explicit', () => {
   });
 });
 
-describe('basic-mixed', () => {
+describe_implementation('basic-mixed', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: basicMixedFile })
+      const rendered = renderSync({ file: basicMixedFile }, { implementation: sass })
       verifyBasic(rendered, basicMixedFile, false, true);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: basicMixedFile })
+      return render({ file: basicMixedFile }, { implementation: sass })
       .then(rendered => {
         verifyBasic(rendered, basicMixedFile, false, true);
       });
@@ -197,17 +197,17 @@ describe('basic-mixed', () => {
   });
 });
 
-describe('basic-mixed-win-le', () => {
+describe_implementation('basic-mixed-win-le', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: basicMixedFileWinLe })
+      const rendered = renderSync({ file: basicMixedFileWinLe }, { implementation: sass })
       verifyBasic(rendered, basicMixedFileWinLe, false, true, '\r\n');
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: basicMixedFileWinLe })
+      return render({ file: basicMixedFileWinLe }, { implementation: sass })
       .then(rendered => {
         verifyBasic(rendered, basicMixedFileWinLe, false, true, '\r\n');
       });

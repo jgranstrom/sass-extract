@@ -35,11 +35,11 @@ function verifyOrder(rendered, sourceFile, partialFile) {
   expect(rendered.vars.global.$var2.declarations[2].expression).to.equal('3');
 }
 
-describe('partial', () => {
+describe_implementation('partial', (sass) => {
   describe('sync', () => {
     it('should extract in the right order', () => {
       for(let i = 0; i < 20; i++) {
-        const rendered = renderSync({ file: orderFile })
+        const rendered = renderSync({ file: orderFile }, { implementation: sass })
         verifyOrder(rendered, orderFile);
       }
     });
