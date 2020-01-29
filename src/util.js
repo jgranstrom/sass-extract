@@ -33,3 +33,16 @@ export function toColorHex(value) {
 
   return colorHex;
 }
+
+/**
+ * Returns the Sass implementation based on the `extractOptions`. Resolves the implementation in the following order: `compileOptions.implementation` || `Node Sass` || `Dart Sass`
+ */
+export function getSassImplementation(compileOptions = {}) {
+  const implementation = compileOptions.implementation || require('node-sass') || require('sass');
+
+  if(!implementation.info || !['node-sass', 'dart-sass'].includes(implementation.info.split('\t')[0])) {
+    throw new Error('The given Sass implementation is invalid. Should be one of `node-sass` or `sass`.')
+  }
+
+  return implementation;
+}
