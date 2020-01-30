@@ -6,8 +6,8 @@ import { serialize } from '../serialize';
  */
 export function run() {
   return {
-    postValue: ({ value, sassValue }) => {
-      return { value: { value: serialize(sassValue) }, sassValue };
+    postValue: ({ value, sassValue, sass }) => {
+      return { value: { value: serialize(sassValue, false, sass) }, sassValue };
     }
   }
 }
