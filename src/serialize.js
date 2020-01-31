@@ -1,4 +1,4 @@
-import { toColorHex } from './util';
+import { getConstructor, toColorHex } from './util';
 import parseColor from 'parse-color';
 
 /**
@@ -28,7 +28,7 @@ function serializeColor(sassColor) {
  * Transform a SassValue into a serialized string
  */
 function serializeValue(sassValue, isInList, sass) {
-  switch(sassValue.constructor) {
+  switch(getConstructor(sassValue, sass)) {
     case sass.types.String:
     case sass.types.Boolean:
       return `${sassValue.getValue()}`;

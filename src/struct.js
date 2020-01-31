@@ -1,11 +1,11 @@
-import { toColorHex } from './util';
+import { getConstructor, getConstructorName, toColorHex } from './util';
 import { serialize } from './serialize';
 
 /**
  * Transform a sassValue into a structured value based on the value type
  */
 function makeValue(sassValue, sass) {
-  switch(sassValue.constructor) {
+  switch(getConstructor(sassValue, sass)) {
     case sass.types.String:
     case sass.types.Boolean:
       return { value: sassValue.getValue() };
@@ -57,7 +57,7 @@ function makeValue(sassValue, sass) {
  */
 export function createStructuredValue(sassValue, sass) {
   const value = Object.assign({
-    type: sassValue.constructor.name,
+    type: getConstructorName(sassValue, sass),
   }, makeValue(sassValue, sass));
 
   return value;
