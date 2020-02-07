@@ -6,7 +6,7 @@ import { Pluggable } from './pluggable';
  * Get a string id for a filename
  */
 function getFileId(filename) {
-  return new Buffer(filename).toString('base64').replace(/=/g, '');
+  return new Buffer.from(filename).toString('base64').replace(/=/g, '');
 }
 
 function parseFile(filename, data) {
