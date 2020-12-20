@@ -8,14 +8,14 @@ import { normalizePath, makeAbsolute } from './util';
 function findImportedPath(url, prev, includedFilesMap, includedPaths) {
   let candidateFromPaths;
 
-  if(prev !== 'stdin') {
+  if (prev !== 'stdin') {
     const prevPath = path.posix.dirname(prev);
     candidateFromPaths = [prevPath, ...includedPaths];
   } else {
     candidateFromPaths = [...includedPaths];
   }
 
-  for(let i = 0; i < candidateFromPaths.length; i++) {
+  for (let i = 0; i < candidateFromPaths.length; i++) {
     let candidatePath;
     let candidateFromPath = normalizePath(makeAbsolute(candidateFromPaths[i]));
     if (path.isAbsolute(url)) {
@@ -25,7 +25,7 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
       candidatePath = path.posix.join(candidateFromPath, url);
     }
 
-    if(includedFilesMap[candidatePath]) {
+    if (includedFilesMap[candidatePath]) {
       return candidatePath;
     } else {
       let urlBasename = path.posix.basename(url);
@@ -38,7 +38,7 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
         candidatePath = path.posix.join(candidateFromPath, partialUrl);
       }
 
-      if(includedFilesMap[candidatePath]) {
+      if (includedFilesMap[candidatePath]) {
         return candidatePath;
       }
     }
@@ -54,13 +54,13 @@ function findImportedPath(url, prev, includedFilesMap, includedPaths) {
 function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) {
   // Ensure that both @import 'file' and @import 'file.scss' is mapped correctly
   let extension = path.posix.extname(prev);
-  if(path.posix.extname(url) !== extension) {
+  if (path.posix.extname(url) !== extension) {
     url += extension;
   }
 
   const absolutePath = findImportedPath(url, prev, includedFilesMap, includedPaths);
 
-  if(!absolutePath) {
+  if (!absolutePath) {
     throw new Error(`Can not determine imported file for url '${url}' imported in ${prev}`);
   }
 
@@ -79,7 +79,7 @@ function getImportResult(extractions, url, prev, includedFilesMap, includedPaths
 
 function getIncludedFilesMap(includedFiles) {
   const includedFilesMap = {};
-  includedFiles.forEach(file => includedFilesMap[file] = true);
+  includedFiles.forEach((file) => (includedFilesMap[file] = true));
   return includedFilesMap;
 }
 
@@ -90,24 +90,24 @@ function getIncludedFilesMap(includedFiles) {
 export function makeImporter(extractions, includedFiles, includedPaths, customImporter) {
   const includedFilesMap = getIncludedFilesMap(includedFiles);
 
-  return function(url, prev, done) {
+  return function (url, prev, done) {
     try {
       let promise = Promise.resolve();
       if (customImporter) {
-        promise = new Promise(resolve => {
+        promise = new Promise((resolve) => {
           if (Array.isArray(customImporter)) {
             const promises = [];
-            customImporter.forEach(importer => {
-              const thisPromise = new Promise(res => {
+            customImporter.forEach((importer) => {
+              const thisPromise = new Promise((res) => {
                 const modifiedUrl = importer(url, prev, res);
                 if (modifiedUrl !== undefined) {
                   res(modifiedUrl);
                 }
               });
               promises.push(thisPromise);
-            })
-            Promise.all(promises).then(results => {
-              resolve(results.find(item => item !== null));
+            });
+            Promise.all(promises).then((results) => {
+              resolve(results.find((item) => item !== null));
             });
           } else {
             const modifiedUrl = customImporter(url, prev, resolve);
@@ -117,19 +117,21 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
           }
         });
       }
-      promise.then(modifiedUrl => {
-        if (modifiedUrl && modifiedUrl.file) {
-          url = modifiedUrl.file;
-        }
-        const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
-        done(result);
-      }).catch(err => {
-        done(err);
-      });
-    } catch(err) {
+      promise
+        .then((modifiedUrl) => {
+          if (modifiedUrl && modifiedUrl.file) {
+            url = modifiedUrl.file;
+          }
+          const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
+          done(result);
+        })
+        .catch((err) => {
+          done(err);
+        });
+    } catch (err) {
       done(err);
     }
-  }
+  };
 }
 
 /**
@@ -139,14 +141,14 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
 export function makeSyncImporter(extractions, includedFiles, includedPaths, customImporter) {
   const includedFilesMap = getIncludedFilesMap(includedFiles);
 
-  return function(url, prev) {
+  return function (url, prev) {
     try {
       if (customImporter) {
         let modifiedUrl;
         if (Array.isArray(customImporter)) {
-          customImporter.forEach(importer => {
+          customImporter.forEach((importer) => {
             modifiedUrl = modifiedUrl || importer(url, prev);
-          })
+          });
         } else {
           modifiedUrl = customImporter(url, prev);
         }
@@ -156,9 +158,9 @@ export function makeSyncImporter(extractions, includedFiles, includedPaths, cust
       }
       const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
       return result;
-    } catch(err) {
+    } catch (err) {
       // note: importer must return errors
       return err;
     }
-  }
+  };
 }

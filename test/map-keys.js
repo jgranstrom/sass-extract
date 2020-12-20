@@ -30,40 +30,53 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value).to.have.property('somekey');
 
   expect(rendered.vars.global.$map.value.string).to.deep.include({
-    type: 'SassNumber', value: 1, unit: 'em'
+    type: 'SassNumber',
+    value: 1,
+    unit: 'em',
   });
   expect(rendered.vars.global.$map.value['1px']).to.deep.include({
-    type: 'SassString', value: 'number'
+    type: 'SassString',
+    value: 'number',
   });
   expect(rendered.vars.global.$map.value.white).to.deep.include({
-    type: 'SassString', value: 'color-string'
+    type: 'SassString',
+    value: 'color-string',
   });
   expect(rendered.vars.global.$map.value['#123456']).to.deep.include({
-    type: 'SassString', value: 'color-hex'
+    type: 'SassString',
+    value: 'color-hex',
   });
   expect(rendered.vars.global.$map.value['rgba(0,1,2,0.5)']).to.deep.include({
-    type: 'SassString', value: 'color-rgba'
+    type: 'SassString',
+    value: 'color-rgba',
   });
   expect(rendered.vars.global.$map.value.black).to.deep.include({
-    type: 'SassString', value: 'color-black-rgba'
+    type: 'SassString',
+    value: 'color-black-rgba',
   });
   expect(rendered.vars.global.$map.value.true).to.deep.include({
-    type: 'SassString', value: 'boolean'
+    type: 'SassString',
+    value: 'boolean',
   });
   expect(rendered.vars.global.$map.value.null).to.deep.include({
-    type: 'SassString', value: 'null'
+    type: 'SassString',
+    value: 'null',
   });
   expect(rendered.vars.global.$map.value['1,2,3']).to.deep.include({
-    type: 'SassString', value: 'list'
+    type: 'SassString',
+    value: 'list',
   });
   expect(rendered.vars.global.$map.value['1 2 3 4']).to.deep.include({
-    type: 'SassString', value: 'list-spaces'
+    type: 'SassString',
+    value: 'list-spaces',
   });
   expect(rendered.vars.global.$map.value['(a: map)']).to.deep.include({
-    type: 'SassString', value: 'map'
+    type: 'SassString',
+    value: 'map',
   });
   expect(rendered.vars.global.$map.value['(b: nested),(c: maps)']).to.deep.include({
-    type: 'SassString', value: 'list-maps'
+    type: 'SassString',
+    value: 'list-maps',
   });
 
   expect(rendered.vars.global.$map.value['(d: map)']).to.deep.include({
@@ -75,18 +88,26 @@ function verifyMapKeys(rendered, sourceFile) {
   });
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1,2,3');
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1,2,3']).to.deep.include({
-    type: 'SassString', value: 'list'
+    type: 'SassString',
+    value: 'list',
   });
-  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3 4');
-  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3 4']).to.deep.include({
-    type: 'SassString', value: 'list-spaces'
-  });
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property(
+    '1 2 3 4'
+  );
+  expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3 4']).to.deep.include(
+    {
+      type: 'SassString',
+      value: 'list-spaces',
+    }
+  );
 
   expect(rendered.vars.global.$map.value['#fcfcfc']).to.deep.include({
-    type: 'SassString', value: 'darkened-white'
+    type: 'SassString',
+    value: 'darkened-white',
   });
   expect(rendered.vars.global.$map.value.somekey).to.deep.include({
-    type: 'SassString', value: 'key-variable'
+    type: 'SassString',
+    value: 'key-variable',
   });
 }
 
@@ -100,8 +121,7 @@ describe('map-keys', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: mapKeysFile })
-      .then(rendered => {
+      return render({ file: mapKeysFile }).then((rendered) => {
         verifyMapKeys(rendered, mapKeysFile);
       });
     });

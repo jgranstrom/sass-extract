@@ -20,7 +20,9 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$mixinVariable.sources).to.have.length(1);
   expect(rendered.vars.global.$mixinVariable.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$mixinVariable.declarations).to.have.length(1);
-  expect(rendered.vars.global.$mixinVariable.declarations[0].expression).to.equal(`'mixin-variable' !global`);
+  expect(rendered.vars.global.$mixinVariable.declarations[0].expression).to.equal(
+    `'mixin-variable' !global`
+  );
   expect(rendered.vars.global.$mixinVariable.declarations[0].flags.global).to.equal(true);
   expect(rendered.vars.global.$mixinVariable.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$mixinVariable.value).to.equal('mixin-variable');
@@ -29,10 +31,14 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$defaultedAtFirst.sources).to.have.length(1);
   expect(rendered.vars.global.$defaultedAtFirst.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$defaultedAtFirst.declarations).to.have.length(2);
-  expect(rendered.vars.global.$defaultedAtFirst.declarations[0].expression).to.equal(`'defaulted' !default !global`);
+  expect(rendered.vars.global.$defaultedAtFirst.declarations[0].expression).to.equal(
+    `'defaulted' !default !global`
+  );
   expect(rendered.vars.global.$defaultedAtFirst.declarations[0].flags.global).to.equal(true);
   expect(rendered.vars.global.$defaultedAtFirst.declarations[0].flags.default).to.equal(true);
-  expect(rendered.vars.global.$defaultedAtFirst.declarations[1].expression).to.equal(`'actual' !global`);
+  expect(rendered.vars.global.$defaultedAtFirst.declarations[1].expression).to.equal(
+    `'actual' !global`
+  );
   expect(rendered.vars.global.$defaultedAtFirst.declarations[1].flags.global).to.equal(true);
   expect(rendered.vars.global.$defaultedAtFirst.declarations[1].flags.default).to.equal(false);
   expect(rendered.vars.global.$defaultedAtFirst.value).to.equal('actual');
@@ -44,7 +50,9 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$someDefault.declarations[0].expression).to.equal(`'b' !default`);
   expect(rendered.vars.global.$someDefault.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$someDefault.declarations[0].flags.default).to.equal(true);
-  expect(rendered.vars.global.$someDefault.declarations[1].expression).to.equal(`'a' !default !global`);
+  expect(rendered.vars.global.$someDefault.declarations[1].expression).to.equal(
+    `'a' !default !global`
+  );
   expect(rendered.vars.global.$someDefault.declarations[1].flags.global).to.equal(true);
   expect(rendered.vars.global.$someDefault.declarations[1].flags.default).to.equal(true);
   expect(rendered.vars.global.$someDefault.declarations[2].expression).to.equal(`'c' !global`);
@@ -59,10 +67,14 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$someOtherDefault.declarations[0].expression).to.equal(`3`);
   expect(rendered.vars.global.$someOtherDefault.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$someOtherDefault.declarations[0].flags.default).to.equal(false);
-  expect(rendered.vars.global.$someOtherDefault.declarations[1].expression).to.equal(`1 !default !global`);
+  expect(rendered.vars.global.$someOtherDefault.declarations[1].expression).to.equal(
+    `1 !default !global`
+  );
   expect(rendered.vars.global.$someOtherDefault.declarations[1].flags.global).to.equal(true);
   expect(rendered.vars.global.$someOtherDefault.declarations[1].flags.default).to.equal(true);
-  expect(rendered.vars.global.$someOtherDefault.declarations[2].expression).to.equal(`2 !default !global`);
+  expect(rendered.vars.global.$someOtherDefault.declarations[2].expression).to.equal(
+    `2 !default !global`
+  );
   expect(rendered.vars.global.$someOtherDefault.declarations[2].flags.global).to.equal(true);
   expect(rendered.vars.global.$someOtherDefault.declarations[2].flags.default).to.equal(true);
   expect(rendered.vars.global.$someOtherDefault.value).to.equal(3);
@@ -71,10 +83,14 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$multipleDefault.sources).to.have.length(1);
   expect(rendered.vars.global.$multipleDefault.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$multipleDefault.declarations).to.have.length(2);
-  expect(rendered.vars.global.$multipleDefault.declarations[0].expression).to.equal(`'x' !default !global`);
+  expect(rendered.vars.global.$multipleDefault.declarations[0].expression).to.equal(
+    `'x' !default !global`
+  );
   expect(rendered.vars.global.$multipleDefault.declarations[0].flags.global).to.equal(true);
   expect(rendered.vars.global.$multipleDefault.declarations[0].flags.default).to.equal(true);
-  expect(rendered.vars.global.$multipleDefault.declarations[1].expression).to.equal(`'y' !default !global`);
+  expect(rendered.vars.global.$multipleDefault.declarations[1].expression).to.equal(
+    `'y' !default !global`
+  );
   expect(rendered.vars.global.$multipleDefault.declarations[1].flags.global).to.equal(true);
   expect(rendered.vars.global.$multipleDefault.declarations[1].flags.default).to.equal(true);
   expect(rendered.vars.global.$multipleDefault.value).to.equal('x');
@@ -90,8 +106,7 @@ describe('imported-mixins', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: importedMixinsFile })
-      .then(rendered => {
+      return render({ file: importedMixinsFile }).then((rendered) => {
         verifyImportedMixins(rendered, importedMixinsFile, mixinsFile);
       });
     });

@@ -73,15 +73,14 @@ function verifyComment(rendered, sourceFile) {
 describe('comments', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: multilineCommentFile })
+      const rendered = renderSync({ file: multilineCommentFile });
       verifyComment(rendered, multilineCommentFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: multilineCommentFile })
-      .then(rendered => {
+      return render({ file: multilineCommentFile }).then((rendered) => {
         verifyComment(rendered, multilineCommentFile);
       });
     });

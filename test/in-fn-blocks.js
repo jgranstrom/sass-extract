@@ -22,14 +22,18 @@ function verifyInFnBlocks(rendered, sourceFile) {
   expect(rendered.vars.global.$mixin1.sources).to.have.length(1);
   expect(rendered.vars.global.$mixin1.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$mixin1.declarations).to.have.length(1);
-  expect(rendered.vars.global.$mixin1.declarations[0].expression).to.equal(`'m-variable-1' !global`);
+  expect(rendered.vars.global.$mixin1.declarations[0].expression).to.equal(
+    `'m-variable-1' !global`
+  );
   expect(rendered.vars.global.$mixin1.value).to.equal('m-variable-1');
 
   expect(rendered.vars.global.$mixin2.type).to.equal('SassString');
   expect(rendered.vars.global.$mixin2.sources).to.have.length(1);
   expect(rendered.vars.global.$mixin2.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$mixin2.declarations).to.have.length(1);
-  expect(rendered.vars.global.$mixin2.declarations[0].expression).to.equal(`'m-variable-2' !global`);
+  expect(rendered.vars.global.$mixin2.declarations[0].expression).to.equal(
+    `'m-variable-2' !global`
+  );
   expect(rendered.vars.global.$mixin2.value).to.equal('m-variable-2');
 
   expect(rendered.vars.global.$mixin3.type).to.equal('SassString');
@@ -43,14 +47,18 @@ function verifyInFnBlocks(rendered, sourceFile) {
   expect(rendered.vars.global.$function1.sources).to.have.length(1);
   expect(rendered.vars.global.$function1.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$function1.declarations).to.have.length(1);
-  expect(rendered.vars.global.$function1.declarations[0].expression).to.equal(`'fn-variable-1' !global`);
+  expect(rendered.vars.global.$function1.declarations[0].expression).to.equal(
+    `'fn-variable-1' !global`
+  );
   expect(rendered.vars.global.$function1.value).to.equal('fn-variable-1');
 
   expect(rendered.vars.global.$function2.type).to.equal('SassString');
   expect(rendered.vars.global.$function2.sources).to.have.length(1);
   expect(rendered.vars.global.$function2.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$function2.declarations).to.have.length(1);
-  expect(rendered.vars.global.$function2.declarations[0].expression).to.equal(`'fn-variable-2' !global`);
+  expect(rendered.vars.global.$function2.declarations[0].expression).to.equal(
+    `'fn-variable-2' !global`
+  );
   expect(rendered.vars.global.$function2.value).to.equal('fn-variable-2');
 
   expect(rendered.vars.global.$function3.type).to.equal('SassString');
@@ -62,16 +70,24 @@ function verifyInFnBlocks(rendered, sourceFile) {
 
   expect(rendered.vars.global.$someGlobalSetOnInvoke1.type).to.equal('SassString');
   expect(rendered.vars.global.$someGlobalSetOnInvoke1.sources).to.have.length(1);
-  expect(rendered.vars.global.$someGlobalSetOnInvoke1.sources[0]).to.equal(normalizePath(sourceFile));
+  expect(rendered.vars.global.$someGlobalSetOnInvoke1.sources[0]).to.equal(
+    normalizePath(sourceFile)
+  );
   expect(rendered.vars.global.$someGlobalSetOnInvoke1.declarations).to.have.length(1);
-  expect(rendered.vars.global.$someGlobalSetOnInvoke1.declarations[0].expression).to.equal(`$param !global`);
+  expect(rendered.vars.global.$someGlobalSetOnInvoke1.declarations[0].expression).to.equal(
+    `$param !global`
+  );
   expect(rendered.vars.global.$someGlobalSetOnInvoke1.value).to.equal('default');
 
   expect(rendered.vars.global.$someGlobalSetOnInvoke2.type).to.equal('SassString');
   expect(rendered.vars.global.$someGlobalSetOnInvoke2.sources).to.have.length(1);
-  expect(rendered.vars.global.$someGlobalSetOnInvoke2.sources[0]).to.equal(normalizePath(sourceFile));
+  expect(rendered.vars.global.$someGlobalSetOnInvoke2.sources[0]).to.equal(
+    normalizePath(sourceFile)
+  );
   expect(rendered.vars.global.$someGlobalSetOnInvoke2.declarations).to.have.length(1);
-  expect(rendered.vars.global.$someGlobalSetOnInvoke2.declarations[0].expression).to.equal(`$param !global`);
+  expect(rendered.vars.global.$someGlobalSetOnInvoke2.declarations[0].expression).to.equal(
+    `$param !global`
+  );
   expect(rendered.vars.global.$someGlobalSetOnInvoke2.value).to.equal('provided');
 }
 
@@ -85,8 +101,7 @@ describe('in-fn-blocks', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: inFnBlocksFile })
-      .then(rendered => {
+      return render({ file: inFnBlocksFile }).then((rendered) => {
         verifyInFnBlocks(rendered, inFnBlocksFile);
       });
     });

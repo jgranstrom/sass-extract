@@ -15,7 +15,7 @@ If you are using webpack make sure to also check out the [sass-extract-loader](h
 [![demo.gif](https://s27.postimg.org/w40sdzqjn/demo.gif)](https://postimg.org/image/oba4m0kkf/)
 Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgranstrom/sass-extract-loader)
 
-------
+---
 
 - [Installation](#installation)
 - [API](#api)
@@ -47,12 +47,15 @@ Demo of **sass-extract** using the [sass-extract-loader](https://github.com/jgra
   - [Running tests](#running-tests)
 
 ## Installation
+
 ```bash
 npm install --save node-sass sass-extract
 ```
-*Note that the node-sass compiler have to be installed as it is a peer dependency of sass-extract.*
+
+_Note that the node-sass compiler have to be installed as it is a peer dependency of sass-extract._
 
 ## API
+
 The API is deliberately kept very similar to that of `node-sass`. This is because `sass-extract` can be used as a replacement that will add variable extraction as an additional feature to compiling the sass into css.
 
 ##### render(compileOptions, extractOptions)
@@ -64,15 +67,16 @@ See [node-sass](https://github.com/sass/node-sass) for documentation of the comp
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
 ```js
-const sassExtract = require('sass-extract');
+const sassExtract = require("sass-extract")
 
-sassExtract.render({
-  file: 'path/to/my/styles.scss'
-})
-.then(rendered => {
-  console.log(rendered.vars);
-  console.log(rendered.css.toString());
-});
+sassExtract
+  .render({
+    file: "path/to/my/styles.scss",
+  })
+  .then((rendered) => {
+    console.log(rendered.vars)
+    console.log(rendered.css.toString())
+  })
 ```
 
 ##### renderSync(compileOptions, extractOptions)
@@ -80,14 +84,14 @@ sassExtract.render({
 A synchronous version of the `render` function.
 
 ```js
-const sassExtract = require('sass-extract');
+const sassExtract = require("sass-extract")
 
 const rendered = sassExtract.renderSync({
-  file: 'path/to/my/styles.scss'
-});
+  file: "path/to/my/styles.scss",
+})
 
-console.log(rendered.vars);
-console.log(rendered.css.toString());
+console.log(rendered.vars)
+console.log(rendered.css.toString())
 ```
 
 ##### extract(rendered, { compileOptions, extractOptions })
@@ -101,19 +105,20 @@ Generally you will pass the same compileOptions to both `node-sass` for renderin
 To be able to extract variables across multiple files using the `@import` directive you need to provide either `file` or `includePaths` for import lookups.
 
 ```js
-const sass = require('node-sass');
-const sassExtract = require('sass-extract');
+const sass = require("node-sass")
+const sassExtract = require("sass-extract")
 
 const rendered = sass.renderSync({
-  file: 'path/to/my/styles.scss'
-});
-
-sassExtract.extract(rendered, {
-  file: 'path/to/my/styles.scss'
+  file: "path/to/my/styles.scss",
 })
-.then(vars => {
-  console.log(vars);
-});
+
+sassExtract
+  .extract(rendered, {
+    file: "path/to/my/styles.scss",
+  })
+  .then((vars) => {
+    console.log(vars)
+  })
 ```
 
 ##### extractSync(rendered, { compileOptions, extractOptions })
@@ -121,25 +126,25 @@ sassExtract.extract(rendered, {
 A synchronous version of the `extract` function.
 
 ```js
-const sass = require('node-sass');
-const sassExtract = require('sass-extract');
+const sass = require("node-sass")
+const sassExtract = require("sass-extract")
 
 const rendered = sass.renderSync({
-  file: 'path/to/my/styles.scss'
-});
+  file: "path/to/my/styles.scss",
+})
 
 const vars = sassExtract.extractSync(rendered, {
-  file: 'path/to/my/styles.scss'
-});
+  file: "path/to/my/styles.scss",
+})
 
-console.log(vars);
+console.log(vars)
 ```
 
 ## Extract options
 
 Can be provided in all `render` or `extract` methods.
 
-- `extractOptions.plugins: []`: Provide any plugins to be used during the extraction. Provide a string `'<plugin>'` for the node module or bundled plugin name, or alternatively an object `{ plugin: '<plugin>', options: {} }` to provide any options to the plugin. *Note: A plugin instance can be passed directly instead of a plugin name which allows importing the plugin separately*
+- `extractOptions.plugins: []`: Provide any plugins to be used during the extraction. Provide a string `'<plugin>'` for the node module or bundled plugin name, or alternatively an object `{ plugin: '<plugin>', options: {} }` to provide any options to the plugin. _Note: A plugin instance can be passed directly instead of a plugin name which allows importing the plugin separately_
 
 ## Variable context
 
@@ -165,7 +170,7 @@ A global variable is accessible from anywhere within that file, as well as from 
 ```scss
 // styleA.scss
 $a: 123px;
-@import './styleB.scss';
+@import "./styleB.scss";
 ```
 
 ```scss
@@ -199,7 +204,7 @@ Variables in sass can be overridden any number of times and across multiple file
 // styleA.scss
 $a: 123px;
 $b: $a;
-@import './styleB.scss';
+@import "./styleB.scss";
 ```
 
 ```scss
@@ -220,7 +225,6 @@ $a: 456px;
 ## Data types
 
 Sass has a few different data types that a variable can have. These are detected by **sass-extract** automatically and the structure of the result of a variable value will be adapted to the type of the variables. Below follows descriptions for how each type of variable is extracted.
-
 
 ##### General variable value structure
 
@@ -253,22 +257,24 @@ $myVariable: 123px;
 
 Each of the variable results will have the same general structure and potentially additional type specific fields.
 
-| Field  | Description |
-|:---|:---|
-| `type`| A string describing the data type of the extracted variables  |
-| `sources`| An array of all file paths where this variables is declared  |
-| `declarations`| An array of declarations of the variable |
-| `declarations[i].expression`| The raw expression of the variable definition |
-| `declarations[i].flags`| Describes any present flags such as `!default` or `!global` |
-| `declarations[i].in`| The file where the declaration was found |
-| `declarations[i].position`| The exact position of the declaration in the file |
+| Field                        | Description                                                  |
+| :--------------------------- | :----------------------------------------------------------- |
+| `type`                       | A string describing the data type of the extracted variables |
+| `sources`                    | An array of all file paths where this variables is declared  |
+| `declarations`               | An array of declarations of the variable                     |
+| `declarations[i].expression` | The raw expression of the variable definition                |
+| `declarations[i].flags`      | Describes any present flags such as `!default` or `!global`  |
+| `declarations[i].in`         | The file where the declaration was found                     |
+| `declarations[i].position`   | The exact position of the declaration in the file            |
 
 Note that `sources` and `expressions` are both arrays, see [Overrides](#overrides) for details about this.
 
 ##### SassString
+
 ```scss
-$variable: 'string';
+$variable: "string";
 ```
+
 ```js
 {
   type: 'SassString',
@@ -277,9 +283,11 @@ $variable: 'string';
 ```
 
 ##### SassBoolean
+
 ```scss
 $variable: true;
 ```
+
 ```js
 {
   type: 'SassBoolean',
@@ -288,9 +296,11 @@ $variable: true;
 ```
 
 ##### SassNull
+
 ```scss
 $variable: null;
 ```
+
 ```js
 {
   type: 'SassNull',
@@ -299,10 +309,13 @@ $variable: null;
 ```
 
 ##### SassNumber
-*SassNumbers contains both the extracted number and their unit*
+
+_SassNumbers contains both the extracted number and their unit_
+
 ```scss
 $variable: 123px;
 ```
+
 ```js
 {
   type: 'SassNumber',
@@ -312,11 +325,13 @@ $variable: 123px;
 ```
 
 ##### SassColor
-*SassColors contains extracted colors in both rgba and hex formats*
+
+_SassColors contains extracted colors in both rgba and hex formats_
 
 ```scss
-$variable: #FF0000;
+$variable: #ff0000;
 ```
+
 ```js
 {
   type: 'SassColor',
@@ -331,11 +346,12 @@ $variable: #FF0000;
 
 ```
 
-*Or alternatively*
+_Or alternatively_
 
 ```scss
 $variable: rgba(0, 255, 0, 0.5);
 ```
+
 ```js
 {
   type: 'SassColor',
@@ -351,11 +367,13 @@ $variable: rgba(0, 255, 0, 0.5);
 ```
 
 ##### SassList
-*SassLists contains recursive types as an array*
+
+_SassLists contains recursive types as an array_
 
 ```scss
 $variable: 1px solid black;
 ```
+
 ```js
 {
   type: 'SassList',
@@ -384,11 +402,12 @@ $variable: 1px solid black;
 }
 ```
 
-*Or when it's comma separated*
+_Or when it's comma separated_
 
 ```scss
 $variable: tahoma, arial;
 ```
+
 ```js
 {
   type: 'SassList',
@@ -407,11 +426,16 @@ $variable: tahoma, arial;
 ```
 
 ##### SassMap
-*SassMaps contains recursive types as an object with matching field names*
+
+_SassMaps contains recursive types as an object with matching field names_
 
 ```scss
-$variable: ( width: 10em, height: 5em );
+$variable: (
+  width: 10em,
+  height: 5em,
+);
 ```
+
 ```js
 {
   type: 'SassMap',
@@ -447,25 +471,25 @@ For examples see the bundled plugins in `src/plugins`.
 
 There are some bundled plugins that comes with the library. To use them simply `require('sass-extract/lib/plugins/<plugin>')` and add them to the plugin array of the extraction options, or specify them by module name such as `{ plugins: ['minimal'] }`.
 
-|Plugin|Description
-|:-------------|:-------------|
-|`serialize`|Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }`|
-|`compact`|Remove all metadata about variables and only output the actual value for each variable|
-|`minimal`|Combines serialize and compact to create a small serialized representation of the extracted variables|
-|`filter`|Filter the results based on a combination of property names and/or variable types|
+| Plugin      | Description                                                                                                                                                                      |
+| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serialize` | Get a serialized variant of each variable instead of a deconstructed object. E.g. `123px` is extracted as `{ value: 123px }` instead of the default `{ value: 123, unit: 'px' }` |
+| `compact`   | Remove all metadata about variables and only output the actual value for each variable                                                                                           |
+| `minimal`   | Combines serialize and compact to create a small serialized representation of the extracted variables                                                                            |
+| `filter`    | Filter the results based on a combination of property names and/or variable types                                                                                                |
 
 ##### Bundled plugin options
 
 ###### `filter`
-|Option field|Description|
-|:-------------|:-----|
-|`except.props = ['$my-prop']`|Will remove any properties with a name in the provided array|
-|`except.types = ['SassNumber']`|Will remove any properties with a type in the provided array|
-|`only.props = ['$my-prop']`|Will remove any properties with a name **not** in the provided array|
-|`only.types = ['SassNumber']`|Will remove any properties with a type **not** in the provided array|
 
-*Note*: Empty arrays are ignored and treated as no filtering should be applied for that selection
+| Option field                    | Description                                                          |
+| :------------------------------ | :------------------------------------------------------------------- |
+| `except.props = ['$my-prop']`   | Will remove any properties with a name in the provided array         |
+| `except.types = ['SassNumber']` | Will remove any properties with a type in the provided array         |
+| `only.props = ['$my-prop']`     | Will remove any properties with a name **not** in the provided array |
+| `only.types = ['SassNumber']`   | Will remove any properties with a type **not** in the provided array |
 
+_Note_: Empty arrays are ignored and treated as no filtering should be applied for that selection
 
 ## What is sass-extract?
 
@@ -478,6 +502,7 @@ The purpose of this library is to give you the option to keep all of your style 
 There are other solutions to the same problem such as placing some of your style variables in a JSON file an including them into the sass, but with **sass-extract** you can skip that additional complexity of separate files and preprocessing and just get the variables directly from the sass itself.
 
 ## Requirements
+
 - `node-sass >= 3.8.0`
 - `node >= 4`
 
@@ -486,6 +511,7 @@ There are other solutions to the same problem such as placing some of your style
 **sass-extract** is using babel in order to take advantage of recent langugae features.
 
 ##### Compile source
+
 ```bash
 npm run compile
 ```
@@ -508,8 +534,8 @@ Generate changelog using `npm install -g conventional-changelog` and `npm run ch
 
 1. Make changes
 2. Commit those changes
-4. Set new version in package.json
-5. `npm run changelog`
-6. Commit package.json and CHANGELOG.md files
-7. Tag
-8. Push
+3. Set new version in package.json
+4. `npm run changelog`
+5. Commit package.json and CHANGELOG.md files
+6. Tag
+7. Push

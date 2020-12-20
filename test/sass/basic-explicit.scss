@@ -11,8 +11,8 @@ div {
   $string: 'string' !global;
   $boolean: true !global;
   $null: null !global;
-$map: (
-  number: 2em,
-  string: 'mapstring'
-) !global;
+  $map: (
+    number: 2em,
+    string: 'mapstring',
+  ) !global;
 }

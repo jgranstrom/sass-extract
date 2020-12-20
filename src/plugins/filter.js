@@ -2,15 +2,23 @@ function filterResults(results, filterMaps) {
   const filteredResults = {};
   const resultKeys = Object.keys(results);
 
-  resultKeys.forEach(key => {
+  resultKeys.forEach((key) => {
     const prop = key;
     const type = results[key].type;
 
-    if(filterMaps.except.props && filterMaps.except.props[prop]) { return; }
-    if(filterMaps.except.types && filterMaps.except.types[type]) { return; }
-    
-    if(filterMaps.only.props && !filterMaps.only.props[prop]) { return; }
-    if(filterMaps.only.types && !filterMaps.only.types[type]) { return; }
+    if (filterMaps.except.props && filterMaps.except.props[prop]) {
+      return;
+    }
+    if (filterMaps.except.types && filterMaps.except.types[type]) {
+      return;
+    }
+
+    if (filterMaps.only.props && !filterMaps.only.props[prop]) {
+      return;
+    }
+    if (filterMaps.only.types && !filterMaps.only.types[type]) {
+      return;
+    }
 
     filteredResults[key] = results[key];
   });
@@ -21,10 +29,10 @@ function filterResults(results, filterMaps) {
 function makeFilterMap(filterArray) {
   let filterMap = null;
 
-  if(filterArray != null && filterArray.length > 0) {
+  if (filterArray != null && filterArray.length > 0) {
     filterMap = {};
-    filterArray.forEach(filterElement => filterMap[filterElement] = true);
-  } 
+    filterArray.forEach((filterElement) => (filterMap[filterElement] = true));
+  }
 
   return filterMap;
 }
@@ -42,7 +50,7 @@ export function run(options) {
       props: makeFilterMap(options && options.only && options.only.props),
       types: makeFilterMap(options && options.only && options.only.types),
     },
-  }
+  };
 
   return {
     postExtract: (extractedVariables) => {
@@ -51,6 +59,6 @@ export function run(options) {
       };
 
       return compactedVariables;
-    }
-  }
+    },
+  };
 }

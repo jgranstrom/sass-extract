@@ -14,7 +14,7 @@ export function normalizePath(path) {
  * Make a potentially relative path absolute relative to cwd
  */
 export function makeAbsolute(maybeRelativePath) {
-  if(path.isAbsolute(maybeRelativePath)) {
+  if (path.isAbsolute(maybeRelativePath)) {
     return maybeRelativePath;
   } else {
     return path.posix.join(process.cwd(), maybeRelativePath);
@@ -27,7 +27,7 @@ export function makeAbsolute(maybeRelativePath) {
 export function toColorHex(value) {
   let colorHex = Math.round(value).toString(16);
 
-  if(colorHex.length < 2) {
+  if (colorHex.length < 2) {
     colorHex = `0${colorHex}`;
   }
 

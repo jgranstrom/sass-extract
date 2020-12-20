@@ -6,7 +6,7 @@ import { serialize } from './serialize';
  * Transform a sassValue into a structured value based on the value type
  */
 function makeValue(sassValue) {
-  switch(sassValue.constructor) {
+  switch (sassValue.constructor) {
     case sass.types.String:
     case sass.types.Boolean:
       return { value: sassValue.getValue() };
@@ -21,9 +21,11 @@ function makeValue(sassValue) {
 
       return {
         value: {
-          r, g, b,
+          r,
+          g,
+          b,
           a: sassValue.getA(),
-          hex: `#${toColorHex(r)}${toColorHex(g)}${toColorHex(b)}`
+          hex: `#${toColorHex(r)}${toColorHex(g)}${toColorHex(b)}`,
         },
       };
 
@@ -33,7 +35,7 @@ function makeValue(sassValue) {
     case sass.types.List:
       const listLength = sassValue.getLength();
       const listValue = [];
-      for(let i = 0; i < listLength; i++) {
+      for (let i = 0; i < listLength; i++) {
         listValue.push(createStructuredValue(sassValue.getValue(i)));
       }
       return { value: listValue, separator: sassValue.getSeparator() ? ',' : ' ' };
@@ -41,7 +43,7 @@ function makeValue(sassValue) {
     case sass.types.Map:
       const mapLength = sassValue.getLength();
       const mapValue = {};
-      for(let i = 0; i < mapLength; i++) {
+      for (let i = 0; i < mapLength; i++) {
         // Serialize map keys of arbitrary type for extracted struct
         const serializedKey = serialize(sassValue.getKey(i));
         mapValue[serializedKey] = createStructuredValue(sassValue.getValue(i));
@@ -49,17 +51,20 @@ function makeValue(sassValue) {
       return { value: mapValue };
 
     default:
-      throw new Error(`Unsupported sass variable type '${sassValue.constructor.name}'`)
-  };
-};
+      throw new Error(`Unsupported sass variable type '${sassValue.constructor.name}'`);
+  }
+}
 
 /**
  * Create a structured value definition from a sassValue object
  */
 export function createStructuredValue(sassValue) {
-  const value = Object.assign({
-    type: sassValue.constructor.name,
-  }, makeValue(sassValue));
+  const value = Object.assign(
+    {
+      type: sassValue.constructor.name,
+    },
+    makeValue(sassValue)
+  );
 
   return value;
-};
+}

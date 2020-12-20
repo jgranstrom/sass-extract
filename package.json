@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel -d lib/ src/",
+    "lint": "eslint --ext=js src,test",
     "prepublish": "npm run compile",
     "test": "mocha --require babel-core/register --timeout 10000",
     "test:fast": "FAST_TEST=true mocha --require babel-core/register",
@@ -43,12 +44,23 @@
     "chai": "^4.1.2",
     "chai-subset": "^1.6.0",
     "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^7.16.0",
+    "eslint-plugin-prettier": "^3.3.0",
     "foundation-sites": "^6.4.3",
-    "mocha": "^4.0.1"
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "mocha": "^4.0.1",
+    "prettier": "^2.2.1"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "*.{js,scss}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

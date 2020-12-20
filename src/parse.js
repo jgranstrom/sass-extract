@@ -11,17 +11,15 @@ const DEP_KEYWORDS = {
 };
 
 const DEP_HOST = {
-  mixin: depParentNode => depParentNode,
-  function: depParentNode => depParentNode.children('function'),
+  mixin: (depParentNode) => depParentNode,
+  function: (depParentNode) => depParentNode.children('function'),
 };
 
 /**
  * Check if a declaration node has a '!' operator followed by a '<flag>' identifier in its value
  */
 function declarationHasFlag($ast, node, flag) {
-  return $ast(node)
-  .children('value').children(flag)
-  .length() > 0
+  return $ast(node).children('value').children(flag).length() > 0;
 }
 
 /**
@@ -42,52 +40,49 @@ function isDefaultDeclaration($ast, node) {
  * Parse the raw expression of a variable declaration excluding flags
  */
 function parseExpression($ast, declaration) {
-  return stringify($ast(declaration)
-  .children('value')
-  .get(0))
-  .trim();
+  return stringify($ast(declaration).children('value').get(0)).trim();
 }
 
 /**
  * Get dependencies required to extract variables such as mixins or function invocations
  */
 function getDeclarationDeps($ast, declaration, scope) {
-  if(scope !== SCOPE_EXPLICIT) {
+  if (scope !== SCOPE_EXPLICIT) {
     return {};
   }
 
-  const depParentNodes = $ast(declaration).parents(node => {
-    if(node.node.type === 'mixin') {
+  const depParentNodes = $ast(declaration).parents((node) => {
+    if (node.node.type === 'mixin') {
       return true;
-    } else if(node.node.type === 'atrule') {
+    } else if (node.node.type === 'atrule') {
       const atruleIdentNode = $ast(node).children('atkeyword').children('ident');
-      return atruleIdentNode.length() > 0 && atruleIdentNode.first().value() === 'function'
+      return atruleIdentNode.length() > 0 && atruleIdentNode.first().value() === 'function';
     } else {
       return false;
     }
   });
 
-  if(depParentNodes.length() === 0) {
+  if (depParentNodes.length() === 0) {
     return {};
   }
 
   const depParentNode = depParentNodes.last();
   const depKeywordNode = depParentNode.children('atkeyword').children('ident');
 
-  if(depKeywordNode.length() === 0) {
+  if (depKeywordNode.length() === 0) {
     return {};
   }
 
   const atKeyword = depKeywordNode.first().value();
 
-  if(!DEP_HOST[atKeyword]) {
+  if (!DEP_HOST[atKeyword]) {
     return {};
   }
 
   const depHostNode = DEP_HOST[atKeyword](depParentNode);
   const atKeywordIdentifierNode = depHostNode.children('ident');
 
-  if(atKeywordIdentifierNode.length() === 0) {
+  if (atKeywordIdentifierNode.length() === 0) {
     return {};
   }
 
@@ -99,7 +94,7 @@ function getDeclarationDeps($ast, declaration, scope) {
   const optionalArgsCount = argumentsNode.children('declaration').length();
   const totalArgsCount = requiredArgsCount + optionalArgsCount;
 
-  if(!DEP_KEYWORDS[atKeyword]) {
+  if (!DEP_KEYWORDS[atKeyword]) {
     return {};
   }
 
@@ -121,8 +116,7 @@ function getDeclarationDeps($ast, declaration, scope) {
 function parseDeclaration($ast, declaration, scope) {
   const variable = {};
 
-  const propertyNode = $ast(declaration)
-  .children('property');
+  const propertyNode = $ast(declaration).children('property');
 
   variable.declarationClean = propertyNode.value();
   variable.position = propertyNode.get(0).start;
@@ -144,29 +138,34 @@ function parseDeclaration($ast, declaration, scope) {
  * Parse variable declarations from a chunk of sass source
  */
 export function parseDeclarations(data) {
-  const ast = JSON.parse(gonzales.parse(data, {syntax: 'scss'}).toJson());
+  const ast = JSON.parse(gonzales.parse(data, { syntax: 'scss' }).toJson());
 
   let options = {
     hasChildren: (node) => Array.isArray(node.content),
     getChildren: (node) => node.content,
     toJSON: (node, children) => {
       return Object.assign({}, node, {
-        content: children ? children : node.content
-      })
+        content: children ? children : node.content,
+      });
     },
     toString: (node) => {
-      return typeof node.content === 'string' ? node.content : ''
-    }
-  }
+      return typeof node.content === 'string' ? node.content : '';
+    },
+  };
 
   const $ast = createQueryWrapper(ast, options);
 
   const implicitGlobalDeclarations = $ast('declaration').hasParent('stylesheet');
-  const explicitGlobalDeclarations = $ast('declaration').hasParent('block')
-  .filter(node => isExplicitGlobalDeclaration($ast, node));
+  const explicitGlobalDeclarations = $ast('declaration')
+    .hasParent('block')
+    .filter((node) => isExplicitGlobalDeclaration($ast, node));
 
-  let implicitGlobals = implicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration, SCOPE_IMPICIT));
-  let explicitGlobals = explicitGlobalDeclarations.map(declaration => parseDeclaration($ast, declaration, SCOPE_EXPLICIT));
+  let implicitGlobals = implicitGlobalDeclarations.map((declaration) =>
+    parseDeclaration($ast, declaration, SCOPE_IMPICIT)
+  );
+  let explicitGlobals = explicitGlobalDeclarations.map((declaration) =>
+    parseDeclaration($ast, declaration, SCOPE_EXPLICIT)
+  );
 
   return { explicitGlobals, implicitGlobals };
 }

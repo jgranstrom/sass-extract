@@ -1,20 +1,18 @@
 @import './include/mixins.scss';
 
-@include mixin1
+@include mixin1;
 
-@include mixin-that-overrides
-@include mixin-with-default
+@include mixin-that-overrides;
+@include mixin-with-default;
 
-@include mixin-default
-@include mixin-not-default
+@include mixin-default;
+@include mixin-not-default;
 
-@include mixin-other-default-1
-@include mixin-other-default-2
+@include mixin-other-default-1;
+@include mixin-other-default-2;
 
-@include mixin-multiple-default-1
-@include mixin-multiple-default-2
+@include mixin-multiple-default-1;
+@include mixin-multiple-default-2;
 
 $someOtherDefault: 3;
 $someDefault: 'b' !default;
-
-

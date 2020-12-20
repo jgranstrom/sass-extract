@@ -11,5 +11,5 @@ export function run() {
   return {
     postValue: serializeInstance.postValue,
     postExtract: compactInstance.postExtract,
-  }
+  };
 }

@@ -7,7 +7,7 @@
 }
 
 @mixin mixin-that-overrides {
-  $defaultedAtFirst: 'actual' !global; 
+  $defaultedAtFirst: 'actual' !global;
 }
 
 @mixin mixin-default {

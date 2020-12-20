@@ -21,15 +21,14 @@ function verifyPartial(rendered, sourceFile, partialFile) {
 describe('partial', () => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: partialFile })
+      const rendered = renderSync({ file: partialFile });
       verifyPartial(rendered, partialFile, somePartialFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: partialFile })
-      .then(rendered => {
+      return render({ file: partialFile }).then((rendered) => {
         verifyPartial(rendered, partialFile, somePartialFile);
       });
     });

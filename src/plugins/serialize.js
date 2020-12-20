@@ -8,6 +8,6 @@ export function run() {
   return {
     postValue: ({ value, sassValue }) => {
       return { value: { value: serialize(sassValue) }, sassValue };
-    }
-  }
+    },
+  };
 }

@@ -6,26 +6,24 @@ function isPrimitive(value) {
  * Use duck typing to distinguish between map and color objects
  */
 function isColor(value) {
-  return value.r != null
-    && value.g != null
-    && value.b != null
-    && value.a != null
-    && value.hex != null;
+  return (
+    value.r != null && value.g != null && value.b != null && value.a != null && value.hex != null
+  );
 }
 
 function compactArray(arrayValue) {
-  return arrayValue.map(element => {
+  return arrayValue.map((element) => {
     return compactValue(element.value);
   });
 }
 
 function compactObject(objectValue) {
-  if(isColor(objectValue)) {
+  if (isColor(objectValue)) {
     return objectValue;
   }
   const compactedObject = {};
 
-  Object.keys(objectValue).forEach(key => {
+  Object.keys(objectValue).forEach((key) => {
     compactedObject[key] = compactValue(objectValue[key].value);
   });
 
@@ -33,9 +31,9 @@ function compactObject(objectValue) {
 }
 
 function compactValue(value) {
-  if(isPrimitive(value)) {
+  if (isPrimitive(value)) {
     return value;
-  } else if(Array.isArray(value)) {
+  } else if (Array.isArray(value)) {
     return compactArray(value);
   } else {
     return compactObject(value);
@@ -54,6 +52,6 @@ export function run() {
       };
 
       return compactedVariables;
-    }
-  }
+    },
+  };
 }

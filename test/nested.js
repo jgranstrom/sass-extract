@@ -53,9 +53,15 @@ function verifyNestedOverrides(rendered, sourceFile) {
   expect(rendered.vars.global.$a.unit).to.equal('px');
   expect(rendered.vars.global.$a.type).to.equal('SassNumber');
   expect(rendered.vars.global.$a.sources).to.have.length(2);
-  expect(rendered.vars.global.$a.sources).to.include.members([normalizePath(nestedOverridesFile), normalizePath(nestedOverridesSubFile)]);
+  expect(rendered.vars.global.$a.sources).to.include.members([
+    normalizePath(nestedOverridesFile),
+    normalizePath(nestedOverridesSubFile),
+  ]);
   expect(rendered.vars.global.$a.declarations).to.have.length(2);
-  expect(rendered.vars.global.$a.declarations.map(dec => dec.expression)).to.include.members(['100px', '200px']);
+  expect(rendered.vars.global.$a.declarations.map((dec) => dec.expression)).to.include.members([
+    '100px',
+    '200px',
+  ]);
 
   expect(rendered.vars.global.$b.value).to.equal(100);
   expect(rendered.vars.global.$b.unit).to.equal('px');
@@ -69,15 +75,14 @@ function verifyNestedOverrides(rendered, sourceFile) {
 describe('nested-basic', () => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
-      const rendered = renderSync({ file: nestedBasicFile })
+      const rendered = renderSync({ file: nestedBasicFile });
       verifyNestedBasic(rendered);
     });
   });
 
   describe('async', () => {
     it('should extract variables not in comments', () => {
-      return render({ file: nestedBasicFile })
-      .then(rendered => {
+      return render({ file: nestedBasicFile }).then((rendered) => {
         verifyNestedBasic(rendered);
       });
     });
@@ -87,15 +92,14 @@ describe('nested-basic', () => {
 describe('nested-overrides', () => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
-      const rendered = renderSync({ file: nestedOverridesFile })
+      const rendered = renderSync({ file: nestedOverridesFile });
       verifyNestedOverrides(rendered);
     });
   });
 
   describe('async', () => {
     it('should extract variables not in comments', () => {
-      return render({ file: nestedOverridesFile })
-      .then(rendered => {
+      return render({ file: nestedOverridesFile }).then((rendered) => {
         verifyNestedOverrides(rendered);
       });
     });

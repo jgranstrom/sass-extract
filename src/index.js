@@ -1,2 +1,2 @@
 export { render, renderSync } from './render';
-export { extract, extractSync } from'./extract';
+export { extract, extractSync } from './extract';

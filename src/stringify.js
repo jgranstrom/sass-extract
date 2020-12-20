@@ -10,50 +10,35 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 
 let type = {
-  arguments: (n) =>
-    '(' + walkValue(n.content) + ')',
-  atkeyword: (n) =>
-    '@' + n.content,
-  attribute: (n) =>
-    '[' + walkValue(n.content) + ']',
-  block: (n) =>
-    '{' + walkValue(n.content) + '}',
-  class: (n) =>
-    '.' + walkValue(n.content),
-  color: (n) =>
-    '#' + n.content,
-  id: (n) =>
-    '#' + walkValue(n.content),
-  interpolation: (n) =>
-    '#{' + walkValue(n.content) + '}',
-  comment_multiline: (n) =>
-    '/*' + n.content + '*/',
-  comment_singleline: (n) =>
-    '//' + n.content,
-  parentheses: (n) =>
-    '(' + walkValue(n.content) + ')',
-  pseudo_class: (n) =>
-    ':' + walkValue(n.content),
-  psuedo_element: (n) =>
-    '::' + walkValue(n.content),
-  string: (n) =>
-    `${n.content}`,
-  variable: (n) =>
-    '$' + walkValue(n.content)
-}
+  arguments: (n) => '(' + walkValue(n.content) + ')',
+  atkeyword: (n) => '@' + n.content,
+  attribute: (n) => '[' + walkValue(n.content) + ']',
+  block: (n) => '{' + walkValue(n.content) + '}',
+  class: (n) => '.' + walkValue(n.content),
+  color: (n) => '#' + n.content,
+  id: (n) => '#' + walkValue(n.content),
+  interpolation: (n) => '#{' + walkValue(n.content) + '}',
+  comment_multiline: (n) => '/*' + n.content + '*/',
+  comment_singleline: (n) => '//' + n.content,
+  parentheses: (n) => '(' + walkValue(n.content) + ')',
+  pseudo_class: (n) => ':' + walkValue(n.content),
+  psuedo_element: (n) => '::' + walkValue(n.content),
+  string: (n) => `${n.content}`,
+  variable: (n) => '$' + walkValue(n.content),
+};
 
 let walkNode = (node) => {
-  if (type[node.type]) return type[node.type](node)
-  if (typeof node.content === 'string') return node.content
-  if (Array.isArray(node.content)) return walkValue(node.content)
-  return ''
-}
+  if (type[node.type]) return type[node.type](node);
+  if (typeof node.content === 'string') return node.content;
+  if (Array.isArray(node.content)) return walkValue(node.content);
+  return '';
+};
 
 let walkValue = (value) => {
-  if (!Array.isArray(value)) return ''
+  if (!Array.isArray(value)) return '';
   return value.reduce((s, node) => {
-    return s + walkNode(node)
-  }, '')
-}
+    return s + walkNode(node);
+  }, '');
+};
 
 export const stringify = walkNode;

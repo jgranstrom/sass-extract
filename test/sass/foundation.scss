@@ -70,10 +70,7 @@ $base-font-size: 20px;
 @import '../../node_modules/foundation-sites/scss/components/tooltip';
 @import '../../node_modules/foundation-sites/scss/prototype/prototype';
 
-@mixin foundation-everything(
-  $flex: true,
-  $prototype: false
-) {
+@mixin foundation-everything($flex: true, $prototype: false) {
   @if $flex {
     $global-flexbox: true !global;
   }
@@ -81,12 +78,10 @@ $base-font-size: 20px;
   @include foundation-global-styles;
   @if not $flex {
     @include foundation-grid;
-  }
-  @else {
+  } @else {
     @if $xy-grid {
       @include foundation-xy-grid-classes;
-    }
-    @else {
+    } @else {
       @include foundation-flex-grid;
     }
   }

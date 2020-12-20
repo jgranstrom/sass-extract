@@ -38,8 +38,8 @@ function verifyOrder(rendered, sourceFile, partialFile) {
 describe('partial', () => {
   describe('sync', () => {
     it('should extract in the right order', () => {
-      for(let i = 0; i < 20; i++) {
-        const rendered = renderSync({ file: orderFile })
+      for (let i = 0; i < 20; i++) {
+        const rendered = renderSync({ file: orderFile });
         verifyOrder(rendered, orderFile);
       }
     });

@@ -44,15 +44,14 @@ function verifyComment(rendered, sourceFile) {
 describe('comments', () => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
-      const rendered = renderSync({ file: commentFile })
+      const rendered = renderSync({ file: commentFile });
       verifyComment(rendered, commentFile);
     });
   });
 
   describe('async', () => {
     it('should extract variables not in comments', () => {
-      return render({ file: commentFile })
-      .then(rendered => {
+      return render({ file: commentFile }).then((rendered) => {
         verifyComment(rendered, commentFile);
       });
     });

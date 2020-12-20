@@ -48,7 +48,9 @@ function verifyVarArgs(rendered, sourceFile) {
   expect(rendered.vars.global.$optionallySingle.sources).to.have.length(1);
   expect(rendered.vars.global.$optionallySingle.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$optionallySingle.declarations).to.have.length(1);
-  expect(rendered.vars.global.$optionallySingle.declarations[0].expression).to.equal(`optionally('last')`);
+  expect(rendered.vars.global.$optionallySingle.declarations[0].expression).to.equal(
+    `optionally('last')`
+  );
   expect(rendered.vars.global.$optionallySingle.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$optionallySingle.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$optionallySingle.value).to.have.length(1);
@@ -60,7 +62,9 @@ function verifyVarArgs(rendered, sourceFile) {
   expect(rendered.vars.global.$optionallyMultiple.sources).to.have.length(1);
   expect(rendered.vars.global.$optionallyMultiple.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$optionallyMultiple.declarations).to.have.length(1);
-  expect(rendered.vars.global.$optionallyMultiple.declarations[0].expression).to.equal(`optionally('last', 1, 2, 3)`);
+  expect(rendered.vars.global.$optionallyMultiple.declarations[0].expression).to.equal(
+    `optionally('last', 1, 2, 3)`
+  );
   expect(rendered.vars.global.$optionallyMultiple.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$optionallyMultiple.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$optionallyMultiple.value).to.have.length(4);
@@ -75,7 +79,9 @@ function verifyVarArgs(rendered, sourceFile) {
   expect(rendered.vars.global.$oneString.sources).to.have.length(1);
   expect(rendered.vars.global.$oneString.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$oneString.declarations).to.have.length(1);
-  expect(rendered.vars.global.$oneString.declarations[0].expression).to.equal(`oneOf(2, 'a', 'b', 'c')`);
+  expect(rendered.vars.global.$oneString.declarations[0].expression).to.equal(
+    `oneOf(2, 'a', 'b', 'c')`
+  );
   expect(rendered.vars.global.$oneString.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$oneString.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$oneString.value).to.equal('b');
@@ -84,7 +90,9 @@ function verifyVarArgs(rendered, sourceFile) {
   expect(rendered.vars.global.$oneNumber.sources).to.have.length(1);
   expect(rendered.vars.global.$oneNumber.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$oneNumber.declarations).to.have.length(1);
-  expect(rendered.vars.global.$oneNumber.declarations[0].expression).to.equal(`oneOf(3, 'a', 'b', 5, ('d', 'e'))`);
+  expect(rendered.vars.global.$oneNumber.declarations[0].expression).to.equal(
+    `oneOf(3, 'a', 'b', 5, ('d', 'e'))`
+  );
   expect(rendered.vars.global.$oneNumber.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$oneNumber.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$oneNumber.value).to.equal(5);
@@ -93,7 +101,9 @@ function verifyVarArgs(rendered, sourceFile) {
   expect(rendered.vars.global.$oneList.sources).to.have.length(1);
   expect(rendered.vars.global.$oneList.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$oneList.declarations).to.have.length(1);
-  expect(rendered.vars.global.$oneList.declarations[0].expression).to.equal(`oneOf(4, 'a', 'b', 5, ('d', 'e'), 1, 2)`);
+  expect(rendered.vars.global.$oneList.declarations[0].expression).to.equal(
+    `oneOf(4, 'a', 'b', 5, ('d', 'e'), 1, 2)`
+  );
   expect(rendered.vars.global.$oneList.declarations[0].flags.global).to.equal(false);
   expect(rendered.vars.global.$oneList.declarations[0].flags.default).to.equal(false);
   expect(rendered.vars.global.$oneList.value).to.have.length(2);
@@ -127,8 +137,7 @@ describe('var-args', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: varArgsFile })
-      .then(rendered => {
+      return render({ file: varArgsFile }).then((rendered) => {
         verifyVarArgs(rendered, varArgsFile);
       });
     });

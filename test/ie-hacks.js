@@ -31,8 +31,7 @@ describe('ie-hacks', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: ieHacksFile })
-      .then(rendered => {
+      return render({ file: ieHacksFile }).then((rendered) => {
         verifyIeHacks(rendered, ieHacksFile);
       });
     });

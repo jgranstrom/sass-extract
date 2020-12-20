@@ -64,8 +64,7 @@ describe('inline', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ data: inlineData })
-      .then(rendered => {
+      return render({ data: inlineData }).then((rendered) => {
         verifyInline(rendered, 'data', 'data', 'data');
       });
     });
@@ -82,10 +81,11 @@ describe('inline-nested', () => {
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ data: inlineNestedData, includePaths: [inlineNestedPath] })
-      .then(rendered => {
-        verifyInline(rendered, inlineNested1File, 'data', inlineNested2File);
-      });
+      return render({ data: inlineNestedData, includePaths: [inlineNestedPath] }).then(
+        (rendered) => {
+          verifyInline(rendered, inlineNested1File, 'data', inlineNested2File);
+        }
+      );
     });
   });
 });
