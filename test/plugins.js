@@ -1,8 +1,6 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
-const { normalizePath } = require('../src/util');
-const { EOL } = require('os');
 const serializePlugin = require('../src/plugins/serialize');
 const compactPlugin = require('../src/plugins/compact');
 const minimalPlugin = require('../src/plugins/minimal');

@@ -1,13 +1,13 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../src');
+const { renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
 
 const orderFile = path.join(__dirname, 'sass', 'order.scss');
 const order1File = path.join(__dirname, 'sass', 'order', '1.scss');
 const order2File = path.join(__dirname, 'sass', 'order', '2.scss');
 
-function verifyOrder(rendered, sourceFile, partialFile) {
+function verifyOrder(rendered, sourceFile) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$var');

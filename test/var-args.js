@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const varArgsFile = path.join(__dirname, 'sass', 'var-args.scss');
 

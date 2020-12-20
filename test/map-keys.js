@@ -1,12 +1,10 @@
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
-const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const mapKeysFile = path.join(__dirname, 'sass', 'map-keys.scss');
 
-function verifyMapKeys(rendered, sourceFile) {
+function verifyMapKeys(rendered) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$map');

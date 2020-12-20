@@ -111,7 +111,7 @@ function verifyBasic(rendered, sourceFile, explicit, mixed, expectedEol = EOL) {
   expect(rendered.vars.global.$string.sources[0]).to.equal(normalizePath(sourceFile));
   expect(rendered.vars.global.$string.declarations).to.have.length(1);
   expect(rendered.vars.global.$string.declarations[0].expression).to.equal(
-    `\'string\'${explicit ? ' !global' : ''}`
+    `'string'${explicit ? ' !global' : ''}`
   );
   if (explicit) {
     expect(rendered.vars.global.$string.declarations[0].flags.global).to.equal(true);

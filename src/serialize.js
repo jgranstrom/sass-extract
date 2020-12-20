@@ -31,19 +31,23 @@ function serializeColor(sassColor) {
 function serializeValue(sassValue, isInList) {
   switch (sassValue.constructor) {
     case sass.types.String:
-    case sass.types.Boolean:
+    case sass.types.Boolean: {
       return `${sassValue.getValue()}`;
+    }
 
-    case sass.types.Number:
+    case sass.types.Number: {
       return `${sassValue.getValue()}${sassValue.getUnit()}`;
+    }
 
-    case sass.types.Color:
+    case sass.types.Color: {
       return serializeColor(sassValue);
+    }
 
-    case sass.types.Null:
+    case sass.types.Null: {
       return `null`;
+    }
 
-    case sass.types.List:
+    case sass.types.List: {
       const listLength = sassValue.getLength();
       const listElement = [];
       const hasSeparator = sassValue.getSeparator();
@@ -56,8 +60,9 @@ function serializeValue(sassValue, isInList) {
       } else {
         return `${listElement.join(hasSeparator ? ',' : ' ')}`;
       }
+    }
 
-    case sass.types.Map:
+    case sass.types.Map: {
       const mapLength = sassValue.getLength();
       const mapValue = {};
       for (let i = 0; i < mapLength; i++) {
@@ -67,6 +72,7 @@ function serializeValue(sassValue, isInList) {
       }
       const serializedMapValues = Object.keys(mapValue).map((key) => `${key}: ${mapValue[key]}`);
       return `(${serializedMapValues})`;
+    }
 
     default:
       throw new Error(`Unsupported sass variable type '${sassValue.constructor.name}'`);

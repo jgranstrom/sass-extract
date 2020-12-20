@@ -2,12 +2,11 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const importedFunctionsFile = path.join(__dirname, 'sass', 'imported-functions.scss');
 const functionsFile = path.join(__dirname, 'sass', 'nested', 'functions.scss');
 
-function verifyImportedFunctions(rendered, sourceFile, functionsFile) {
+function verifyImportedFunctions(rendered, sourceFile) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$functionVariable');

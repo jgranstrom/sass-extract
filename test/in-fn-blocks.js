@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const inFnBlocksFile = path.join(__dirname, 'sass', 'in-fn-blocks.scss');
 

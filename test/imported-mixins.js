@@ -2,12 +2,11 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const importedMixinsFile = path.join(__dirname, 'sass', 'imported-mixins.scss');
 const mixinsFile = path.join(__dirname, 'sass', 'nested', 'mixins.scss');
 
-function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
+function verifyImportedMixins(rendered, sourceFile) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$mixinVariable');

@@ -4,8 +4,6 @@ chai.use(chaiSubset);
 const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
-const { normalizePath } = require('../src/util');
-const { EOL } = require('os');
 
 const foundationVariablesFile = path.join(__dirname, 'sass', 'foundation.scss');
 
@@ -553,7 +551,7 @@ const EXPECTED_SELECTED_VAR_VALUES = [
     prop: '$-zf-breakpoints-keys',
     val: {
       type: 'SassList',
-      value: [{ value: 'small', value: 'medium', value: 'large', value: 'xlarge' }],
+      value: [{ value: 'small' }, { value: 'medium' }, { value: 'large' }, { value: 'xlarge' }],
     },
   },
 
@@ -586,7 +584,7 @@ const EXPECTED_SELECTED_VAR_VALUES = [
   { prop: '$form-label-font-weight', val: { type: 'SassString', value: 'bold' } },
 ];
 
-function verifyFoundation(rendered, sourceFile) {
+function verifyFoundation(rendered) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
 

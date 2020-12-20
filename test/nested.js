@@ -42,7 +42,7 @@ function verifyNestedBasic(rendered) {
   expect(rendered.vars.global.$c.declarations[0].expression).to.equal('300px');
 }
 
-function verifyNestedOverrides(rendered, sourceFile) {
+function verifyNestedOverrides(rendered) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$a');

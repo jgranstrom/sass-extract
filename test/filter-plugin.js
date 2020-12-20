@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const path = require('path');
-const { render, renderSync } = require('../src');
+const { renderSync } = require('../src');
 
 const PROPS_ALL = { $number1: true, $number2: true, $string: true, $list: true };
 const PROPS_NONE = {};

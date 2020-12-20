@@ -4,7 +4,6 @@ const FN_PREFIX = '___SV_INJECT';
 const FN_PREFIX_IMPLICIT_GLOBAL = 'IG';
 const FN_PREFIX_EXPLICIT_GLOBAL = 'EG';
 const FN_PREFIX_DEPENDENT_GLOBAL = 'DG';
-const FN_SUFFIX_VALUE = 'VALUE';
 
 /**
  * Create injection function and source for a file, category, declaration and result handler
