@@ -108,3 +108,7 @@ export function promisifySass(impl) {
   }
   return impl;
 }
+
+export function isDartSass(impl) {
+  return impl.info.match(/dart/);
+}

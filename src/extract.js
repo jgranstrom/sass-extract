@@ -1,8 +1,9 @@
-import {normalizePath, makeAbsolute, getSassImplementation, promisifySass} from './util';
+import {normalizePath, makeAbsolute, getSassImplementation, promisifySass, isDartSass} from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles, parseFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
 import { Pluggable } from './pluggable';
+import {patchReadFile, unpatchReadFile} from './fs-patcher';
 
 /**
  * Get rendered stats required for extraction
@@ -95,8 +96,19 @@ export function extract(rendered, { compileOptions = {}, extractOptions = {} } =
     const importer = makeImporter(extractions, includedFiles, includedPaths, compileOptions.importer);
     const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
+    const isDart = isDartSass(sass);
+
+    if (isDart) {
+      extractionCompileOptions.importer = compileOptions.importer;
+      patchReadFile(extractions, entryFilename);
+    }
+
     return sass.renderAsync(extractionCompileOptions)
     .then(() => {
+      if (isDart) {
+        unpatchReadFile();
+      }
+
       return pluggable.run(Pluggable.POST_EXTRACT, compileExtractionResult(orderedFiles, extractions));
     });
   });
@@ -118,7 +130,18 @@ export function extractSync(rendered, { compileOptions = {}, extractOptions = {}
   const importer = makeSyncImporter(extractions, includedFiles, includedPaths, compileOptions.importer);
   const extractionCompileOptions = makeExtractionCompileOptions(compileOptions, entryFilename, extractions, importer);
 
+  const isDart = isDartSass(sass);
+
+  if (isDart) {
+    extractionCompileOptions.importer = compileOptions.importer;
+    patchReadFile(extractions, entryFilename);
+  }
+
   sass.renderSync(extractionCompileOptions);
+
+  if (isDart) {
+    unpatchReadFile();
+  }
 
   return pluggable.run(Pluggable.POST_EXTRACT, compileExtractionResult(orderedFiles, extractions));
 }

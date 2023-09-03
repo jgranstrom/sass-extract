@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
+    "fs-monkey": "^1.0.4",
     "gonzales-pe": "^4.2.4",
     "parse-color": "^1.0.0",
     "query-ast": "^1.0.2"
