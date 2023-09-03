@@ -1,5 +1,4 @@
-import Promise from 'bluebird';
-import { normalizePath, makeAbsolute, getSassImplementation } from './util';
+import {normalizePath, makeAbsolute, getSassImplementation, promisifySass} from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles, parseFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
@@ -85,7 +84,7 @@ function compileExtractionResult(orderedFiles, extractions) {
  */
 export function extract(rendered, { compileOptions = {}, extractOptions = {} } = {}) {
   const pluggable = new Pluggable(extractOptions.plugins).init();
-  const sass = Promise.promisifyAll(getSassImplementation(extractOptions));
+  const sass = promisifySass(getSassImplementation(extractOptions));
 
   const { entryFilename, includedFiles, includedPaths } = getRenderedStats(rendered, compileOptions);
 

@@ -1,4 +1,5 @@
 import path from 'path';
+import Promise from 'bluebird';
 
 const NORMALIZED_PATH_SEPARATOR = '/';
 const PLATFORM_PATH_SEPARATOR = path.sep;
@@ -94,4 +95,16 @@ export function getConstructorName (sassValue, sass) {
     default:
       throw new Error(`Unsupported sass constructor '${sassValue.constructor.name}'`)
   }
+}
+
+export function promisifySass(impl) {
+
+  for (const name of ['render']) {
+    const asyncName = name + 'Async';
+
+    if (!(asyncName in impl)) {
+      impl[asyncName] = Promise.promisify(impl[name]);
+    }
+  }
+  return impl;
 }
