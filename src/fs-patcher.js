@@ -7,6 +7,10 @@ const originalReadFile = fs.readFile;
 function getInjectedData(path, extractions, entryFilename) {
   path = fs.realpathSync(path);
 
+  if (process.platform === 'win32') {
+    path = path.replace(/\\/g, '/');
+  }
+
   if (path in extractions && path !== entryFilename) {
     return extractions[path].injectedData;
   }
