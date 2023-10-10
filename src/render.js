@@ -1,4 +1,4 @@
-import {getSassImplementation, promisifySass} from './util';
+import { getSassImplementation, promisifySass } from './util';
 import { extract, extractSync } from './extract';
 
 /**

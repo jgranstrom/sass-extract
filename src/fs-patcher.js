@@ -1,4 +1,4 @@
-import {patchFs} from 'fs-monkey';
+import { patchFs } from 'fs-monkey';
 import fs from 'fs';
 
 const originalReadFileSync = fs.readFileSync;

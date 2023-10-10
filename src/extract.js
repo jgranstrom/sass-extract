@@ -1,9 +1,9 @@
-import {normalizePath, makeAbsolute, getSassImplementation, promisifySass, isDartSass} from './util';
+import { normalizePath, makeAbsolute, getSassImplementation, promisifySass, isDartSass } from './util';
 import { loadCompiledFiles, loadCompiledFilesSync } from './load';
 import { processFiles, parseFiles } from './process';
 import { makeImporter, makeSyncImporter } from './importer';
 import { Pluggable } from './pluggable';
-import {patchReadFile, unpatchReadFile} from './fs-patcher';
+import { patchReadFile, unpatchReadFile } from './fs-patcher';
 
 /**
  * Get rendered stats required for extraction
