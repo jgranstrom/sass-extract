@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const importedMixinsFile = path.join(__dirname, 'sass', 'imported-mixins.scss');
 const mixinsFile = path.join(__dirname, 'sass', 'nested', 'mixins.scss');
@@ -80,17 +79,17 @@ function verifyImportedMixins(rendered, sourceFile, mixinsFile) {
   expect(rendered.vars.global.$multipleDefault.value).to.equal('x');
 }
 
-describe('imported-mixins', () => {
+describe_implementation('imported-mixins', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: importedMixinsFile });
+      const rendered = renderSync({ file: importedMixinsFile }, { implementation: sass });
       verifyImportedMixins(rendered, importedMixinsFile, mixinsFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: importedMixinsFile })
+      return render({ file: importedMixinsFile }, { implementation: sass })
       .then(rendered => {
         verifyImportedMixins(rendered, importedMixinsFile, mixinsFile);
       });

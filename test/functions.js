@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const functionsFile = path.join(__dirname, 'sass', 'functions.scss');
 
@@ -32,22 +31,24 @@ function verifyFunctions(rendered, sourceFile) {
   expect(rendered.vars.global.$fSize.declarations[0].expression).to.equal('fn-size(2)');
 }
 
-const functions = {
-  'fn-color()': () => new types.Color(0, 255, 0),
-  'fn-size($multiplier)': (multiplier) => new types.Number(10 * multiplier.getValue(), 'px'),
-}
+describe_implementation('functions', (sass) => {
+  const { types } = sass;
 
-describe('functions', () => {
+  const functions = {
+    'fn-color()': () => new types.Color(0, 255, 0),
+    'fn-size($multiplier)': (multiplier) => new types.Number(10 * multiplier.getValue(), 'px'),
+  };
+
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: functionsFile, functions });
+      const rendered = renderSync({ file: functionsFile, functions }, { implementation: sass });
       verifyFunctions(rendered, functionsFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: functionsFile, functions })
+      return render({ file: functionsFile, functions }, { implementation: sass })
       .then(rendered => {
         verifyFunctions(rendered, functionsFile);
       });

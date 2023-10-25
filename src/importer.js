@@ -71,10 +71,18 @@ function getImportAbsolutePath(url, prev, includedFilesMap, includedPaths = []) 
  * Get the resulting source and path for a given @import request
  */
 function getImportResult(extractions, url, prev, includedFilesMap, includedPaths) {
-  const absolutePath = getImportAbsolutePath(url, prev, includedFilesMap, includedPaths);
-  const contents = extractions[absolutePath].injectedData;
+  if (!Array.isArray(url)) {
+    url = [url]
+  }
 
-  return { file: absolutePath, contents };
+  const returnObj = url.map(url_item => {
+    const absolutePath = getImportAbsolutePath(url_item, prev, includedFilesMap, includedPaths);
+    const contents = extractions[absolutePath].injectedData;
+
+    return { file: absolutePath, contents };
+  });
+
+  return returnObj;
 }
 
 function getIncludedFilesMap(includedFiles) {
@@ -92,34 +100,25 @@ export function makeImporter(extractions, includedFiles, includedPaths, customIm
 
   return function(url, prev, done) {
     try {
-      let promise = Promise.resolve();
+      const promises = [];
       if (customImporter) {
-        promise = new Promise(resolve => {
-          if (Array.isArray(customImporter)) {
-            const promises = [];
-            customImporter.forEach(importer => {
-              const thisPromise = new Promise(res => {
-                const modifiedUrl = importer(url, prev, res);
-                if (modifiedUrl !== undefined) {
-                  res(modifiedUrl);
-                }
-              });
-              promises.push(thisPromise);
-            })
-            Promise.all(promises).then(results => {
-              resolve(results.find(item => item !== null));
-            });
-          } else {
-            const modifiedUrl = customImporter(url, prev, resolve);
-            if (modifiedUrl !== undefined) {
-              resolve(modifiedUrl);
-            }
-          }
+        if (!Array.isArray(customImporter)) {
+          customImporter = [customImporter]
+        }
+
+        customImporter.forEach(importer => {
+          promises.push(new Promise(res => {
+            importer.apply({}, [url, prev, res]);
+          }));
         });
       }
-      promise.then(modifiedUrl => {
-        if (modifiedUrl && modifiedUrl.file) {
-          url = modifiedUrl.file;
+      Promise.all(promises).then(results => results.find(item => item !== null)).then(modifiedUrl => {
+        if (modifiedUrl) {
+          if (!Array.isArray(modifiedUrl)) {
+            modifiedUrl = [modifiedUrl];
+          }
+
+          url = modifiedUrl.map(url_item => url_item.file);
         }
         const result = getImportResult(extractions, url, prev, includedFilesMap, includedPaths);
         done(result);

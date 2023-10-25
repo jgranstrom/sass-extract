@@ -66,7 +66,7 @@ function verifyNestedOverrides(rendered, sourceFile) {
   expect(rendered.vars.global.$b.declarations[0].expression).to.equal('$a');
 }
 
-describe('nested-basic', () => {
+describe_implementation('nested-basic', (sass) => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
       const rendered = renderSync({ file: nestedBasicFile })
@@ -84,17 +84,17 @@ describe('nested-basic', () => {
   });
 });
 
-describe('nested-overrides', () => {
+describe_implementation('nested-overrides', (sass) => {
   describe('sync', () => {
     it('should extract variables not in comments', () => {
-      const rendered = renderSync({ file: nestedOverridesFile })
+      const rendered = renderSync({ file: nestedOverridesFile }, { implementation: sass })
       verifyNestedOverrides(rendered);
     });
   });
 
   describe('async', () => {
     it('should extract variables not in comments', () => {
-      return render({ file: nestedOverridesFile })
+      return render({ file: nestedOverridesFile }, { implementation: sass })
       .then(rendered => {
         verifyNestedOverrides(rendered);
       });

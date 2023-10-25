@@ -1,12 +1,11 @@
-import sass from 'node-sass';
-import { toColorHex } from './util';
+import { getConstructor, getConstructorName, toColorHex } from './util';
 import { serialize } from './serialize';
 
 /**
  * Transform a sassValue into a structured value based on the value type
  */
-function makeValue(sassValue) {
-  switch(sassValue.constructor) {
+function makeValue(sassValue, sass) {
+  switch(getConstructor(sassValue, sass)) {
     case sass.types.String:
     case sass.types.Boolean:
       return { value: sassValue.getValue() };
@@ -34,7 +33,7 @@ function makeValue(sassValue) {
       const listLength = sassValue.getLength();
       const listValue = [];
       for(let i = 0; i < listLength; i++) {
-        listValue.push(createStructuredValue(sassValue.getValue(i)));
+        listValue.push(createStructuredValue(sassValue.getValue(i), sass));
       }
       return { value: listValue, separator: sassValue.getSeparator() ? ',' : ' ' };
 
@@ -43,8 +42,8 @@ function makeValue(sassValue) {
       const mapValue = {};
       for(let i = 0; i < mapLength; i++) {
         // Serialize map keys of arbitrary type for extracted struct
-        const serializedKey = serialize(sassValue.getKey(i));
-        mapValue[serializedKey] = createStructuredValue(sassValue.getValue(i));
+        const serializedKey = serialize(sassValue.getKey(i), false, sass);
+        mapValue[serializedKey] = createStructuredValue(sassValue.getValue(i), sass);
       }
       return { value: mapValue };
 
@@ -56,10 +55,10 @@ function makeValue(sassValue) {
 /**
  * Create a structured value definition from a sassValue object
  */
-export function createStructuredValue(sassValue) {
+export function createStructuredValue(sassValue, sass) {
   const value = Object.assign({
-    type: sassValue.constructor.name,
-  }, makeValue(sassValue));
+    type: getConstructorName(sassValue, sass),
+  }, makeValue(sassValue, sass));
 
   return value;
 };

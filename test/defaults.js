@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const defaultsFile = path.join(__dirname, 'sass', 'defaults.scss');
 
@@ -28,17 +27,17 @@ function verifyDefaults(rendered, sourceFile) {
   expect(rendered.vars.global.$variable.unit).to.equal('px');
 }
 
-describe('defaults', () => {
+describe_implementation('defaults', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: defaultsFile });
+      const rendered = renderSync({ file: defaultsFile }, { implementation: sass });
       verifyDefaults(rendered, defaultsFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: defaultsFile })
+      return render({ file: defaultsFile }, { implementation: sass })
       .then(rendered => {
         verifyDefaults(rendered, defaultsFile);
       });

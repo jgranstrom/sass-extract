@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const importedFunctionsFile = path.join(__dirname, 'sass', 'imported-functions.scss');
 const functionsFile = path.join(__dirname, 'sass', 'nested', 'functions.scss');
@@ -83,17 +82,17 @@ function verifyImportedFunctions(rendered, sourceFile, functionsFile) {
   expect(rendered.vars.global.$multipleDefault.value).to.equal('x');
 }
 
-describe('imported-functions', () => {
+describe_implementation('imported-functions', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: importedFunctionsFile });
+      const rendered = renderSync({ file: importedFunctionsFile }, { implementation: sass });
       verifyImportedFunctions(rendered, importedFunctionsFile, functionsFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: importedFunctionsFile })
+      return render({ file: importedFunctionsFile }, { implementation: sass })
       .then(rendered => {
         verifyImportedFunctions(rendered, importedFunctionsFile, functionsFile);
       });

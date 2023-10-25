@@ -18,17 +18,17 @@ function verifyPartial(rendered, sourceFile, partialFile) {
   expect(rendered.vars.global.$color.sources[0]).to.equal(normalizePath(partialFile));
 }
 
-describe('partial', () => {
+describe_implementation('partial', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: partialFile })
+      const rendered = renderSync({ file: partialFile }, { implementation: sass })
       verifyPartial(rendered, partialFile, somePartialFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: partialFile })
+      return render({ file: partialFile }, { implementation: sass })
       .then(rendered => {
         verifyPartial(rendered, partialFile, somePartialFile);
       });

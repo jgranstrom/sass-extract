@@ -159,7 +159,7 @@ function verifyFoundation(rendered, sourceFile) {
   });
 }
 
-describe('foundation-variables', function() {
+describe_implementation('foundation-variables', function(sass) {
   beforeEach(function() {
     if(process.env.FAST_TEST) {
       this.skip();
@@ -168,14 +168,14 @@ describe('foundation-variables', function() {
 
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: foundationVariablesFile })
+      const rendered = renderSync({ file: foundationVariablesFile }, { implementation: sass })
       verifyFoundation(rendered, foundationVariablesFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: foundationVariablesFile })
+      return render({ file: foundationVariablesFile }, { implementation: sass })
       .then(rendered => {
         verifyFoundation(rendered, foundationVariablesFile);
       });

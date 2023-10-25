@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
-const { types } = require('node-sass');
 
 const inFnBlocksFile = path.join(__dirname, 'sass', 'in-fn-blocks.scss');
 
@@ -75,17 +74,17 @@ function verifyInFnBlocks(rendered, sourceFile) {
   expect(rendered.vars.global.$someGlobalSetOnInvoke2.value).to.equal('provided');
 }
 
-describe('in-fn-blocks', () => {
+describe_implementation('in-fn-blocks', (sass) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: inFnBlocksFile });
+      const rendered = renderSync({ file: inFnBlocksFile }, { implementation: sass });
       verifyInFnBlocks(rendered, inFnBlocksFile);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: inFnBlocksFile })
+      return render({ file: inFnBlocksFile }, { implementation: sass })
       .then(rendered => {
         verifyInFnBlocks(rendered, inFnBlocksFile);
       });

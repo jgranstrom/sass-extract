@@ -43,10 +43,10 @@ function verifyFilteredResult(rendered, expectedProps) {
 
 const filterPluginFile = path.join(__dirname, 'sass', 'filter-plugin.scss');
 
-describe('filter-plugin', () => {
+describe_implementation('filter-plugin', (sass) => {
   describe('all', () => {
     it('should include all props', () => {
-      const rendered = renderSync({ file: filterPluginFile }, { plugins: [ 'filter' ] });
+      const rendered = renderSync({ file: filterPluginFile }, { plugins: [ 'filter' ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
   });
@@ -55,35 +55,35 @@ describe('filter-plugin', () => {
     it('should include all props', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { props: ['$number1', '$number2', '$string', '$list' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
 
     it('should include all props', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { props: [] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
 
     it('should include all props', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         except: { props: ['$blahblah' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
 
     it('should include $number1', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { props: ['$number1' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number1: true });
     });
 
     it('should include $number2 and $list', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { props: ['$number2', '$list' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number2: true, $list: true });
     });
   });
@@ -92,7 +92,7 @@ describe('filter-plugin', () => {
     it('should include all types', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { types: ['SassNumber', 'SassString', 'SassList' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
 
@@ -106,28 +106,28 @@ describe('filter-plugin', () => {
     it('should include all types', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         except: { types: ['SassNotThere' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_ALL);
     });
 
     it('should include numbers', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { types: ['SassNumber' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number1: true, $number2: true });
     });
 
     it('should include list', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { types: ['SassList' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $list: true });
     });
 
     it('should include numbers and string', () => {
       const rendered = renderSync({ file: filterPluginFile }, { plugins: [ { plugin: 'filter', options: {
         only: { types: ['SassNumber', 'SassString' ] }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number1: true, $number2: true, $string: true });
     });
   });
@@ -139,7 +139,7 @@ describe('filter-plugin', () => {
           props: ['$number1' ],
           types: ['SassNumber' ],
         }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number1: true });
     });
 
@@ -151,7 +151,7 @@ describe('filter-plugin', () => {
         except: {
           props: ['$number1' ],
         }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, { $number2: true });
     });
 
@@ -163,7 +163,7 @@ describe('filter-plugin', () => {
         except: {
           types: ['SassNumber' ],
         }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_NONE);
     });
 
@@ -175,7 +175,7 @@ describe('filter-plugin', () => {
         except: {
           props: ['$number1' ],
         }
-      } } ] });
+      } } ], implementation: sass });
       verifyFilteredResult(rendered, PROPS_NONE);
     });
   });

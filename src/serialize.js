@@ -1,5 +1,4 @@
-import sass from 'node-sass';
-import { toColorHex } from './util';
+import { getConstructor, toColorHex } from './util';
 import parseColor from 'parse-color';
 
 /**
@@ -28,8 +27,8 @@ function serializeColor(sassColor) {
 /**
  * Transform a SassValue into a serialized string
  */
-function serializeValue(sassValue, isInList) {
-  switch(sassValue.constructor) {
+function serializeValue(sassValue, isInList, sass) {
+  switch(getConstructor(sassValue, sass)) {
     case sass.types.String:
     case sass.types.Boolean:
       return `${sassValue.getValue()}`;
@@ -48,7 +47,7 @@ function serializeValue(sassValue, isInList) {
       const listElement = [];
       const hasSeparator = sassValue.getSeparator();
       for(let i = 0; i < listLength; i++) {
-        listElement.push(serialize(sassValue.getValue(i), true));
+        listElement.push(serialize(sassValue.getValue(i), true, sass));
       }
       // Make sure nested lists are serialized with surrounding parenthesis
       if(isInList) {
@@ -61,8 +60,8 @@ function serializeValue(sassValue, isInList) {
       const mapLength = sassValue.getLength();
       const mapValue = {};
       for(let i = 0; i < mapLength; i++) {
-        const key = serialize(sassValue.getKey(i));
-        const value = serialize(sassValue.getValue(i));
+        const key = serialize(sassValue.getKey(i), false, sass);
+        const value = serialize(sassValue.getValue(i), false, sass);
         mapValue[key] = value;
       }
       const serializedMapValues = Object.keys(mapValue).map(key => `${key}: ${mapValue[key]}`);
@@ -76,6 +75,6 @@ function serializeValue(sassValue, isInList) {
 /**
  * Create a serialized string from a sassValue object
  */
-export function serialize(sassValue, isInList) {
-  return serializeValue(sassValue, isInList);
+export function serialize(sassValue, isInList, sass) {
+  return serializeValue(sassValue, isInList, sass);
 };

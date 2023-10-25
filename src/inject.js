@@ -9,11 +9,12 @@ const FN_SUFFIX_VALUE = 'VALUE';
 /**
  * Create injection function and source for a file, category, declaration and result handler
  */
-function createInjection(fileId, categoryPrefix, declaration, idx, declarationResultHandler) {
+function createInjection(fileId, categoryPrefix, declaration, idx, declarationResultHandler, sass) {
   const fnName = `${FN_PREFIX}_${fileId}_${categoryPrefix}_${declaration.declarationClean}_${idx}`;
+  const fnSignature = `${fnName}(${declaration.declaration})`;
 
   const injectedFunction = function(sassValue) {
-    const value = createStructuredValue(sassValue);
+    const value = createStructuredValue(sassValue, sass);
     declarationResultHandler(declaration, value, sassValue);
     return sassValue;
   };
@@ -22,7 +23,7 @@ function createInjection(fileId, categoryPrefix, declaration, idx, declarationRe
     $${fnName}: ${fnName}(${declaration.declaration}); 
   }\n`
 
-  return { fnName, injectedFunction, injectedCode };
+  return { fnSignature, injectedFunction, injectedCode };
 }
 
 /**
@@ -31,21 +32,21 @@ function createInjection(fileId, categoryPrefix, declaration, idx, declarationRe
  * Declaration result handlers will be called with the extracted value of each declaration
  * Provided file id will be used to ensure unique function names per file
  */
-export function injectExtractionFunctions(fileId, declarations, dependentDeclarations, { globalDeclarationResultHandler }) {
+export function injectExtractionFunctions(fileId, declarations, dependentDeclarations, { globalDeclarationResultHandler }, sass) {
   let injectedData = ``;
   const injectedFunctions = {};
 
   // Create injections for implicit global variables
   declarations.implicitGlobals.forEach((declaration, idx) => {
-    const { fnName, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_IMPLICIT_GLOBAL, declaration, idx, globalDeclarationResultHandler);
-    injectedFunctions[fnName] = injectedFunction;
+    const { fnSignature, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_IMPLICIT_GLOBAL, declaration, idx, globalDeclarationResultHandler, sass);
+    injectedFunctions[fnSignature] = injectedFunction;
     injectedData += injectedCode;
   });
 
   // Create injections for explicit global variables
   declarations.explicitGlobals.forEach((declaration, idx) => {
-    const { fnName, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_EXPLICIT_GLOBAL, declaration, idx, globalDeclarationResultHandler);
-    injectedFunctions[fnName] = injectedFunction;
+    const { fnSignature, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_EXPLICIT_GLOBAL, declaration, idx, globalDeclarationResultHandler, sass);
+    injectedFunctions[fnSignature] = injectedFunction;
     injectedData += injectedCode;
   });
 
@@ -53,8 +54,8 @@ export function injectExtractionFunctions(fileId, declarations, dependentDeclara
     // Do not add dependent injection if the declaration is in the current file
     // It will already be added by explicits
     if(decFileId === fileId) { return; }
-    const { fnName, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_DEPENDENT_GLOBAL, declaration, idx, globalDeclarationResultHandler);
-    injectedFunctions[fnName] = injectedFunction;
+    const { fnSignature, injectedFunction, injectedCode } = createInjection(fileId, FN_PREFIX_DEPENDENT_GLOBAL, declaration, idx, globalDeclarationResultHandler, sass);
+    injectedFunctions[fnSignature] = injectedFunction;
     injectedData += injectedCode;
   });  
 
