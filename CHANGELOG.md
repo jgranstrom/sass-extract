@@ -1,3 +1,10 @@
+<a name="3.0.0"></a>
+# 3.0.0 (2023-10-25)
+
+* feat: Support for Dart sass ([90e4225](https://github.com/jgranstrom/sass-extract/commit/90e4225))
+
+
+
 <a name="2.1.0"></a>
 # 2.1.0 (2018-01-17)
 
