@@ -1,12 +1,7 @@
 # sass-extract
 
-[![Build Status](https://travis-ci.org/jgranstrom/sass-extract.svg?branch=master&style=flat)](https://travis-ci.org/jgranstrom/sass-extract)
-[![Build status](https://ci.appveyor.com/api/projects/status/ne21r9yv64of2iah?svg=true)](https://ci.appveyor.com/project/jgranstrom/sass-extract)
+![CI status](https://github.com/jgranstrom/sass-extract/workflows/CI/badge.svg)
 [![npm version](https://badge.fury.io/js/sass-extract.svg)](http://badge.fury.io/js/sass-extract)
-[![dependencies Status](https://david-dm.org/jgranstrom/sass-extract/status.svg)](https://david-dm.org/jgranstrom/sass-extract)
-[![devDependencies Status](https://david-dm.org/jgranstrom/sass-extract/dev-status.svg)](https://david-dm.org/jgranstrom/sass-extract?type=dev)
-[![peerDependencies Status](https://david-dm.org/jgranstrom/sass-extract/peer-status.svg)](https://david-dm.org/jgranstrom/sass-extract?type=peer)
-[![Gitter](https://badges.gitter.im/jgranstrom/sass-extract.svg)](https://gitter.im/jgranstrom/sass-extract?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Extract structured variables from your sass files with no effort. Have all your style variables defined in style files, while being able to use them in javascript for things that cannot be styled with css such as complex visualisations or other dynamic content.
 
