@@ -16,7 +16,7 @@ function implementation_iterator(description, specDefinitions, suite) {
     const implementation_description = description + ' with ' + key;
     const implementation = implementations[key];
 
-    suite(implementation_description, specDefinitions.bind(null, implementation));
+    suite(implementation_description, specDefinitions.bind(null, implementation, key));
   });
 }
 

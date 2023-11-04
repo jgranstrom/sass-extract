@@ -3,9 +3,12 @@ const path = require('path');
 const { render, renderSync } = require('../src');
 const { normalizePath } = require('../src/util');
 
-const mapKeysFile = path.join(__dirname, 'sass', 'map-keys.scss');
+const mapKeysFile = {
+  "Node Sass": path.join(__dirname, 'sass', 'map-keys_node-sass.scss'),
+  "Dart Sass": path.join(__dirname, 'sass', 'map-keys_dart-sass.scss'),
+}
 
-function verifyMapKeys(rendered, sourceFile) {
+function verifyMapKeys(rendered, impl) {
   expect(rendered.vars).to.exist;
   expect(rendered.vars).to.have.property('global');
   expect(rendered.vars.global).to.have.property('$map');
@@ -72,11 +75,17 @@ function verifyMapKeys(rendered, sourceFile) {
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested).to.deep.include({
     type: 'SassMap',
   });
-  // TODO `node-sass` throws Error for the nested `(1, 2, 3)` key. The problem should be with node-sass itself, as it works OK with `sass`.
-  // expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1,2,3');
-  // expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1,2,3']).to.deep.include({
-  //   type: 'SassString', value: 'list'
-  // });
+  if(impl === "Node Sass") {
+    expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3');
+    expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3']).to.deep.include({
+      type: 'SassString', value: 'list'
+    });
+  } else if(impl === "Dart Sass") {
+    expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1,2,3');
+    expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1,2,3']).to.deep.include({
+      type: 'SassString', value: 'list'
+    });
+  }
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value).to.have.property('1 2 3 4');
   expect(rendered.vars.global.$map.value['(d: map)'].value.nested.value['1 2 3 4']).to.deep.include({
     type: 'SassString', value: 'list-spaces'
@@ -90,19 +99,19 @@ function verifyMapKeys(rendered, sourceFile) {
   });
 }
 
-describe_implementation('map-keys', (sass) => {
+describe_implementation('map-keys', (sass, impl) => {
   describe('sync', () => {
     it('should extract all variables', () => {
-      const rendered = renderSync({ file: mapKeysFile }, { implementation: sass });
-      verifyMapKeys(rendered, mapKeysFile);
+      const rendered = renderSync({ file: mapKeysFile[impl] }, { implementation: sass });
+      verifyMapKeys(rendered, impl);
     });
   });
 
   describe('async', () => {
     it('should extract all variables', () => {
-      return render({ file: mapKeysFile }, { implementation: sass })
+      return render({ file: mapKeysFile[impl] }, { implementation: sass })
       .then(rendered => {
-        verifyMapKeys(rendered, mapKeysFile);
+        verifyMapKeys(rendered, impl);
       });
     });
   });

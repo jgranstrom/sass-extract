@@ -15,7 +15,7 @@ $map: (
   ((b: 'nested'), (c: 'maps')): 'list-maps',
   (d: 'map'): (
     nested: (
-      //(1, 2, 3): 'list', // TODO `node-sass` throws Error for the nested `(1, 2, 3)` key. The problem should be with node-sass itself, as it works OK with `sass`.
+      (1 2 3): 'list',
       (1 2 3 4): 'list-spaces'
     )
   ),

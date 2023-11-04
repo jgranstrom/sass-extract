@@ -1,0 +1,24 @@
+$keyvar: 'somekey';
+
+$map: (
+  string: 1em,
+  1px: 'number',
+  white: 'color-string',
+  #123456: 'color-hex',
+  rgba(0, 1, 2, 0.5): 'color-rgba',
+  rgb(0, 0, 0): 'color-black-rgba',
+  true: 'boolean',
+  null: 'null',
+  (1, 2, 3): 'list',
+  (1 2 3 4): 'list-spaces',
+  (a: 'map'): 'map',
+  ((b: 'nested'), (c: 'maps')): 'list-maps',
+  (d: 'map'): (
+    nested: (
+      (1, 2, 3): 'list',
+      (1 2 3 4): 'list-spaces'
+    )
+  ),
+  darken(white, 1%): 'darkened-white',
+  $keyvar: 'key-variable',
+);
