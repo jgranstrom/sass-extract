@@ -32,6 +32,11 @@
     "node-sass": ">=3.8.0",
     "sass": ">=1"
   },
+  "peerDependenciesMeta": {
+    "node-sass": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "bluebird": "^3.7.2",
     "fs-monkey": "^1.0.4",
@@ -40,6 +45,7 @@
     "query-ast": "^1.0.2"
   },
   "devDependencies": {
+    "node-sass": ">=3.8.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
